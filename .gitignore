@@ -1,0 +1,10 @@
+/.vagrant/
+/.idea
+/ssh
+/www
+/vagrant-ssh
+/config.yaml
+/.DS_Store
+/extra/001-env.sh
+/extra/100-pre-build.sh
+/extra/120-post-build.sh
