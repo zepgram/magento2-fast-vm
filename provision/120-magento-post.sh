@@ -62,12 +62,6 @@ magento setup:config:set \
       --session-save-redis-port=6379 \
       --session-save-redis-db=2
 
-# Apply rights
-cd "$PROJECT_PATH" \
-  && chmod -R 0777 . \
-  && chown -R www-data:www-data . \
-  && chmod u+x bin/magento
-
 # Apply rights before post-build
 cd "$PROJECT_PATH" \
   && chmod -R 0777 . \
