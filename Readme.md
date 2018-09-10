@@ -91,8 +91,8 @@ You can add your custom shell provisioners which will be executed on pre-defined
    * time_zone: set time zone (Europe/London)
 
 ### Mount
-* app directory: magento2 development must be provided in app directory, so mounting the entire project is not necessary according to documentation and best practice provided by magento. Furthermore, by mounting only this directory the virtual machine grants great performance indeed, generated files and static content are not shared between guest and host machine.
-* root directory: if you wish to mount the entire project you can, but I highly recommend you to make NFS work.
+* <b>app directory:</b> magento2 development must be provided in app directory, so mounting the entire project is not necessary according to documentation and best practice provided by magento. Furthermore, by mounting only this directory the virtual machine grants great performance: generated files and static content are not shared between guest and host machine.
+* <b>root directory:</b> if you wish to mount the entire project you can, but I highly recommend you to enable NFS option to improve performance between guest and host machine.
 
 ### NFS
 NFS mount option can be a problem when you reach the point to make it available for all operating system.<br>
