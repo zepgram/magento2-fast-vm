@@ -49,7 +49,7 @@ source /etc/profile.d/myvars.sh
 if [[ -z $(grep "www-data" "/home/vagrant/.bashrc") ]]; then
 cat <<EOF >> /home/vagrant/.bashrc
 # Log as www-data user
-cd /var/www && sudo -s -u www-data;
+cd /var/www/${7} && sudo -s -u www-data;
 EOF
 fi
 
