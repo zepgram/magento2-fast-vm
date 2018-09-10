@@ -62,13 +62,24 @@ magento setup:config:set \
       --session-save-redis-port=6379 \
       --session-save-redis-db=2
 
-# Extra post-build
-if [ -f /home/vagrant/provision/120-post-build.sh ]; then
-  bash /home/vagrant/provision/120-post-build.sh
-fi
-
 # Apply rights
 cd "$PROJECT_PATH" \
   && chmod -R 0777 . \
   && chown -R www-data:www-data . \
   && chmod u+x bin/magento
+
+# Apply rights before post-build
+cd "$PROJECT_PATH" \
+  && chmod -R 0777 . \
+  && chown -R www-data:www-data . \
+  && chmod u+x bin/magento
+
+# Extra post-build
+if [ -f /home/vagrant/provision/120-post-build.sh ]; then
+  bash /home/vagrant/provision/120-post-build.sh
+  # Apply rights after post-build
+  cd "$PROJECT_PATH" \
+  && chmod -R 0777 . \
+  && chown -R www-data:www-data . \
+  && chmod u+x bin/magento
+fi
