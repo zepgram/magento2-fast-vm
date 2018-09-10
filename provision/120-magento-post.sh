@@ -59,12 +59,10 @@ magento setup:config:set \
       --session-save-redis-port=6379 \
       --session-save-redis-db=2
 
-# Apply rights before post-build
-permission
-
 # Extra post-build
 if [ -f /home/vagrant/provision/120-post-build.sh ]; then
   bash /home/vagrant/provision/120-post-build.sh
-  # Apply rights after post-build
-  permission
 fi
+
+# Apply permission
+permission
