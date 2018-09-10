@@ -11,21 +11,12 @@ export DEBIAN_FRONTEND=noninteractive
 
 echo '--- Magento post-installation sequence ---'
 
-# Oermission script
-cat <<EOF > /var/www/permissions
-echo 'Applying magento permissions'
-cd "$PROJECT_PATH" \
-  && find var vendor pub/static pub/media app/etc -type f -exec chmod g+w {} \; \
-  && find var vendor pub/static pub/media app/etc -type d -exec chmod g+ws {} \; \
-  && sudo chown -R www-data:www-data . && sudo chmod u+x bin/magento
-EOF
-chmod +x /var/www/permissions && chown -R www-data:www-data /var/www/permissions
-
 # Post setup
 magento deploy:mode:set "$PROJECT_MODE"
 magento config:set "admin/security/session_lifetime" "31536000"
 magento config:set "admin/security/lockout_threshold" "180"
 
+# Composer config
 if [ $PROJECT_SOURCE == "composer" ]; then
   # Enable php ini
   if [ -f "${PROJECT_PATH}/php.ini.sample" ]; then
@@ -69,11 +60,11 @@ magento setup:config:set \
       --session-save-redis-db=2
 
 # Apply rights before post-build
-sh permissions
+permission
 
 # Extra post-build
 if [ -f /home/vagrant/provision/120-post-build.sh ]; then
   bash /home/vagrant/provision/120-post-build.sh
   # Apply rights after post-build
-  sh permissions
+  permission
 fi

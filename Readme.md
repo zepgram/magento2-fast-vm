@@ -113,6 +113,7 @@ Magento user is configured as ``www-data``, it means all command in magento proj
 Command line ``vagrant ssh`` logs you as www-data user.<br>
 * To logout and get back to vagrant user you can run ``exit``
 * To login as www-data you can run ``sudo -s -u www-data`` or ``bash``
+* To re-apply magento permission you can run ``permission`` in command line
 <br>
 <i>F.I.</i> I had trouble by making vagrant as owner of magento project (vagrant:www-data): there were permissions error on setup:upgrade execution and static files were not generated properly. Those issues are linked to multiple options provided by this setup (nfs & mount) which leads to 4 differents setup cases. It could work in 1 case (mount:root) but not others.
 <br>If you have any solution about this, I'll fix it.
@@ -123,6 +124,7 @@ Command line ``vagrant ssh`` logs you as www-data user.<br>
   * magento-cloud (Cloud-specific version of the Magento CLI)
   * pestle (A collection of command line scripts for Magento 2 code generation)
   * magerun (The swiss army knife for Magento developers)
+  * permission (Apply magento2 permissions on project)
 
 ### Magento mode
 After installation you can change magento statement.<br>
