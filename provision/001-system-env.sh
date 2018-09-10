@@ -33,18 +33,6 @@ export PROJECT_BUILD="/home/vagrant/build/${7}"
 export PROJECT_PATH="/var/www/${7}"
 EOF
 
-# Add php version if exist
-if [ -x /usr/bin/php ]; then
-	PHP_VERSION="$(php --version | head -n 1 | cut -d " " -f 2 | cut -c 1,2,3)";
-	if [[ -z $(grep "PHP_VERSION" "/etc/environment") ]]; then
-		echo -e "export PHP_VERSION="${PHP_VERSION}"" >> /etc/environment
-	else
-  		sed -i '/export PHP_VERSION*/c\'"export PHP_VERSION=$PHP_VERSION" /etc/environment
-	fi
-fi
-# Source to allow extra env usage
-source /etc/environment
-
 # Log as www-data
 if [[ -z $(grep "www-data" "/home/vagrant/.bashrc") ]]; then
 cat <<EOF >> /home/vagrant/.bashrc
