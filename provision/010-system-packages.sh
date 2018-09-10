@@ -37,14 +37,14 @@ apt-get install -y \
 
 # Set php version
 PHP_VERSION="$(php --version | head -n 1 | cut -d " " -f 2 | cut -c 1,2,3)";
-if [[ -z $(grep "PHP_VERSION" "/etc/environment") ]]; then
-cat <<EOF >> /etc/environment
+if [[ -z $(grep "PHP_VERSION" "/etc/profile.d/myvars.sh") ]]; then
+cat <<EOF >> /etc/profile.d/myvars.sh
 export PHP_VERSION="${PHP_VERSION}"
 EOF
 else
-  sed -i '/export PHP_VERSION*/c\'"export PHP_VERSION=$PHP_VERSION" /etc/environment
+  sed -i '/export PHP_VERSION*/c\'"export PHP_VERSION=$PHP_VERSION" /etc/profile.d/myvars.sh
 fi
-source /etc/environment
+source /etc/profile.d/myvars.sh
 
 # Composer
 curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer

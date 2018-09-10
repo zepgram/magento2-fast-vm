@@ -12,7 +12,7 @@ export DEBIAN_FRONTEND=noninteractive
 echo '--- Environment variables ---'
 
 # Set environment variable
-cat <<EOF > /etc/environment
+cat <<EOF > /etc/profile.d/myvars.sh
 export PROJECT_HOST_REPOSITORY="${1}"
 export PROJECT_REPOSITORY="${2}"
 export PROJECT_COMPOSER_USER="${3}"
@@ -47,5 +47,5 @@ if [ -f /home/vagrant/provision/001-env.sh ]; then
 fi
 
 # Source and display
-source /etc/environment
-cat /etc/environment
+source /etc/profile.d/myvars.sh
+cat /etc/profile.d/myvars.sh
