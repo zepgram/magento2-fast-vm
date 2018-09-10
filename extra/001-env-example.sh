@@ -3,6 +3,6 @@
 # Hook on system init sequence
 
 # Example:
-# cat <<EOF >> /etc/profile.d/myvars.sh
+# cat <<EOF >> /etc/environment
 # export CUSTOM_ENVIRONMENT=myvalue
 # EOF

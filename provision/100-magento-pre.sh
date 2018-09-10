@@ -55,6 +55,7 @@ cd "$PROJECT_PATH" \\
 && sudo chown -R www-data:www-data . && sudo chmod u+x bin/magento
 EOF
 grep '[^[:blank:]]' < /home/vagrant/permission.bak > /home/vagrant/permission
+rm -f /home/vagrant/permission.bak
 ln -sf /home/vagrant/permission /usr/local/bin/permission
 chmod +x /usr/local/bin/permission
 

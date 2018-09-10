@@ -20,7 +20,7 @@ sudo -u vagrant mkdir -p /home/vagrant/build/
 if [ $PROJECT_SOURCE == "composer" ]; then
 	# Install magento source code
 	sudo -u vagrant composer create-project --no-install --no-progress --repository-url=https://repo.magento.com/ \
-	magento/project-"$PROJECT_EDITION"-edition="$PROJECT_VERSION" "$PROJECT_BUILD"
+		magento/project-"$PROJECT_EDITION"-edition="$PROJECT_VERSION" "$PROJECT_BUILD"
 	# Install sample data
 	if [ $PROJECT_SAMPLE == "true" ]; then
 		sudo -u vagrant composer require -d "$PROJECT_BUILD" \
@@ -36,7 +36,7 @@ if [ $PROJECT_SOURCE == "composer" ]; then
 		magento/sample-data-media magento/module-offline-shipping-sample-data --no-update
 	fi
 else
-	# install from git branch
+	# Install from git branch
 	sudo -u vagrant git clone "$PROJECT_REPOSITORY" "$PROJECT_BUILD"
 	cd "$PROJECT_BUILD"; git fetch --all; git reset --hard; git checkout "$PROJECT_SOURCE" --force;
 fi
@@ -51,22 +51,30 @@ rsync -a --remove-source-files "$PROJECT_BUILD"/ "$PROJECT_PATH"/ || true
 ln -sf "$PROJECT_PATH"/bin/magento /usr/local/bin/magento
 chmod +x /usr/local/bin/magento
 
-# Run bin/magento install
+# Exceptional rights for install
+chown -R www-data:www-data "$PROJECT_PATH"
+chmod -R 0777 "$PROJECT_PATH"
+
+# Run install
+su -s /bin/bash -c ' \
 magento setup:uninstall -n -q
+' www-data
+su -s /bin/bash -c ' \
 magento setup:install \
-	--base-url="http://${PROJECT_URL}/" \
-	--base-url-secure="https://${PROJECT_URL}/" \
-	--db-host="localhost"  \
-	--db-name="${PROJECT_NAME}" \
-	--db-user="vagrant" \
-	--db-password="vagrant" \
-	--admin-firstname="admin" \
-	--admin-lastname="admin" \
-	--admin-email="${PROJECT_USER_EMAIL}" \
-	--admin-user="admin" \
-	--admin-password="admin123" \
-	--language="${PROJECT_LANGUAGE}" \
-	--currency="${PROJECT_CURRENCY}" \
-	--timezone="${PROJECT_TIME_ZONE}" \
-	--use-rewrites="1" \
-	--backend-frontname="admin"
+--base-url="http://${PROJECT_URL}/" \
+--base-url-secure="https://${PROJECT_URL}/" \
+--db-host="localhost"  \
+--db-name="${PROJECT_NAME}" \
+--db-user="vagrant" \
+--db-password="vagrant" \
+--admin-firstname="admin" \
+--admin-lastname="admin" \
+--admin-email="${PROJECT_USER_EMAIL}" \
+--admin-user="admin" \
+--admin-password="admin123" \
+--language="${PROJECT_LANGUAGE}" \
+--currency="${PROJECT_CURRENCY}" \
+--timezone="${PROJECT_TIME_ZONE}" \
+--use-rewrites="1" \
+--backend-frontname="admin"
+' www-data

@@ -64,5 +64,5 @@ if [ -f /home/vagrant/provision/120-post-build.sh ]; then
   bash /home/vagrant/provision/120-post-build.sh
 fi
 
-# Apply permission
+# Set permission to magento
 permission

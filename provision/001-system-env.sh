@@ -12,7 +12,7 @@ export DEBIAN_FRONTEND=noninteractive
 echo '--- Environment variables ---'
 
 # Set environment variable
-cat <<EOF > /etc/profile.d/myvars.sh
+cat <<EOF > /etc/environment
 export PROJECT_HOST_REPOSITORY="${1}"
 export PROJECT_REPOSITORY="${2}"
 export PROJECT_COMPOSER_USER="${3}"
@@ -36,14 +36,14 @@ EOF
 # Add php version if exist
 if [ -x /usr/bin/php ]; then
 	PHP_VERSION="$(php --version | head -n 1 | cut -d " " -f 2 | cut -c 1,2,3)";
-	if [[ -z $(grep "PHP_VERSION" "/etc/profile.d/myvars.sh") ]]; then
-		echo -e "export PHP_VERSION="${PHP_VERSION}"" >> /etc/profile.d/myvars.sh
+	if [[ -z $(grep "PHP_VERSION" "/etc/environment") ]]; then
+		echo -e "export PHP_VERSION="${PHP_VERSION}"" >> /etc/environment
 	else
-  		sed -i '/export PHP_VERSION*/c\'"export PHP_VERSION=$PHP_VERSION" /etc/profile.d/myvars.sh
+  		sed -i '/export PHP_VERSION*/c\'"export PHP_VERSION=$PHP_VERSION" /etc/environment
 	fi
 fi
 # Source to allow extra env usage
-source /etc/profile.d/myvars.sh
+source /etc/environment
 
 # Log as www-data
 if [[ -z $(grep "www-data" "/home/vagrant/.bashrc") ]]; then
@@ -59,5 +59,5 @@ if [ -f /home/vagrant/provision/001-env.sh ]; then
 fi
 
 # Source and display
-source /etc/profile.d/myvars.sh
-cat /etc/profile.d/myvars.sh
+source /etc/environment
+cat /etc/environment
