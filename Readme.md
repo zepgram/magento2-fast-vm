@@ -116,12 +116,11 @@ Command line ``vagrant ssh`` on host machine will log you as www-data user.<br>
 * To re-apply magento permission you can run ``permission`` in command line
 
 ### Command line
-1. Binary
-  * magento (Magento CLI for your project)
-  * magento-cloud (Cloud-specific version of the Magento CLI)
-  * pestle (A collection of command line scripts for Magento 2 code generation)
-  * magerun (The swiss army knife for Magento developers)
-  * permission (Apply magento2 permissions on project)
+* magento (Magento CLI for your project)
+* magento-cloud (Cloud-specific version of the Magento CLI)
+* pestle (A collection of command line scripts for Magento 2 code generation)
+* magerun (The swiss army knife for Magento developers)
+* permission (Apply magento2 permissions on project)
 
 ### Magento mode
 After installation you can change magento statement.<br>
