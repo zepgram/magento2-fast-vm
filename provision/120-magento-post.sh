@@ -11,9 +11,15 @@ export DEBIAN_FRONTEND=noninteractive
 
 echo '--- Magento post-installation sequence ---'
 
-# Magento cli
-ln -sf "$PROJECT_PATH"/bin/magento /usr/local/bin/magento
-chmod +x /usr/local/bin/magento
+# Oermission script
+cat <<EOF > /var/www/permissions
+echo 'Applying magento permissions'
+cd "$PROJECT_PATH" \
+  && find var vendor pub/static pub/media app/etc -type f -exec chmod g+w {} \; \
+  && find var vendor pub/static pub/media app/etc -type d -exec chmod g+ws {} \; \
+  && sudo chown -R www-data:www-data . && sudo chmod u+x bin/magento
+EOF
+chmod +x /var/www/permissions && chown -R www-data:www-data /var/www/permissions
 
 # Post setup
 magento deploy:mode:set "$PROJECT_MODE"
@@ -63,17 +69,11 @@ magento setup:config:set \
       --session-save-redis-db=2
 
 # Apply rights before post-build
-cd "$PROJECT_PATH" \
-  && chmod -R 0777 . \
-  && chown -R www-data:www-data . \
-  && chmod u+x bin/magento
+sh permissions
 
 # Extra post-build
 if [ -f /home/vagrant/provision/120-post-build.sh ]; then
   bash /home/vagrant/provision/120-post-build.sh
   # Apply rights after post-build
-  cd "$PROJECT_PATH" \
-  && chmod -R 0777 . \
-  && chown -R www-data:www-data . \
-  && chmod u+x bin/magento
+  sh permissions
 fi

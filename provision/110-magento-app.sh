@@ -47,9 +47,13 @@ sudo -u vagrant composer install -d "$PROJECT_BUILD" --no-progress
 # Rsync directory
 rsync -a --remove-source-files "$PROJECT_BUILD"/ "$PROJECT_PATH"/ || true
 
+# Magento cli
+ln -sf "$PROJECT_PATH"/bin/magento /usr/local/bin/magento
+chmod +x /usr/local/bin/magento
+
 # Run bin/magento install
-sudo -u vagrant php "$PROJECT_PATH"/bin/magento setup:uninstall -n -q
-sudo -u vagrant php "$PROJECT_PATH"/bin/magento setup:install \
+magento setup:uninstall -n -q
+magento setup:install \
 	--base-url="http://${PROJECT_URL}/" \
 	--base-url-secure="https://${PROJECT_URL}/" \
 	--db-host="localhost"  \
