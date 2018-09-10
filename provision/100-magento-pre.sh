@@ -47,14 +47,14 @@ sudo -u vagrant cat <<EOF > /home/vagrant/.composer/auth.json
 EOF
 
 # Permission script
-cat <<EOF > /home/vagrant/permission
-#!/bin/bash
+sudo -u vagrant cat <<EOF > /home/vagrant/permission.bak
 echo 'Applying permissions to $PROJECT_PATH project'
 cd "$PROJECT_PATH" \\
-  && sudo find var vendor pub/static pub/media app/etc -type f -exec chmod g+w {} \; \\
-  && sudo find var vendor pub/static pub/media app/etc -type d -exec chmod g+ws {} \; \\
-  && sudo chown -R www-data:www-data . && sudo chmod u+x bin/magento
+&& sudo find var vendor pub/static pub/media app/etc -type f -exec chmod g+w {} \; \\
+&& sudo find var vendor pub/static pub/media app/etc -type d -exec chmod g+ws {} \; \\
+&& sudo chown -R www-data:www-data . && sudo chmod u+x bin/magento
 EOF
+grep '[^[:blank:]]' < /home/vagrant/permission.bak > /home/vagrant/permission
 ln -sf /home/vagrant/permission /usr/local/bin/permission
 chmod +x /usr/local/bin/permission
 
