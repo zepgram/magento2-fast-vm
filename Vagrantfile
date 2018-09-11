@@ -64,7 +64,7 @@ Vagrant.configure(2) do |config|
   config.bindfs.default_options = {
     force_user:   'magento',
     force_group:  'www-data',
-    perms:        'u=rwX:g=rD:o=rD'
+    perms:        'u=rwx:g=rwx:o=r'
   }
   if vmconf['nfs'] == "true"
     # Windows NFS specification
