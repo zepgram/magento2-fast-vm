@@ -109,11 +109,12 @@ NFS mount option can be a problem when you reach the point to make it available 
 ## Usage
 
 ### Permission
-Magento file system owner is configured for ``www-data``, it means all command in magento project must be done by this user.<br>
-Command line ``vagrant ssh`` on host machine will log you as www-data user.<br>
+Magento file system owner is configured for ``magento`` user, it means all commands in magento project must be executed by this user.<br>
+Command line ``vagrant ssh`` will log you as magento user by default.<br>
 * To logout and get back to vagrant user you can run ``exit``
-* To login as www-data you can run ``sudo -s -u www-data`` or ``bash``
+* To login as www-data you can run ``sudo su magento`` or ``bash``
 * To re-apply magento permission you can run ``permission`` in command line
+<b>Password for magento user is ``magento``</b>
 
 ### Command line
 * magento (Magento CLI for your project)

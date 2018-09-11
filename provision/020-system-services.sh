@@ -11,11 +11,6 @@ export DEBIAN_FRONTEND=noninteractive
 
 echo '--- Configure system services ---'
 
-# Add git host
-chmod 600 /home/vagrant/.ssh/id_rsa
-chmod 600 /home/vagrant/.ssh/id_rsa.pub
-echo -e "Host ${PROJECT_HOST_REPOSITORY}\n\tStrictHostKeyChecking no\n" >> /home/vagrant/.ssh/config
-
 # Create user
 sed -i 's/bind-address/#bind-address/' /etc/mysql/mariadb.conf.d/50-server.cnf
 sed -i 's/skip-external-locking/#skip-external-locking/' /etc/mysql/mariadb.conf.d/50-server.cnf
@@ -212,8 +207,7 @@ EOF
 a2ensite 000-default
 a2ensite 001-ssl
 sudo a2enmod deflate expires headers proxy proxy_http rewrite ssl
-
-service apache2 reload
+usermod -a -G www-data vagrant
 
 # Adminer in default
 mkdir -p /var/www/html/adminer

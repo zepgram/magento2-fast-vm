@@ -61,6 +61,11 @@ Vagrant.configure(2) do |config|
 
   # Sync
   config.vm.synced_folder ".", "/vagrant", disabled: true
+  config.bindfs.default_options = {
+    force_user:   'magento',
+    force_group:  'www-data',
+    perms:        'u=rwX:g=rD:o=rD'
+  }
   if vmconf['nfs'] == "true"
     # Windows NFS specification
     if OS.is_windows
@@ -73,12 +78,13 @@ Vagrant.configure(2) do |config|
     else
       config.vm.synced_folder hostDirectory, guestDirectory, create: true, :nfs => { :mount_options => ["dmode=777","fmode=777"] }
     end
-      config.bindfs.bind_folder guestDirectory, guestDirectory, :owner => "www-data", :group => "www-data", :'create-as-user' => true
+      config.bindfs.bind_folder guestDirectory, guestDirectory, after: :provision
       config.nfs.map_uid = Process.uid
       config.nfs.map_gid = Process.gid
   else
-    # Regular mount 
-    config.vm.synced_folder hostDirectory, guestDirectory, create: true, :owner => "www-data", :group => "www-data", :mount_options => ["dmode=777", "fmode=777"]
+    # Regular mount
+    config.vm.synced_folder hostDirectory, guestDirectory, create: true
+    config.bindfs.bind_folder guestDirectory, guestDirectory, after: :provision
   end
 
   # SSH key provisioning
