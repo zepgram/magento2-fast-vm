@@ -161,6 +161,7 @@ Disable cron:
 - redis-server
 - composer
 - magento-cloud CLI
+- magento bash completion
 - pestle
 - magereun
 - adminer
