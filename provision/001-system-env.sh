@@ -65,7 +65,7 @@ if [ -f /home/vagrant/provision/001-env.sh ]; then
 fi
 
 # Set project owner for setup
-echo "export PROJECT_SETUP_OWNER="$(ls -ld /var/www/${7}/app | awk 'NR==1 {print $3}') | tee /etc/profile.d/setup-owner.sh
+echo "export PROJECT_SETUP_OWNER="$(ls -ld /var/www/${7} | awk 'NR==1 {print $3}') | tee /etc/profile.d/setup-owner.sh
 
 # Source and display
 source /etc/profile
