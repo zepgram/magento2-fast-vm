@@ -76,7 +76,7 @@ Vagrant.configure(2) do |config|
       # Linux NFS specification
       config.vm.synced_folder hostDirectory, guestDirectory, create: true, :nfs => true, linux__nfs_options: ['rwx','no_subtree_check','all_squash','async'], nfs_version: 3
     else
-      config.vm.synced_folder hostDirectory, guestDirectory, create: true, :nfs => { :mount_options => ["dmode=777","fmode=777"] }
+      config.vm.synced_folder hostDirectory, guestDirectory, create: true, :nfs => true
     end
       config.bindfs.bind_folder guestDirectory, guestDirectory, after: :provision
       config.nfs.map_uid = Process.uid
