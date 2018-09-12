@@ -74,7 +74,7 @@ Vagrant.configure(2) do |config|
     end
     if OS.is_linux
       # Linux NFS specification
-      config.vm.synced_folder hostDirectory, guestDirectory, create: true, :nfs => true, linux__nfs_options: ['rwx','no_subtree_check','all_squash','async'], nfs_version: 3
+      config.vm.synced_folder hostDirectory, guestDirectory, create: true, :nfs => true, linux__nfs_options: ['rw','no_subtree_check','all_squash','async'], nfs_version: 3
     else
       config.vm.synced_folder hostDirectory, guestDirectory, create: true, :nfs => true
     end
