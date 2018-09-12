@@ -38,7 +38,7 @@ if [ $PROJECT_SOURCE == "composer" ]; then
 else
 	# Install from git branch
 	sudo -u vagrant git clone "$PROJECT_REPOSITORY" "$PROJECT_BUILD"
-	cd "$PROJECT_BUILD"; git fetch --all; git reset --hard; git checkout "$PROJECT_SOURCE" --force;
+	cd "$PROJECT_BUILD"; sudo -u vagrant git fetch --all; git reset --hard; git checkout "$PROJECT_SOURCE" --force;
 fi
 
 # Composer install
