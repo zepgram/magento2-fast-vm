@@ -67,4 +67,3 @@ sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento setup:install \
 --timezone="${PROJECT_TIME_ZONE}" \
 --use-rewrites="1" \
 --backend-frontname="admin"
-
