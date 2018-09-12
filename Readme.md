@@ -102,9 +102,10 @@ NFS mount option can be a problem when you reach the point to make it available 
   * Windows 10
   * Mac Sierra
   * Mac OS X
-  * Ubuntu 14
-  * Ubuntu 16
-  * Mint
+  * Ubuntu 14.04
+  * Ubuntu 16.04
+  * Ubuntu 17.04 (require to set option to "nfs_version: 4" in Vagrantfile)
+  * Ubuntu 18.04 (require to set option to "nfs_version: 4" in Vagrantfile)
  
 ## Usage
 
