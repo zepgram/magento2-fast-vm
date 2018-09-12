@@ -12,16 +12,16 @@ export DEBIAN_FRONTEND=noninteractive
 echo '--- Magento post-installation sequence ---'
 
 # Magento cli
+chmod +x "$PROJECT_PATH"/bin/magento
 ln -sf "$PROJECT_PATH"/bin/magento /usr/local/bin/magento
-chmod +x /usr/local/bin/magento
 
 # Post setup
-sudo -u "$PROJECT_SETUP_OWNER" magento deploy:mode:set "$PROJECT_MODE"
-sudo -u "$PROJECT_SETUP_OWNER" magento config:set "admin/security/session_lifetime" "31536000"
-sudo -u "$PROJECT_SETUP_OWNER" magento config:set "admin/security/lockout_threshold" "180"
+sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento deploy:mode:set "$PROJECT_MODE"
+sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento config:set "admin/security/session_lifetime" "31536000"
+sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento config:set "admin/security/lockout_threshold" "180"
 
 # Redis configuration
-sudo -u "$PROJECT_SETUP_OWNER" magento setup:config:set \
+sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento setup:config:set \
       --cache-backend=redis \
       --cache-backend-redis-server=127.0.0.1 \
       --cache-backend-redis-port=6379 \
@@ -32,7 +32,7 @@ sudo -u "$PROJECT_SETUP_OWNER" magento setup:config:set \
       --page-cache-redis-db=1 \
       --page-cache-redis-compress-data=1
 
-sudo -u "$PROJECT_SETUP_OWNER" magento setup:config:set \
+sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento setup:config:set \
       --session-save=redis \
       --session-save-redis-host=127.0.0.1 \
       --session-save-redis-port=6379 \
@@ -72,3 +72,5 @@ fi
 
 # Set permission to magento
 permission
+/etc/init.d/apache2 restart
+/etc/init.d/redis-server restart

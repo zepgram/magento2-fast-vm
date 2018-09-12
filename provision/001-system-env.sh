@@ -42,6 +42,10 @@ if [[ ! -f "/root/.user-${PROJECT_USER}" ]]; then
 	usermod -g www-data "$PROJECT_USER"
 	usermod --shell /bin/bash "$PROJECT_USER"
 	touch /root/.user-"$PROJECT_USER"
+cat <<EOF >> /home/"$PROJECT_USER"/.bashrc
+# Source env
+. /etc/profile
+EOF
 fi
 
 # Log as magento user

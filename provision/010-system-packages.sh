@@ -55,7 +55,7 @@ sudo -u vagrant composer global require hirak/prestissimo
 # Postfix
 wget -P ~/ https://www.thawte.com/roots/thawte_Premium_Server_CA.pem && \
     mv ~/thawte_Premium_Server_CA.pem /usr/local/share/ca-certificates/thawte_Premium_Server_CA.crt && \
-    update-ca-certificates ;
+    update-ca-certificates;
 
 # Mailcatcher
 gem install mime-types --version "< 3" --no-ri --no-rdoc
