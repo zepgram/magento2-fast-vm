@@ -32,8 +32,24 @@ cat <<EOF > /etc/apache2/sites-available/010-$PROJECT_NAME.conf
 </VirtualHost>
 EOF
 a2ensite 010-"$PROJECT_NAME"
+usermod -a -G www-data "$PROJECT_USER"
 
-# Composer authentication
+# Permission script
+cat <<EOF > /home/vagrant/permission.bak
+echo 'Applying permissions to $PROJECT_PATH project'
+cd "$PROJECT_PATH" \\
+&& sudo find var vendor pub/static pub/media app/etc -type f -exec chmod g+w {} \; \\
+&& sudo find var vendor pub/static pub/media app/etc -type d -exec chmod g+ws {} \; \\
+&& sudo chown -R $PROJECT_USER:www-data . && sudo chmod u+x bin/magento
+EOF
+grep '[^[:blank:]]' < /home/vagrant/permission.bak > /usr/local/bin/permission
+rm -rf /home/vagrant/permission.bak
+chmod +x /usr/local/bin/permission
+
+# Credentials
+chmod 600 /home/vagrant/.ssh/id_rsa
+chmod 600 /home/vagrant/.ssh/id_rsa.pub
+echo -e "Host ${PROJECT_HOST_REPOSITORY}\n\tStrictHostKeyChecking no\n" >> /home/vagrant/.ssh/config
 sudo -u vagrant mkdir -p /home/vagrant/.composer
 sudo -u vagrant cat <<EOF > /home/vagrant/.composer/auth.json
 {
@@ -46,25 +62,18 @@ sudo -u vagrant cat <<EOF > /home/vagrant/.composer/auth.json
 }
 EOF
 
-# Permission script
-sudo -u vagrant cat <<EOF > /home/vagrant/permission.bak
-echo 'Applying permissions to $PROJECT_PATH project'
-cd "$PROJECT_PATH" \\
-&& sudo find var vendor pub/static pub/media app/etc -type f -exec chmod g+w {} \; \\
-&& sudo find var vendor pub/static pub/media app/etc -type d -exec chmod g+ws {} \; \\
-&& sudo chown -R www-data:www-data . && sudo chmod u+x bin/magento
-EOF
-grep '[^[:blank:]]' < /home/vagrant/permission.bak > /home/vagrant/permission
-rm -f /home/vagrant/permission.bak
-ln -sf /home/vagrant/permission /usr/local/bin/permission
-chmod +x /usr/local/bin/permission
+# Copy credentials to project user
+cp -r /home/vagrant/.composer /home/"$PROJECT_USER"/.composer
+cp -r /home/vagrant/.ssh /home/"$PROJECT_USER"/.ssh
+chown -R "$PROJECT_USER":"$PROJECT_USER" /home/"$PROJECT_USER"/.composer
+chown -R "$PROJECT_USER":"$PROJECT_USER" /home/"$PROJECT_USER"/.ssh
 
 # Extra pre-build
 if [ -f /home/vagrant/provision/100-pre-build.sh ]; then
   bash /home/vagrant/provision/100-pre-build.sh
 fi
 
-# Flush and restart
+# Restart services
 /etc/init.d/apache2 restart
 /etc/init.d/mysql restart
 /etc/init.d/redis-server restart

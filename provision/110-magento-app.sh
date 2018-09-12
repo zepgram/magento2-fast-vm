@@ -46,21 +46,11 @@ sudo -u vagrant composer install -d "$PROJECT_BUILD" --no-progress
 
 # Rsync directory
 rsync -a --remove-source-files "$PROJECT_BUILD"/ "$PROJECT_PATH"/ || true
-
-# Magento cli
-ln -sf "$PROJECT_PATH"/bin/magento /usr/local/bin/magento
-chmod +x /usr/local/bin/magento
-
-# Exceptional rights for install
-chown -R www-data:www-data "$PROJECT_PATH"
-chmod -R 0777 "$PROJECT_PATH"
+chown -R "$PROJECT_SETUP_OWNER":www-data "$PROJECT_PATH"
 
 # Run install
-su -s /bin/bash -c ' \
-magento setup:uninstall -n -q
-' www-data
-su -s /bin/bash -c ' \
-magento setup:install \
+sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento setup:uninstall -n -q
+sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento setup:install \
 --base-url="http://${PROJECT_URL}/" \
 --base-url-secure="https://${PROJECT_URL}/" \
 --db-host="localhost"  \
@@ -77,4 +67,3 @@ magento setup:install \
 --timezone="${PROJECT_TIME_ZONE}" \
 --use-rewrites="1" \
 --backend-frontname="admin"
-' www-data

@@ -37,14 +37,14 @@ apt-get install -y \
 
 # Set php version
 PHP_VERSION="$(php --version | head -n 1 | cut -d " " -f 2 | cut -c 1,2,3)";
-if [[ -z $(grep "PHP_VERSION" "/etc/profile.d/myvars.sh") ]]; then
-cat <<EOF >> /etc/profile.d/myvars.sh
+if [[ -z $(grep "PHP_VERSION" "/etc/profile.d/env.sh") ]]; then
+cat <<EOF >> /etc/profile.d/env.sh
 export PHP_VERSION="${PHP_VERSION}"
 EOF
 else
-  sed -i '/export PHP_VERSION*/c\'"export PHP_VERSION=$PHP_VERSION" /etc/profile.d/myvars.sh
+  sed -i '/export PHP_VERSION*/c\'"export PHP_VERSION=$PHP_VERSION" /etc/profile.d/env.sh
 fi
-source /etc/profile.d/myvars.sh
+source /etc/profile.d/env.sh
 
 # Composer
 curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
@@ -78,6 +78,10 @@ chmod +x /usr/local/bin/magerun
 curl -sLS https://accounts.magento.cloud/cli/installer | php
 mv /root/.magento-cloud/bin/magento-cloud /usr/local/bin
 chmod +x /usr/local/bin/magento-cloud
+
+# Bash completion for magento cli
+sudo curl -o /etc/bash_completion.d/magento2-bash-completion https://raw.githubusercontent.com/yvoronoy/magento2-bash-completion/master/magento2-bash-completion
+source /etc/bash_completion.d/magento2-bash-completion
 
 # Clean
 apt-get -y clean autoclean

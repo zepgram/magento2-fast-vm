@@ -12,7 +12,7 @@ export DEBIAN_FRONTEND=noninteractive
 echo '--- Environment variables ---'
 
 # Set environment variable
-cat <<EOF > /etc/profile.d/myvars.sh
+cat <<EOF > /etc/profile.d/env.sh
 export PROJECT_HOST_REPOSITORY="${1}"
 export PROJECT_REPOSITORY="${2}"
 export PROJECT_COMPOSER_USER="${3}"
@@ -31,13 +31,24 @@ export PROJECT_LANGUAGE="${15}"
 export PROJECT_TIME_ZONE="${16}"
 export PROJECT_BUILD="/home/vagrant/build/${7}"
 export PROJECT_PATH="/var/www/${7}"
+export PROJECT_USER="${7}"
 EOF
+source /etc/profile.d/env.sh
 
-# Log as www-data
-if [[ -z $(grep "www-data" "/home/vagrant/.bashrc") ]]; then
+# Create magento user and password
+if [[ ! -f "/root/.user-${PROJECT_USER}" ]]; then
+	useradd -m -p $(python -c "import crypt; print crypt.crypt(\"magento\", \"\$6\$$(</dev/urandom tr -dc 'a-zA-Z0-9' | head -c 32)\$\")") "$PROJECT_USER"
+	usermod -a -G sudo "$PROJECT_USER"
+	usermod -g www-data "$PROJECT_USER"
+	usermod --shell /bin/bash "$PROJECT_USER"
+	touch /root/.user-"$PROJECT_USER"
+fi
+
+# Log as magento user
+if [[ -z $(grep "${PROJECT_USER}" "/home/vagrant/.bashrc") ]]; then
 cat <<EOF >> /home/vagrant/.bashrc
-# Log as www-data user
-cd /var/www/${7} && sudo -s -u www-data;
+# Log as $PROJECT_USER user
+cd /var/www/${7} && sudo su $PROJECT_USER;
 EOF
 fi
 
@@ -46,6 +57,9 @@ if [ -f /home/vagrant/provision/001-env.sh ]; then
 	bash /home/vagrant/provision/001-env.sh
 fi
 
+# Set project owner for setup
+echo "export PROJECT_SETUP_OWNER="$(ls -ld /var/www/${7}/app | awk 'NR==1 {print $3}') | tee /etc/profile.d/setup-owner.sh
+
 # Source and display
-source /etc/profile.d/myvars.sh
-cat /etc/profile.d/myvars.sh
+source /etc/profile
+cat /etc/profile.d/env.sh
