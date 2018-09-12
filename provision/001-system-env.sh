@@ -43,8 +43,10 @@ if [[ ! -f "/root/.user-${PROJECT_USER}" ]]; then
 	usermod --shell /bin/bash "$PROJECT_USER"
 	touch /root/.user-"$PROJECT_USER"
 cat <<EOF >> /home/"$PROJECT_USER"/.bashrc
+
 # Source env
-. /etc/profile
+source /etc/profile.d/env.sh
+source /etc/profile.d/setup-owner.sh
 EOF
 fi
 
