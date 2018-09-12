@@ -36,11 +36,13 @@ usermod -a -G www-data "$PROJECT_USER"
 
 # Permission script
 cat <<EOF > /home/vagrant/permission.bak
+if [ "$PROJECT_NFS" != "true" ]; then
 echo 'Applying permissions to $PROJECT_PATH project'
 cd "$PROJECT_PATH" \\
 && sudo find var vendor pub/static pub/media app/etc -type f -exec chmod g+w {} \; \\
 && sudo find var vendor pub/static pub/media app/etc -type d -exec chmod g+ws {} \; \\
 && sudo chown -R $PROJECT_USER:www-data . && sudo chmod u+x bin/magento
+fi
 EOF
 grep '[^[:blank:]]' < /home/vagrant/permission.bak > /usr/local/bin/permission
 rm -rf /home/vagrant/permission.bak

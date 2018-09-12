@@ -109,7 +109,7 @@ Vagrant.configure(2) do |config|
     credentials['composer_password'], credentials['name'], credentials['email'], 
     projectName, magento['url'], magento['source'], magento['edition'], magento['version'], 
     magento['sample'], magento['mode'], magento['currency'], magento['language'],
-    magento['time_zone']
+    magento['time_zone'], vmconf['nfs']
   ]
 
   # Shell provisioning 

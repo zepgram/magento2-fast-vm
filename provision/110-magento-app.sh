@@ -46,7 +46,10 @@ sudo -u vagrant composer install -d "$PROJECT_BUILD" --no-progress
 
 # Rsync directory
 rsync -a --remove-source-files "$PROJECT_BUILD"/ "$PROJECT_PATH"/ || true
-chown -R "$PROJECT_SETUP_OWNER":www-data "$PROJECT_PATH"
+
+if [ ! "$PROJECT_NFS" == "true" ]; then
+	chown -R "$PROJECT_SETUP_OWNER":www-data "$PROJECT_PATH"
+fi
 
 # Run install
 sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento setup:uninstall -n -q
