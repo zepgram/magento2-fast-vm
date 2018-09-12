@@ -71,6 +71,6 @@ if [ -f /home/vagrant/provision/120-post-build.sh ]; then
 fi
 
 # Set permission to magento
-permission
 /etc/init.d/apache2 restart
 /etc/init.d/redis-server restart
+permission
