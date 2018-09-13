@@ -11,10 +11,16 @@ export DEBIAN_FRONTEND=noninteractive
 
 echo '--- Magento installation sequence ---'
 
-# Prepare directory 
-rm -rf "$PROJECT_BUILD" &> /dev/null
+# Prepare directory
+PROJECT_BUILD="/home/$PROJECT_SETUP_OWNER/build/"
 rm -rf "$PROJECT_PATH" &> /dev/null
-sudo -u "$PROJECT_SETUP_OWNER" mkdir -p /home/"$PROJECT_SETUP_OWNER"/build/
+rm -rf "$PROJECT_BUILD" &> /dev/null
+sudo -u "$PROJECT_SETUP_OWNER" mkdir -p $PROJECT_BUILD
+
+# Build on app mount
+if [ $PROJECT_MOUNT != "app" ]; then
+	PROJECT_BUILD="/var/www/$PROJECT_NAME"
+fi
 
 # Get installation files from source
 if [ $PROJECT_SOURCE == "composer" ]; then
