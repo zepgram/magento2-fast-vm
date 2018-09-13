@@ -69,8 +69,15 @@ MOUNT_FULL_PATH=$PROJECT_PATH
 if [ $PROJECT_MOUNT == "app" ]; then
 	MOUNT_FULL_PATH=$PROJECT_PATH/app
 fi
-echo "export PROJECT_SETUP_OWNER="$(ls -ld $MOUNT_FULL_PATH | awk 'NR==1 {print $3}') | tee /etc/profile.d/setup-owner.sh
+SETUP_OWNER="$(ls -ld $MOUNT_FULL_PATH | awk 'NR==1 {print $3}')"
+if [ $SETUP_OWNER != "magento" ]; then
+	SETUP_OWNER="vagrant"
+fi
+cat <<EOF > /etc/profile.d/setup-owner.sh
+export PROJECT_SETUP_OWNER="${SETUP_OWNER}"
+EOF
 
 # Source and display
 source /etc/profile
+cat /etc/profile.d/setup-owner.sh
 cat /etc/profile.d/env.sh
