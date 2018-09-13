@@ -51,7 +51,7 @@ fi
 
 # Apply basic rights on regular mount
 if [ $PROJECT_NFS != "true" ] || [ $PROJECT_MOUNT == "app" ]; then
-	chown -R "$PROJECT_SETUP_OWNER":www-data "$PROJECT_PATH" &> /dev/null
+	chown -fR "$PROJECT_SETUP_OWNER":www-data "$PROJECT_PATH"
 fi
 
 # Run install
