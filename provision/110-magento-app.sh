@@ -14,16 +14,16 @@ echo '--- Magento installation sequence ---'
 # Prepare directory 
 rm -rf "$PROJECT_BUILD" &> /dev/null
 rm -rf "$PROJECT_PATH" &> /dev/null
-sudo -u vagrant mkdir -p /home/vagrant/build/
+sudo -u "$PROJECT_SETUP_OWNER" mkdir -p /home/"$PROJECT_SETUP_OWNER"/build/
 
 # Get installation files from source
 if [ $PROJECT_SOURCE == "composer" ]; then
 	# Install magento source code
-	sudo -u vagrant composer create-project --no-install --no-progress --repository-url=https://repo.magento.com/ \
+	sudo -u "$PROJECT_SETUP_OWNER" composer create-project --no-install --no-progress --repository-url=https://repo.magento.com/ \
 		magento/project-"$PROJECT_EDITION"-edition="$PROJECT_VERSION" "$PROJECT_BUILD"
 	# Install sample data
 	if [ $PROJECT_SAMPLE == "true" ]; then
-		sudo -u vagrant composer require -d "$PROJECT_BUILD" \
+		sudo -u "$PROJECT_SETUP_OWNER" composer require -d "$PROJECT_BUILD" \
 		magento/module-bundle-sample-data magento/module-widget-sample-data \
 		magento/module-theme-sample-data magento/module-catalog-sample-data \
 		magento/module-customer-sample-data magento/module-cms-sample-data \
@@ -37,12 +37,12 @@ if [ $PROJECT_SOURCE == "composer" ]; then
 	fi
 else
 	# Install from git branch
-	sudo -u vagrant git clone "$PROJECT_REPOSITORY" "$PROJECT_BUILD"
-	cd "$PROJECT_BUILD"; sudo -u vagrant git fetch --all; git reset --hard; git checkout "$PROJECT_SOURCE" --force;
+	sudo -u "$PROJECT_SETUP_OWNER" git clone "$PROJECT_REPOSITORY" "$PROJECT_BUILD"
+	cd "$PROJECT_BUILD"; sudo -u "$PROJECT_SETUP_OWNER" git fetch --all; git reset --hard; git checkout "$PROJECT_SOURCE" --force;
 fi
 
 # Composer install
-sudo -u vagrant composer install -d "$PROJECT_BUILD" --no-progress
+sudo -u "$PROJECT_SETUP_OWNER" composer install -d "$PROJECT_BUILD" --no-progress
 
 # Rsync directory
 if [ $PROJECT_BUILD != $PROJECT_PATH ]; then
