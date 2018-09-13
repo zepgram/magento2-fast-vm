@@ -45,10 +45,13 @@ fi
 sudo -u vagrant composer install -d "$PROJECT_BUILD" --no-progress
 
 # Rsync directory
+if [ $PROJECT_BUILD != $PROJECT_PATH ]; then
 rsync -a --remove-source-files "$PROJECT_BUILD"/ "$PROJECT_PATH"/ || true
+fi
 
-if [ ! "$PROJECT_NFS" == "true" ]; then
-	chown -R "$PROJECT_SETUP_OWNER":www-data "$PROJECT_PATH"
+# Apply basic rights on regular mount
+if [ $PROJECT_NFS != "true" ] || [ $PROJECT_MOUNT == "app" ]; then
+	chown -R "$PROJECT_SETUP_OWNER":www-data "$PROJECT_PATH" &> /dev/null
 fi
 
 # Run install

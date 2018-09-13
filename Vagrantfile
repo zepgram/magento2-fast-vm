@@ -26,11 +26,11 @@ magento      = configValues['magento']
 projectName  = 'magento'
 
 # Mount directory option
-hostDirectory = "./www/#{projectName}/app"
-guestDirectory = "/var/www/#{projectName}/app"
-if vmconf['mount'] == 'root'
-  hostDirectory = "./www/#{projectName}"
-  guestDirectory = "/var/www/#{projectName}"
+hostDirectory = "./www/#{projectName}"
+guestDirectory = "/var/www/#{projectName}"
+if vmconf['mount'] == 'app'
+  hostDirectory = "./www/#{projectName}/app"
+  guestDirectory = "/var/www/#{projectName}/app"
 end
 
 # Vagrant configure
@@ -75,7 +75,7 @@ Vagrant.configure(2) do |config|
     if OS.is_linux
       # Linux NFS specification
       config.vm.synced_folder hostDirectory, guestDirectory, create: true, :nfs => true, 
-      linux__nfs_options: ['rw','no_subtree_check','all_squash','async'], nfs_version: 3
+      linux__nfs_options: ['rw','no_subtree_check','all_squash','async'], nfs_version: 4, nfs_udp: false
     else
       config.vm.synced_folder hostDirectory, guestDirectory, create: true, :nfs => true
     end
@@ -109,7 +109,7 @@ Vagrant.configure(2) do |config|
     credentials['composer_password'], credentials['name'], credentials['email'], 
     projectName, magento['url'], magento['source'], magento['edition'], magento['version'], 
     magento['sample'], magento['mode'], magento['currency'], magento['language'],
-    magento['time_zone'], vmconf['nfs']
+    magento['time_zone'], vmconf['nfs'], vmconf['mount']
   ]
 
   # Shell provisioning 

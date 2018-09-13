@@ -11,6 +11,12 @@ export DEBIAN_FRONTEND=noninteractive
 
 echo '--- Environment variables ---'
 
+# Build on app mount
+PROJECT_BUILD="/var/www/${7}"
+if [ "${18}" == "app" ]; then
+PROJECT_BUILD="/home/vagrant/build/${7}"
+fi
+
 # Set environment variable
 cat <<EOF > /etc/profile.d/env.sh
 export PROJECT_HOST_REPOSITORY="${1}"
@@ -30,7 +36,8 @@ export PROJECT_CURRENCY="${14}"
 export PROJECT_LANGUAGE="${15}"
 export PROJECT_TIME_ZONE="${16}"
 export PROJECT_NFS="${17}"
-export PROJECT_BUILD="/home/vagrant/build/${7}"
+export PROJECT_MOUNT="${18}"
+export PROJECT_BUILD="${PROJECT_BUILD}"
 export PROJECT_PATH="/var/www/${7}"
 export PROJECT_USER="${7}"
 EOF

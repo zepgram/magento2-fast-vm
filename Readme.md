@@ -104,8 +104,8 @@ NFS mount option can be a problem when you reach the point to make it available 
   * Mac OS X
   * Ubuntu 14.04
   * Ubuntu 16.04
-  * Ubuntu 17.04 (require to set option to "nfs_version: 4" in Vagrantfile)
-  * Ubuntu 18.04 (require to set option to "nfs_version: 4" in Vagrantfile)
+  * Ubuntu 17.04
+  * Ubuntu 18.04
  
 ## Usage
 
