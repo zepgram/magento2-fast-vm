@@ -5,7 +5,7 @@ vmconf:
   memory: '4096'
   cpus: '2'
   nfs: 'true'
-  mount: 'app'
+  mount: 'root'
   provision: 'all'
 credentials:
   git_host: 'github.com'
