@@ -2,7 +2,7 @@
 
 # ------------------------------------- #
 # NFS Vagrant - Magento2                #
-#										#
+#                                       #
 # Author: zpgram                        #
 # Git: https://github.com/zepgram/      #
 # ------------------------------------- #
