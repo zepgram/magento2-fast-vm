@@ -16,13 +16,13 @@ PROJECT_BUILD="/home/$PROJECT_SETUP_OWNER/build/"
 rm -rf "$PROJECT_PATH" &> /dev/null
 rm -rf "$PROJECT_BUILD" &> /dev/null
 sudo -u "$PROJECT_SETUP_OWNER" mkdir -p $PROJECT_BUILD
-chmod -R 0777 /home/vagrant/
+chmod -R 777 /home/vagrant/
+chmod -R 600 /home/vagrant/.ssh/.
 
 # Build on app mount
 if [ $PROJECT_MOUNT != "app" ]; then
 	PROJECT_BUILD="/var/www/$PROJECT_NAME"
 fi
-
 
 # Get installation files from source
 if [ $PROJECT_SOURCE == "composer" ]; then
