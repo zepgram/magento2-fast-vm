@@ -193,4 +193,3 @@ To setup phpStorm configuration you can follow magento2 [official documentation]
 - If you have trouble during installation please open a new issue on this git repository.
 - In case of error with NFS mount [downgrade to version 1.9.5](https://releases.hashicorp.com/vagrant/1.9.5/). Problem is known and reported by vagrant community: https://github.com/hashicorp/vagrant/issues/5424
 - If you encountered an unexpected error during vagrant provisionning. Don't forget to set NFS option to <b>false</b> and run ``vagrant provision``
-- If you run ``vagrant provision`` after first installation, please run ``vagrant reload`` before re-provisioning
