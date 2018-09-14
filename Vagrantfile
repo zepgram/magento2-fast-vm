@@ -27,10 +27,10 @@ projectName  = 'magento'
 
 # Mount directory option
 hostDirectory = "./www/#{projectName}"
-guestDirectory = "/var/www/#{projectName}"
+guestDirectory = "/srv/#{projectName}"
 if vmconf['mount'] == 'app'
   hostDirectory = "./www/#{projectName}/app"
-  guestDirectory = "/var/www/#{projectName}/app"
+  guestDirectory = "/srv/#{projectName}/app"
 end
 
 # Vagrant configure

@@ -31,7 +31,7 @@ export PROJECT_LANGUAGE="${15}"
 export PROJECT_TIME_ZONE="${16}"
 export PROJECT_NFS="${17}"
 export PROJECT_MOUNT="${18}"
-export PROJECT_PATH="/var/www/${7}"
+export PROJECT_PATH="/srv/${7}"
 export PROJECT_USER="${7}"
 EOF
 source /etc/profile.d/env.sh
@@ -55,7 +55,7 @@ fi
 if [[ -z $(grep "${PROJECT_USER}" "/home/vagrant/.bashrc") ]]; then
 cat <<EOF >> /home/vagrant/.bashrc
 # Log as $PROJECT_USER user
-cd /var/www/${7} && sudo su $PROJECT_USER;
+cd $PROJECT_PATH && sudo su $PROJECT_USER;
 EOF
 fi
 

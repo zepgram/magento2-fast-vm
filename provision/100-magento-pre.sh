@@ -19,12 +19,12 @@ mysql -u root -ppassword -e "CREATE DATABASE ${PROJECT_NAME} COLLATE 'utf8mb4_ge
 cat <<EOF > /etc/apache2/sites-available/010-$PROJECT_NAME.conf
 <VirtualHost *:80>
   ServerName ${PROJECT_URL}
-  DocumentRoot "${PROJECT_PATH}"
+  DocumentRoot "/var/www/${PROJECT_NAME}"
   SetEnv VAGRANT 1
   ErrorLog /var/log/apache2/${PROJECT_NAME}.error.log
   CustomLog /var/log/apache2/${PROJECT_NAME}.access.log combined
   SetEnvIf X-Forwarded-Proto https HTTPS=on
-  <Directory "${PROJECT_PATH}">
+  <Directory "/var/www/${PROJECT_NAME}">
     Order Deny,Allow
     Allow from all
     AllowOverride All

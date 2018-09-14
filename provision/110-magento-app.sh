@@ -12,21 +12,21 @@ export DEBIAN_FRONTEND=noninteractive
 echo '--- Magento installation sequence ---'
 
 # Prepare directory
-PROJECT_BUILD="/home/$PROJECT_SETUP_OWNER/build/"
-rm -rf "$PROJECT_PATH" &> /dev/null
-rm -rf "$PROJECT_BUILD" &> /dev/null
-sudo -u "$PROJECT_SETUP_OWNER" mkdir -p $PROJECT_BUILD
-
-# Build on app mount
-if [ $PROJECT_MOUNT != "app" ]; then
-	PROJECT_BUILD="/var/www/$PROJECT_NAME"
+DIRECTORY_BUILD="/srv"
+if [ $PROJECT_MOUNT == "app" ]; then
+	DIRECTORY_BUILD="/tmp"
 fi
+PROJECT_BUILD="$DIRECTORY_BUILD/$PROJECT_NAME"
+rm -rf $PROJECT_BUILD &> /dev/null
+chmod -R 777 /srv /tmp
+mkdir -p $PROJECT_BUILD
+chown -fR $PROJECT_SETUP_OWNER:$PROJECT_SETUP_OWNER $PROJECT_BUILD
 
 # Get installation files from source
 if [ $PROJECT_SOURCE == "composer" ]; then
 	# Install magento source code
-	sudo -u "$PROJECT_SETUP_OWNER" composer create-project --no-install --no-progress --repository-url=https://repo.magento.com/ \
-		magento/project-"$PROJECT_EDITION"-edition="$PROJECT_VERSION" "$PROJECT_BUILD"
+	sudo -u "$PROJECT_SETUP_OWNER" composer create-project --no-interaction --no-install --no-progress \
+		--repository=https://repo.magento.com/ magento/project-"$PROJECT_EDITION"-edition="$PROJECT_VERSION" "$PROJECT_NAME" -d "$DIRECTORY_BUILD"
 	# Install sample data
 	if [ $PROJECT_SAMPLE == "true" ]; then
 		sudo -u "$PROJECT_SETUP_OWNER" composer require -d "$PROJECT_BUILD" \
@@ -48,12 +48,16 @@ else
 fi
 
 # Composer install
-sudo -u "$PROJECT_SETUP_OWNER" composer install -d "$PROJECT_BUILD" --no-progress
+sudo -u "$PROJECT_SETUP_OWNER" composer install -d "$PROJECT_BUILD" --no-progress --no-interaction --no-suggest
 
 # Rsync directory
 if [ $PROJECT_BUILD != $PROJECT_PATH ]; then
-rsync -a --remove-source-files "$PROJECT_BUILD"/ "$PROJECT_PATH"/ || true
+	rsync -a --remove-source-files "$PROJECT_BUILD"/ "$PROJECT_PATH"/ || true
 fi
+
+# Symlink
+rm -rf /var/www/"$PROJECT_NAME"
+ln -sfn /srv/"$PROJECT_NAME" /var/www/"$PROJECT_NAME"
 
 # Apply basic rights on regular mount
 if [ $PROJECT_NFS != "true" ] || [ $PROJECT_MOUNT == "app" ]; then

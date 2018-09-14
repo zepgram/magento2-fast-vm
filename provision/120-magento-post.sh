@@ -77,3 +77,4 @@ fi
 /etc/init.d/apache2 restart
 /etc/init.d/redis-server restart
 permission
+magento cache:clean
