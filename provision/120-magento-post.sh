@@ -44,17 +44,13 @@ if [ $PROJECT_SOURCE == "composer" ]; then
   if [ -f "${PROJECT_PATH}/php.ini.sample" ]; then
     sudo -u "$PROJECT_SETUP_OWNER" cp "$PROJECT_PATH"/php.ini.sample "$PROJECT_PATH"/php.ini
   fi
-  # Run npm install if required files exist
-  if [ -f "${PROJECT_PATH}/Gruntfile.js.sample" ]; then
-    sudo -u "$PROJECT_SETUP_OWNER" cp "$PROJECT_PATH"/Gruntfile.js.sample "$PROJECT_PATH"/Gruntfile.js
-  fi
+  # Enable npm
   if [ -f "${PROJECT_PATH}/package.json.sample" ]; then
     sudo -u "$PROJECT_SETUP_OWNER" cp "$PROJECT_PATH"/package.json.sample "$PROJECT_PATH"/package.json
   fi
-  if [ -f "${PROJECT_PATH}/package.json" ] && [ -f "${PROJECT_PATH}/Gruntfile.js" ]; then
-    cd "$PROJECT_PATH" \
-      && sudo -u "$PROJECT_SETUP_OWNER" npm install &> /dev/null \
-      && sudo -u "$PROJECT_SETUP_OWNER" npm update
+  # Enable grunt
+  if [ -f "${PROJECT_PATH}/Gruntfile.js.sample" ]; then
+    sudo -u "$PROJECT_SETUP_OWNER" cp "$PROJECT_PATH"/Gruntfile.js.sample "$PROJECT_PATH"/Gruntfile.js
   fi
 else
   if [ -f "${PROJECT_PATH}/.git/config" ]; then
@@ -63,6 +59,13 @@ else
     git --git-dir "$PROJECT_PATH"/.git config user.email "$PROJECT_USER_EMAIL"
     git --git-dir "$PROJECT_PATH"/.git config core.filemode false
   fi
+fi
+
+# Npm install
+if [ -f "${PROJECT_PATH}/package.json" ] && [ -f "${PROJECT_PATH}/Gruntfile.js" ]; then
+  cd "$PROJECT_PATH" \
+    && sudo -u "$PROJECT_SETUP_OWNER" npm install &> /dev/null \
+    && sudo -u "$PROJECT_SETUP_OWNER" npm update
 fi
 
 # Extra post-build
