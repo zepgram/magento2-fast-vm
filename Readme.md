@@ -5,9 +5,9 @@
 [![license](https://img.shields.io/badge/style-MIT-blue.svg?longCache=true&style=flat&label=license)](https://github.com/zepgram/magento2-fast-vm/blob/master/LICENSE)
 [![release](https://img.shields.io/badge/style-v1.0-blue.svg?longCache=true&style=flat&label=release)](https://github.com/zepgram/magento2-fast-vm/releases)
 
-![windows](https://img.shields.io/badge/ok-green.svg?longCache=true&style=flat&label=windows&logo=windows)
-![apple](https://img.shields.io/badge/ok-green.svg?longCache=true&style=flat&label=mac&logo=apple)
-![linux](https://img.shields.io/badge/ok-green.svg?longCache=true&style=flat&label=linux&logo=linux)
+![windows](https://img.shields.io/badge/ok-brightgreen.svg?longCache=true&style=flat&label=windows&logo=windows)
+![apple](https://img.shields.io/badge/ok-brightgreen.svg?longCache=true&style=flat&label=mac&logo=apple)
+![linux](https://img.shields.io/badge/ok-brightgreen.svg?longCache=true&style=flat&label=linux&logo=linux)
 
 ## Requirements
 
