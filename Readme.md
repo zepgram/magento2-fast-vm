@@ -1,5 +1,14 @@
 # NFS Vagrant - Magento2
 
+![dev-box](https://img.shields.io/badge/style-dev--box-blue.svg?longCache=true&style=flat-square&label=magento2&logo=magento)
+![vagrant](https://img.shields.io/badge/style-debian--stretch-blue.svg?longCache=true&style=flat-square&label=vagrant&logo=vagrant)
+![version](https://img.shields.io/badge/style-v1.0-blue.svg?longCache=true&style=flat-square&label=release&logo=release)
+![license](https://img.shields.io/badge/style-MIT-blue.svg?longCache=true&style=flat-square&label=license&logo=release)
+
+![windows](https://img.shields.io/badge/ok-green.svg?longCache=true&style=flat-square&label=windows&logo=windows)
+![apple](https://img.shields.io/badge/ok-green.svg?longCache=true&style=flat-square&label=mac&logo=apple)
+![linux](https://img.shields.io/badge/ok-green.svg?longCache=true&style=flat-square&label=linux&logo=linux)
+
 ## Requirements
 
 ### Virtualbox
@@ -93,19 +102,6 @@ You can add your custom shell provisioners which will be executed on pre-defined
 ### Mount
 * <b>app directory:</b> magento2 development must be provided in app directory, so mounting the entire project is not necessary according to documentation and best practice provided by magento. Furthermore, by mounting only this directory the virtual machine grants great performance: generated files and static content are not shared between guest and host machine.
 * <b>root directory:</b> if you wish to mount the entire project you can, but I highly recommend you to enable NFS option to improve performance between guest and host machine.
-
-### NFS
-NFS mount option can be a problem when you reach the point to make it available for all operating system.<br>
-<b>If you experience any trouble during installation, you can disable NFS option in config.yaml</b><br>
-* Operating system tested with NFS option:
-  * Windows 7
-  * Windows 10
-  * Mac Sierra
-  * Mac OS X
-  * Ubuntu 14.04
-  * Ubuntu 16.04
-  * Ubuntu 17.04
-  * Ubuntu 18.04
  
 ## Usage
 
@@ -192,4 +188,4 @@ To setup phpStorm configuration you can follow magento2 [official documentation]
 ## Issue
 - If you have trouble during installation please open a new issue on this git repository.
 - In case of error with NFS mount [downgrade to version 1.9.5](https://releases.hashicorp.com/vagrant/1.9.5/). Problem is known and reported by vagrant community: https://github.com/hashicorp/vagrant/issues/5424
-- If you encountered an unexpected error during vagrant provisionning. Don't forget to set NFS option to <b>false</b> and run ``vagrant provision``
+- If you encountered an unexpected error during vagrant provisionning : <b>set NFS option to false</b> and run ``vagrant provision``
