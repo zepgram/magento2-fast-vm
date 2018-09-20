@@ -2,7 +2,6 @@
 
 [![vagrant](https://img.shields.io/badge/style-debian:stretch-blue.svg?longCache=true&style=flat&label=vagrant&logo=vagrant)](https://app.vagrantup.com/debian/boxes/stretch64)
 [![dev-box](https://img.shields.io/badge/style-source:git--composer-blue.svg?longCache=true&style=flat&label=magento2%20&logo=magento)](https://github.com/zepgram/magento2-fast-vm/blob/master/config.yaml.example)
-
 [![license](https://img.shields.io/badge/style-MIT-blue.svg?longCache=true&style=flat&label=license)](https://github.com/zepgram/magento2-fast-vm/blob/master/LICENSE)
 [![release](https://img.shields.io/badge/style-v1.0-blue.svg?longCache=true&style=flat&label=release)](https://github.com/zepgram/magento2-fast-vm/releases)
 
