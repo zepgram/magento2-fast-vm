@@ -1,10 +1,10 @@
 # NFS Vagrant - Magento2
 
-![vagrant](https://img.shields.io/badge/style-debian:stretch-blue.svg?longCache=true&style=flat-square&label=vagrant&logo=vagrant)
-![dev-box](https://img.shields.io/badge/style-source:git--composer-blue.svg?longCache=true&style=flat-square&label=magento2%20&logo=magento)
+[![vagrant](https://img.shields.io/badge/style-debian:stretch-blue.svg?longCache=true&style=flat-square&label=vagrant&logo=vagrant)](https://app.vagrantup.com/debian/boxes/stretch64)
+[![dev-box](https://img.shields.io/badge/style-source:git--composer-blue.svg?longCache=true&style=flat-square&label=magento2%20&logo=magento)](https://github.com/zepgram/magento2-fast-vm/blob/master/config.yaml.example)
 
-![version](https://img.shields.io/badge/style-v1.0-blue.svg?longCache=true&style=flat-square&label=release&logo=release)
-![license](https://img.shields.io/badge/style-MIT-blue.svg?longCache=true&style=flat-square&label=license&logo=release)
+[![license](https://img.shields.io/badge/style-MIT-blue.svg?longCache=true&style=flat-square&label=license)](https://github.com/zepgram/magento2-fast-vm/blob/master/LICENSE)
+[![release](https://img.shields.io/badge/style-v1.0-blue.svg?longCache=true&style=flat-square&label=release)](https://github.com/zepgram/magento2-fast-vm/releases)
 
 ![windows](https://img.shields.io/badge/ok-green.svg?longCache=true&style=flat-square&label=windows&logo=windows)
 ![apple](https://img.shields.io/badge/ok-green.svg?longCache=true&style=flat-square&label=mac&logo=apple)
