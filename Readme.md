@@ -1,7 +1,8 @@
 # NFS Vagrant - Magento2
 
-![dev-box](https://img.shields.io/badge/style-dev--box-blue.svg?longCache=true&style=flat-square&label=magento2&logo=magento)
-![vagrant](https://img.shields.io/badge/style-debian--stretch-blue.svg?longCache=true&style=flat-square&label=vagrant&logo=vagrant)
+![vagrant](https://img.shields.io/badge/style-debian:stretch-blue.svg?longCache=true&style=flat-square&label=vagrant&logo=vagrant)
+![dev-box](https://img.shields.io/badge/style-source:git--composer-blue.svg?longCache=true&style=flat-square&label=magento2%20&logo=magento)
+
 ![version](https://img.shields.io/badge/style-v1.0-blue.svg?longCache=true&style=flat-square&label=release&logo=release)
 ![license](https://img.shields.io/badge/style-MIT-blue.svg?longCache=true&style=flat-square&label=license&logo=release)
 
