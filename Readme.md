@@ -9,6 +9,8 @@
 ![apple](https://img.shields.io/badge/ok-brightgreen.svg?longCache=true&style=flat&label=mac&logo=apple)
 ![linux](https://img.shields.io/badge/ok-brightgreen.svg?longCache=true&style=flat&label=linux&logo=linux)
 
+![associate-developer](https://u.magento.com/media/catalog/product/cache/17/small_image/92x165/9df78eab33525d08d6e5fb8d27136e95/a/s/assoc_dev-l.png)
+
 ## Requirements
 
 ### Virtualbox
