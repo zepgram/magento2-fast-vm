@@ -83,8 +83,8 @@ if [ $PROJECT_NFS == "true" ] && [ $PROJECT_MOUNT != "app" ]; then
 fi
 
 # Set permission to magento
+rm -rf "$PROJECT_PATH"/generated/code/
+magento cache:clean
+permission
 /etc/init.d/apache2 restart
 /etc/init.d/redis-server restart
-rm -rf "$PROJECT_PATH"/generated/code/
-permission
-magento cache:clean
