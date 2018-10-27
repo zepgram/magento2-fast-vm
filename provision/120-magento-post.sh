@@ -85,5 +85,6 @@ fi
 # Set permission to magento
 /etc/init.d/apache2 restart
 /etc/init.d/redis-server restart
+rm -rf "$PROJECT_PATH"/generated/code/
 permission
 magento cache:clean
