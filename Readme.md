@@ -1,15 +1,15 @@
 # NFS Vagrant - Magento2
 
-[![vagrant](https://img.shields.io/badge/style-debian:stretch-blue.svg?longCache=true&style=flat&label=vagrant&logo=vagrant)](https://app.vagrantup.com/debian/boxes/stretch64)
-[![dev-box](https://img.shields.io/badge/style-source:git--composer-blue.svg?longCache=true&style=flat&label=magento2%20&logo=magento)](https://github.com/zepgram/magento2-fast-vm/blob/master/config.yaml.example)
-[![license](https://img.shields.io/badge/style-MIT-blue.svg?longCache=true&style=flat&label=license)](https://github.com/zepgram/magento2-fast-vm/blob/master/LICENSE)
-[![release](https://img.shields.io/badge/style-v1.0-blue.svg?longCache=true&style=flat&label=release)](https://github.com/zepgram/magento2-fast-vm/releases)
+[![vagrant](https://img.shields.io/badge/vagrant-debian:stretch-blue.svg?longCache=true&style=flat&label=vagrant&logo=vagrant)](https://app.vagrantup.com/debian/boxes/stretch64)
+[![dev-box](https://img.shields.io/badge/source-git--composer-blue.svg?longCache=true&style=flat&label=magento2%20&logo=magento)](https://github.com/zepgram/magento2-fast-vm/blob/master/config.yaml.example)
+[![license](https://img.shields.io/badge/license-MIT-blue.svg?longCache=true&style=flat&label=license)](https://github.com/zepgram/magento2-fast-vm/blob/master/LICENSE)
+[![release](https://img.shields.io/badge/release-v1.0-blue.svg?longCache=true&style=flat&label=release)](https://github.com/zepgram/magento2-fast-vm/releases)
 
-![windows](https://img.shields.io/badge/ok-black.svg?longCache=true&style=flat&label=windows&logo=windows)
-![apple](https://img.shields.io/badge/ok-black.svg?longCache=true&style=flat&label=mac&logo=apple)
-![linux](https://img.shields.io/badge/ok-black.svg?longCache=true&style=flat&label=linux&logo=linux)
+![windows](https://img.shields.io/badge/windows-ok-green.svg?longCache=true&style=flat&label=windows&logo=windows)
+![apple](https://img.shields.io/badge/mac-ok-green.svg?longCache=true&style=flat&label=mac&logo=apple)
+![linux](https://img.shields.io/badge/linux-ok-green.svg?longCache=true&style=flat&label=linux&logo=linux)
 
-![associate-developer](https://u.magento.com/media/catalog/product/cache/17/small_image/92x165/9df78eab33525d08d6e5fb8d27136e95/a/s/assoc_dev-l.png)
+[![associate-developer](https://u.magento.com/media/catalog/product/cache/17/small_image/92x165/9df78eab33525d08d6e5fb8d27136e95/a/s/assoc_dev-l.png)](https://u.magento.com/certification/directory/dev/2504796/)
 
 ## Requirements
 
