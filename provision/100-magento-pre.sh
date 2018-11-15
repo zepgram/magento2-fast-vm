@@ -66,7 +66,7 @@ sudo -u vagrant cat <<EOF > /home/vagrant/.composer/auth.json
 EOF
 
 # Git global config
-if [ $PROJECT_SOURCE != "composer" ]; then
+if [ "$PROJECT_SOURCE" != "composer" ]; then
   git config --system user.name "$PROJECT_USER_NAME"
   git config --system user.email "$PROJECT_USER_EMAIL"
   git config --system core.filemode false

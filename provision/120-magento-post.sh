@@ -34,7 +34,7 @@ sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento setup:config:set \
       --session-save-redis-db=2
 
 # Composer config
-if [ $PROJECT_SOURCE == "composer" ]; then
+if [ "$PROJECT_SOURCE" == "composer" ]; then
   # Enable php ini
   if [ -f "${PROJECT_PATH}/php.ini.sample" ]; then
     sudo -u "$PROJECT_SETUP_OWNER" cp "$PROJECT_PATH"/php.ini.sample "$PROJECT_PATH"/php.ini
@@ -67,7 +67,7 @@ sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento config:set "admin/sec
 sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento config:set "admin/security/lockout_threshold" "180"
 
 # Change materialization strategy on NFS ROOT option
-if [ $PROJECT_NFS == "true" ] && [ $PROJECT_MOUNT != "app" ]; then
+if [ "$PROJECT_NFS" == "true" ] && [ "$PROJECT_MOUNT" != "app" ]; then
   if [ -f "${PROJECT_PATH}/.git/config" ]; then
       git --git-dir "$PROJECT_PATH"/.git update-index --assume-unchanged app/etc/di.xml
   fi
