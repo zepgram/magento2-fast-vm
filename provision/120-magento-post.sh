@@ -15,11 +15,6 @@ echo '--- Magento post-installation sequence ---'
 chmod +x "$PROJECT_PATH"/bin/magento
 ln -sf "$PROJECT_PATH"/bin/magento /usr/local/bin/magento
 
-# Post setup
-sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento deploy:mode:set "$PROJECT_MODE"
-sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento config:set "admin/security/session_lifetime" "31536000"
-sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento config:set "admin/security/lockout_threshold" "180"
-
 # Redis configuration
 sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento setup:config:set \
       --cache-backend=redis \
@@ -52,13 +47,6 @@ if [ $PROJECT_SOURCE == "composer" ]; then
   if [ -f "${PROJECT_PATH}/Gruntfile.js.sample" ]; then
     sudo -u "$PROJECT_SETUP_OWNER" cp "$PROJECT_PATH"/Gruntfile.js.sample "$PROJECT_PATH"/Gruntfile.js
   fi
-else
-  if [ -f "${PROJECT_PATH}/.git/config" ]; then
-    # Git config (ignore permission change)
-    git --git-dir "$PROJECT_PATH"/.git config user.name "$PROJECT_USER_NAME"
-    git --git-dir "$PROJECT_PATH"/.git config user.email "$PROJECT_USER_EMAIL"
-    git --git-dir "$PROJECT_PATH"/.git config core.filemode false
-  fi
 fi
 
 # Npm install
@@ -72,6 +60,11 @@ fi
 if [ -f /home/vagrant/provision/120-post-build.sh ]; then
   bash /home/vagrant/provision/120-post-build.sh
 fi
+
+# Post setup
+sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento deploy:mode:set "$PROJECT_MODE"
+sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento config:set "admin/security/session_lifetime" "31536000"
+sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento config:set "admin/security/lockout_threshold" "180"
 
 # Change materialization strategy on NFS ROOT option
 if [ $PROJECT_NFS == "true" ] && [ $PROJECT_MOUNT != "app" ]; then

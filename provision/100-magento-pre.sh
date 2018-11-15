@@ -65,6 +65,13 @@ sudo -u vagrant cat <<EOF > /home/vagrant/.composer/auth.json
 }
 EOF
 
+# Git global config
+if [ $PROJECT_SOURCE != "composer" ]; then
+  git config --system user.name "$PROJECT_USER_NAME"
+  git config --system user.email "$PROJECT_USER_EMAIL"
+  git config --system core.filemode false
+fi
+
 # Copy credentials to project user
 cp -r /home/vagrant/.composer /home/"$PROJECT_USER"/.composer
 cp -r /home/vagrant/.ssh /home/"$PROJECT_USER"/.ssh
