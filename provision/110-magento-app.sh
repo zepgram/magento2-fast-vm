@@ -50,7 +50,7 @@ if [ "$PROJECT_SOURCE" == "composer" ]; then
 else
 	# Install from git branch
 	sudo -u "$PROJECT_SETUP_OWNER" git clone "$PROJECT_REPOSITORY" "$PROJECT_BUILD"
-	cd "$PROJECT_BUILD"; sudo -u "$PROJECT_SETUP_OWNER" git fetch --all; git reset --hard; git checkout "$PROJECT_SOURCE" --force;
+	cd "$PROJECT_BUILD"; sudo -u "$PROJECT_SETUP_OWNER" git fetch --all; git reset --hard; git checkout "$PROJECT_SOURCE" --force; git pull origin "$PROJECT_SOURCE";
 fi
 
 # Composer install
