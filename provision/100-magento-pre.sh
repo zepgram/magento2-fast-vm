@@ -70,6 +70,7 @@ EOF
 
 # Copy credentials to project user
 chown -R vagrant:vagrant /home/vagrant
+mkdir -p /home/"$PROJECT_USER"/.composer /home/"$PROJECT_USER"/.ssh
 cp -r /home/vagrant/.composer/* /home/"$PROJECT_USER"/.composer/
 cp -r /home/vagrant/.ssh/* /home/"$PROJECT_USER"/.ssh/
 chown -R "$PROJECT_USER":"$PROJECT_USER" /home/"$PROJECT_USER"

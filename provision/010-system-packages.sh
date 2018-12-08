@@ -35,9 +35,11 @@ echo "deb https://packages.sury.org/php/ stretch main" | sudo tee /etc/apt/sourc
 # Set required php version
 MAGENTO_PHP_VERSION="7.2";
 if $(dpkg --compare-versions "${PROJECT_VERSION}" "lt" "2.3"); then
+  MAGENTO_PHP_VERSION="7.1";
+fi
+if $(dpkg --compare-versions "${PROJECT_VERSION}" "lt" "2.1"); then
   MAGENTO_PHP_VERSION="7.0";
 fi
-
 # PHP packages
 apt-get update -y && apt-get install -y \
   php${MAGENTO_PHP_VERSION} php${MAGENTO_PHP_VERSION}-common php${MAGENTO_PHP_VERSION}-cli \
@@ -47,7 +49,7 @@ apt-get update -y && apt-get install -y \
   php${MAGENTO_PHP_VERSION}-mysql php${MAGENTO_PHP_VERSION}-sqlite3 libapache2-mod-php${MAGENTO_PHP_VERSION} \
   php${MAGENTO_PHP_VERSION}-memcache php${MAGENTO_PHP_VERSION}-redis php${MAGENTO_PHP_VERSION}-opcache \
   python ruby ruby-dev
-if [[ "${MAGENTO_PHP_VERSION}" == "7.0" ]]; then
+if [[ "${MAGENTO_PHP_VERSION}" == "7.1" ]]; then
   apt-get install -y php${MAGENTO_PHP_VERSION}-mcrypt
 fi
 
