@@ -3,7 +3,7 @@
 # ------------------------------------- #
 # NFS Vagrant - Magento2                #
 #                                       #
-# Author: zpgram                        #
+# Author: zepgram                       #
 # Git: https://github.com/zepgram/      #
 # ------------------------------------- #
 
@@ -67,8 +67,8 @@ EOF
 
 # Git global config
 if [ "$PROJECT_SOURCE" != "composer" ]; then
-  git config --system user.name "$PROJECT_USER_NAME"
-  git config --system user.email "$PROJECT_USER_EMAIL"
+  git config --system user.name "$PROJECT_GIT_USER"
+  git config --system user.email "$PROJECT_GIT_EMAIL"
   git config --system core.filemode false
 fi
 

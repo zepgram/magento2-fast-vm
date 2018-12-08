@@ -7,18 +7,20 @@ vmconf:
   nfs: 'true'
   mount: 'app'
   provision: 'all'
-credentials:
-  git_host: 'github.com'
-  git_repository: 'ssh://git@github.com:project-name.git'
-  composer_username: 'magentoUsernameKey'
-  composer_password: 'magentoPasswordKey'
+composer:
+  username: 'magentoUsernameKey'
+  password: 'magentoPasswordKey'
+git:
   name: 'Benjamin Calef'
   email: 'contact@ivc-digital.com'
+  host: 'github.com'
+  repository: 'ssh://git@github.com:project-name.git'
 magento:
+  php: '7.2'
   url: 'dev.magento.com'
   source: 'composer'
   edition: 'community'
-  version: '2.2.5'
+  version: '2.3.0'
   sample: 'true'
   mode: 'developer'
   currency: 'USD'

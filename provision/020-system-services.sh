@@ -3,7 +3,7 @@
 # ------------------------------------- #
 # NFS Vagrant - Magento2                #
 #                                       #
-# Author: zpgram                        #
+# Author: zepgram                       #
 # Git: https://github.com/zepgram/      #
 # ------------------------------------- #
 
@@ -145,7 +145,6 @@ sed -i 's/;opcache.validate_timestamps=.*/opcache.validate_timestamps=1/' /etc/p
 sed -i 's/memory_limit = .*/memory_limit = 2G/' /etc/php/"$PHP_VERSION"/cli/php.ini
 sed -i "s|;date.timezone =|date.timezone = ${PROJECT_TIME_ZONE}|" /etc/php/"$PHP_VERSION"/cli/php.ini
 sed -i 's/max_execution_time = .*/max_execution_time = 60/' /etc/php/"$PHP_VERSION"/cli/php.ini
-
 
 # File opcache for cli
 cat <<EOF >> /etc/php/"$PHP_VERSION"/apache2/php.ini

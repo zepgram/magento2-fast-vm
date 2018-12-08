@@ -3,7 +3,7 @@
 # ------------------------------------- #
 # NFS Vagrant - Magento2                #
 #                                       #
-# Author: zpgram                        #
+# Author: zepgram                       #
 # Git: https://github.com/zepgram/      #
 # ------------------------------------- #
 
@@ -13,13 +13,15 @@ echo '--- Environment variables ---'
 
 # Set environment variable
 cat <<EOF > /etc/profile.d/env.sh
-export PROJECT_HOST_REPOSITORY="${1}"
-export PROJECT_REPOSITORY="${2}"
-export PROJECT_COMPOSER_USER="${3}"
-export PROJECT_COMPOSER_PASS="${4}"
-export PROJECT_USER_NAME="${5}"
-export PROJECT_USER_EMAIL="${6}"
-export PROJECT_NAME="${7}"
+export PROJECT_NAME="${1}"
+export PROJECT_PATH="/srv/${1}"
+export PROJECT_USER="${1}"
+export PROJECT_COMPOSER_USER="${2}"
+export PROJECT_COMPOSER_PASS="${3}"
+export PROJECT_GIT_USER="${4}"
+export PROJECT_GIT_EMAIL="${5}"
+export PROJECT_HOST_REPOSITORY="${6}"
+export PROJECT_REPOSITORY="${7}"
 export PROJECT_URL="${8}"
 export PROJECT_SOURCE="${9}"
 export PROJECT_EDITION="${10}"
@@ -31,8 +33,6 @@ export PROJECT_LANGUAGE="${15}"
 export PROJECT_TIME_ZONE="${16}"
 export PROJECT_NFS="${17}"
 export PROJECT_MOUNT="${18}"
-export PROJECT_PATH="/srv/${7}"
-export PROJECT_USER="${7}"
 EOF
 source /etc/profile.d/env.sh
 
