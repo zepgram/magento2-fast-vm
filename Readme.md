@@ -34,14 +34,6 @@ Stable version >= 1.9.5
     * [Vagrant download](https://www.vagrantup.com/downloads.html)
 1. Reboot your laptop if prompted to do so when installation completes.
 
-### WFM
-There is a major issue with windows 7 host machine:<br>
-When running vagrant up machine hangs, this problem is encountered with newest version of VirtualBox and Vagrant.<br>
-- First solution is to upgrade powershell to version 4.0 by downloading [WFM 4.0](https://www.microsoft.com/fr-fr/download/details.aspx?id=40855).
-  <br>The file setup is Windows6.1-KB2819745<br>
-- Second solution is to downgrade to 1.9.5 for vagrant and 5.1.10 for VirtualBox<br>
-You can found more about this issue on [github](https://github.com/hashicorp/vagrant/issues/8783).<br>
-
 ## Installation
 &#9888; DO NOT USE SSH KEY WITH PASSPHRASE, this vagrant installation is non-interactive.<br>
 If your ssh key has been created with a passphrase, please create an other one and add it to your git account.
@@ -78,23 +70,24 @@ You can add your custom shell provisioners which will be executed on pre-defined
       * 'all' run all provisionner files
       * 'system' run only machine provisionner
       * 'magento' run magento installation
-* Credentials
-   * git_host: url of git host server to add ssh key to known hosts on guest machine, used only on git source installation (github.com)
-   * git_repository: repository to get magento-cloud version from magento/v2/source project, used only on git source installation (ssh://git@github.com:project-name.git)
-   * composer_username: [magento access](https://marketplace.magento.com/customer/accessKeys/) to download project with composer (magentoUsernameKey)
-   * composer_password: [magento access](https://marketplace.magento.com/customer/accessKeys/) to download project with composer (magentoPasswordKey)
-   * name: your username for git configuration (Benjamin Calef)
-   * email: your email for git configuration (contact@ivc-digital.com)
+* Composer
+   * username: [magento access](https://marketplace.magento.com/customer/accessKeys/) set your magento credentials (magentoUsernameKey)
+   * password: [magento access](https://marketplace.magento.com/customer/accessKeys/) set your magento credentials (magentoPasswordKey)
+* Git (optional)
+   * name: git account username (Benjamin Calef)
+   * email: git account email (contact@ivc-digital.com)
+   * host: set your git host server to add ssh key to "known hosts" (github.com)
+   * repository: clone your existing magento project (ssh://git@github.com:project-name.git)
 * Magento
    * url: magento site host name (dev.magento.com)
    <br>FI [do not use .dev or .localhost as extension](https://ma.ttias.be/chrome-force-dev-domains-https-via-preloaded-hsts/)
     * source: define installation source (composer)
       * 'composer' install version magento source from official composer repository
-      * 'git-branch-name' install magento project from your git repository based on defined branch
+      * 'git-branch-name' install magento project from your git repository based on defined branch (ex: master)
    * edition: magento project edition, used only on composer source installation (community)
       * 'community' install magento community edition
       * 'enterprise' install magento enterprise edition
-   * version: define magento version, used only on composer source installation (2.2.5)
+   * version: define magento version, used only on composer source installation (2.3.0)
    * sample: install sample data, used only on composer source installation (true)
    * mode: magento mode (developer)
    * currency: set currency (USD)
@@ -187,7 +180,19 @@ Disable cron:
 ### PhpStorm
 To setup phpStorm configuration you can follow magento2 [official documentation](http://devdocs.magento.com/guides/v2.1/install-gde/docker/docker-phpstorm-project.html).
 
-## Issue
-- If you have trouble during installation please open a new issue on this git repository.
+## Issues
+
+### NFS
 - In case of error with NFS mount [downgrade to version 1.9.5](https://releases.hashicorp.com/vagrant/1.9.5/). Problem is known and reported by vagrant community: https://github.com/hashicorp/vagrant/issues/5424
 - If you encountered an unexpected error during vagrant provisionning : <b>set NFS option to false</b> and run ``vagrant provision``
+
+### WFM
+There is a major issue with windows 7 host machine:<br>
+When running vagrant up machine hangs, this problem is encountered with newest version of VirtualBox and Vagrant.<br>
+- First solution is to upgrade powershell to version 4.0 by downloading [WFM 4.0](https://www.microsoft.com/fr-fr/download/details.aspx?id=40855).
+  <br>The file setup is Windows6.1-KB2819745<br>
+- Second solution is to downgrade to 1.9.5 for vagrant and 5.1.10 for VirtualBox<br>
+You can found more about this issue on [github](https://github.com/hashicorp/vagrant/issues/8783).<br>
+
+### OTHERS
+- If you have trouble during installation please open a new issue on this git repository.
