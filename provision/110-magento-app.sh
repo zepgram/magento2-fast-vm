@@ -17,20 +17,14 @@ if [ "$PROJECT_MOUNT" == "app" ]; then
 	DIRECTORY_BUILD="/tmp"
 fi
 PROJECT_BUILD="$DIRECTORY_BUILD/$PROJECT_NAME"
-if [ -d "$PROJECT_BUILD"/.git ]; then
-    mv "$PROJECT_BUILD/.git" /tmp/.git
-fi
 rm -rf "$PROJECT_BUILD" &> /dev/null
 chmod -R 777 /srv /tmp
 mkdir -p "$PROJECT_BUILD"
 chown -fR "$PROJECT_SETUP_OWNER":"$PROJECT_SETUP_OWNER" "$PROJECT_BUILD"
-if [ -d "/tmp/.git" ]; then
-    mv /tmp/.git "$PROJECT_BUILD"/.git
-fi
 
 # Get installation files from source
 if [ "$PROJECT_SOURCE" == "composer" ]; then
-	# Install magento source code
+	# Install from magento
 	sudo -u "$PROJECT_SETUP_OWNER" composer create-project --no-interaction --no-install --no-progress \
 		--repository=https://repo.magento.com/ magento/project-"$PROJECT_EDITION"-edition="$PROJECT_VERSION" "$PROJECT_NAME" -d "$DIRECTORY_BUILD"
 	# Install sample data
@@ -48,9 +42,9 @@ if [ "$PROJECT_SOURCE" == "composer" ]; then
 		magento/sample-data-media magento/module-offline-shipping-sample-data --no-update
 	fi
 else
-	# Install from git branch
+	# Install from git
 	sudo -u "$PROJECT_SETUP_OWNER" git clone "$PROJECT_REPOSITORY" "$PROJECT_BUILD"
-	cd "$PROJECT_BUILD"; sudo -u "$PROJECT_SETUP_OWNER" git fetch --all; git reset --hard; git checkout "$PROJECT_SOURCE" --force; git pull origin "$PROJECT_SOURCE";
+	cd "$PROJECT_BUILD"; sudo -u "$PROJECT_SETUP_OWNER" git fetch --all; git checkout "$PROJECT_SOURCE" --force;
 fi
 
 # Composer install
