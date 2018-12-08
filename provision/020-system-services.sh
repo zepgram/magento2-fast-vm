@@ -21,6 +21,7 @@ mysql -u root -ppassword -e "GRANT ALL PRIVILEGES ON * . * TO 'vagrant'@'localho
 mysql -u root -ppassword -e "GRANT ALL PRIVILEGES ON * . * TO 'vagrant'@'%';"
 mysql -u root -ppassword -e "FLUSH PRIVILEGES;"
 
+
 # -----------------------------------------------------------------------------------------------------
 
 
@@ -123,6 +124,7 @@ EOF
 
 # -----------------------------------------------------------------------------------------------------
 
+
 # Apache php configuration
 sed -i 's/;opcache.enable=.*/opcache.enable=1/' /etc/php/"$PHP_VERSION"/apache2/php.ini
 sed -i 's/;opcache.enable_cli=.*/opcache.enable_cli=1/' /etc/php/"$PHP_VERSION"/apache2/php.ini
@@ -162,6 +164,7 @@ systemd-tmpfiles --create /etc/tmpfiles.d/php-cli-opcache.conf
 
 
 # -----------------------------------------------------------------------------------------------------
+
 
 mkdir -p /var/www/html
 chown -R www-data:www-data /var/www/
@@ -208,6 +211,7 @@ cat <<'EOF' > /etc/apache2/sites-available/001-ssl.conf
 </IfModule>
 EOF
 
+# Enable modules
 a2dismod php7.0 php7.1 php7.2
 a2ensite 000-default
 a2ensite 001-ssl
