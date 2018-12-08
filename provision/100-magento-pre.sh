@@ -52,10 +52,12 @@ chmod +x /usr/local/bin/permission
 # Credentials
 chmod 600 /home/vagrant/.ssh/id_rsa
 chmod 600 /home/vagrant/.ssh/id_rsa.pub
-ssh-keyscan ${PROJECT_HOST_REPOSITORY} >> /home/vagrant/.ssh/known_hosts
+rm -rf /home/vagrant/.ssh/known_hosts /home/vagrant/.ssh/config
+rm -rf /home/"$PROJECT_USER"/.ssh/known_hosts /home/"$PROJECT_USER"/.ssh/config
 echo -e "Host ${PROJECT_HOST_REPOSITORY}\n\tStrictHostKeyChecking no\n" >> /home/vagrant/.ssh/config
-sudo -u vagrant mkdir -p /home/vagrant/.composer
-sudo -u vagrant cat <<EOF > /home/vagrant/.composer/auth.json
+ssh-keyscan ${PROJECT_HOST_REPOSITORY} >> /home/vagrant/.ssh/known_hosts
+mkdir -p /home/vagrant/.composer
+cat <<EOF > /home/vagrant/.composer/auth.json
 {
     "http-basic": {
         "repo.magento.com": {
@@ -66,18 +68,18 @@ sudo -u vagrant cat <<EOF > /home/vagrant/.composer/auth.json
 }
 EOF
 
+# Copy credentials to project user
+chown -R vagrant:vagrant /home/vagrant
+cp -r /home/vagrant/.composer/* /home/"$PROJECT_USER"/.composer/
+cp -r /home/vagrant/.ssh/* /home/"$PROJECT_USER"/.ssh/
+chown -R "$PROJECT_USER":"$PROJECT_USER" /home/"$PROJECT_USER"
+
 # Git global config
 if [ "$PROJECT_SOURCE" != "composer" ]; then
   git config --system user.name "$PROJECT_GIT_USER"
   git config --system user.email "$PROJECT_GIT_EMAIL"
   git config --system core.filemode false
 fi
-
-# Copy credentials to project user
-cp -r /home/vagrant/.composer /home/"$PROJECT_USER"/.composer
-cp -r /home/vagrant/.ssh /home/"$PROJECT_USER"/.ssh
-chown -R "$PROJECT_USER":"$PROJECT_USER" /home/"$PROJECT_USER"/.composer
-chown -R "$PROJECT_USER":"$PROJECT_USER" /home/"$PROJECT_USER"/.ssh
 
 # Extra pre-build
 if [ -f /home/vagrant/provision/100-pre-build.sh ]; then
