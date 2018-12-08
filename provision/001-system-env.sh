@@ -14,8 +14,8 @@ echo '--- Environment variables ---'
 # Set environment variable
 cat <<EOF > /etc/profile.d/env.sh
 export PROJECT_NAME="${1}"
-export PROJECT_PATH="/srv/${1}"
 export PROJECT_USER="${1}"
+export PROJECT_PATH="/srv/${1}"
 export PROJECT_COMPOSER_USER="${2}"
 export PROJECT_COMPOSER_PASS="${3}"
 export PROJECT_GIT_USER="${4}"
