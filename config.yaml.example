@@ -11,8 +11,8 @@ composer:
   username: 'magentoUsernameKey'
   password: 'magentoPasswordKey'
 git:
-  name: 'Benjamin Calef'
-  email: 'contact@ivc-digital.com'
+  name: 'John Doe'
+  email: 'john@doe.com'
   host: 'github.com'
   repository: 'ssh://git@github.com:project-name.git'
 magento:

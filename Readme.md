@@ -74,8 +74,8 @@ You can add your custom shell provisioners which will be executed on pre-defined
    * username: [magento access](https://marketplace.magento.com/customer/accessKeys/) set your magento credentials (magentoUsernameKey)
    * password: [magento access](https://marketplace.magento.com/customer/accessKeys/) set your magento credentials (magentoPasswordKey)
 * Git (optional)
-   * name: git account username (Benjamin Calef)
-   * email: git account email (contact@ivc-digital.com)
+   * name: git account username (John Doe)
+   * email: git account email (john@doe.com)
    * host: set your git host server to add ssh key to "known hosts" (github.com)
    * repository: clone your existing magento project (ssh://git@github.com:project-name.git)
 * Magento
