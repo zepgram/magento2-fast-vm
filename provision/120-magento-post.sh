@@ -3,7 +3,7 @@
 # ------------------------------------- #
 # NFS Vagrant - Magento2                #
 #                                       #
-# Author: zpgram                        #
+# Author: zepgram                       #
 # Git: https://github.com/zepgram/      #
 # ------------------------------------- #
 
@@ -61,10 +61,13 @@ if [ -f /home/vagrant/provision/120-post-build.sh ]; then
   bash /home/vagrant/provision/120-post-build.sh
 fi
 
-# Post setup
+# Post setup config
 sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento deploy:mode:set "$PROJECT_MODE"
 sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento config:set "admin/security/session_lifetime" "31536000"
 sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento config:set "admin/security/lockout_threshold" "180"
+sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento config:set "admin/security/password_lifetime" ""
+sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento config:set "admin/security/password_is_forced" "0"
+sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento config:set "web/secure/use_in_adminhtml" "1"
 
 # Change materialization strategy on NFS ROOT option
 if [ "$PROJECT_NFS" == "true" ] && [ "$PROJECT_MOUNT" != "app" ]; then

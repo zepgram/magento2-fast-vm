@@ -3,7 +3,7 @@
 # ------------------------------------- #
 # NFS Vagrant - Magento2                #
 #                                       #
-# Author: zpgram                        #
+# Author: zepgram                       #
 # Git: https://github.com/zepgram/      #
 # ------------------------------------- #
 
@@ -19,21 +19,37 @@ debconf-set-selections <<< "mysql-server mysql-server/root_password_again passwo
 debconf-set-selections <<< "postfix postfix/mailname string $PROJECT_URL"
 debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
 
-# Packages
+# Required packages
 apt-get install -y \
   curl dos2unix graphviz htop net-tools rsync sudo tree wget unzip zip \
   libsqlite3-dev libxml2-utils build-essential software-properties-common \
   postfix mailutils libsasl2-2 ca-certificates libsasl2-modules \
-  mysql-client mysql-server redis-server \
-  apache2 libapache2-mod-php openssl \
-  g++ vim git git-flow \
-  php php-cli \
-  php-curl php-gd php-intl \
-  php-mbstring php-soap php-zip \
-  php-xml php-mcrypt php-bcmath \
-  php-mysql php-sqlite3 \
-  php-memcache php-redis php-opcache \
+  apt-transport-https mysql-client mysql-server redis-server \
+  openssl apache2 \
+  g++ vim git git-flow
+
+# Sury Repository
+wget -q https://packages.sury.org/php/apt.gpg -O- | sudo apt-key add -
+echo "deb https://packages.sury.org/php/ stretch main" | sudo tee /etc/apt/sources.list.d/php.list
+
+# Set required php version
+MAGENTO_PHP_VERSION="7.2";
+if $(dpkg --compare-versions "${PROJECT_VERSION}" "lt" "2.3"); then
+  MAGENTO_PHP_VERSION="7.0";
+fi
+
+# PHP packages
+apt-get update -y && apt-get install -y \
+  php${MAGENTO_PHP_VERSION} php${MAGENTO_PHP_VERSION}-common php${MAGENTO_PHP_VERSION}-cli \
+  php${MAGENTO_PHP_VERSION}-curl php${MAGENTO_PHP_VERSION}-gd php${MAGENTO_PHP_VERSION}-intl \
+  php${MAGENTO_PHP_VERSION}-mbstring php${MAGENTO_PHP_VERSION}-soap php${MAGENTO_PHP_VERSION}-zip \
+  php${MAGENTO_PHP_VERSION}-xml php${MAGENTO_PHP_VERSION}-xml php${MAGENTO_PHP_VERSION}-bcmath \
+  php${MAGENTO_PHP_VERSION}-mysql php${MAGENTO_PHP_VERSION}-sqlite3 libapache2-mod-php${MAGENTO_PHP_VERSION} \
+  php${MAGENTO_PHP_VERSION}-memcache php${MAGENTO_PHP_VERSION}-redis php${MAGENTO_PHP_VERSION}-opcache \
   python ruby ruby-dev
+if [[ "${MAGENTO_PHP_VERSION}" == "7.0" ]]; then
+  apt-get install -y php${MAGENTO_PHP_VERSION}-mcrypt
+fi
 
 # Set php version
 PHP_VERSION="$(php --version | head -n 1 | cut -d " " -f 2 | cut -c 1,2,3)";

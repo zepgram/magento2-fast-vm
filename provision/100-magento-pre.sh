@@ -3,7 +3,7 @@
 # ------------------------------------- #
 # NFS Vagrant - Magento2                #
 #                                       #
-# Author: zpgram                        #
+# Author: zepgram                       #
 # Git: https://github.com/zepgram/      #
 # ------------------------------------- #
 
@@ -52,6 +52,7 @@ chmod +x /usr/local/bin/permission
 # Credentials
 chmod 600 /home/vagrant/.ssh/id_rsa
 chmod 600 /home/vagrant/.ssh/id_rsa.pub
+ssh-keyscan ${PROJECT_HOST_REPOSITORY} >> ~/.ssh/known_hosts
 echo -e "Host ${PROJECT_HOST_REPOSITORY}\n\tStrictHostKeyChecking no\n" >> /home/vagrant/.ssh/config
 sudo -u vagrant mkdir -p /home/vagrant/.composer
 sudo -u vagrant cat <<EOF > /home/vagrant/.composer/auth.json
@@ -67,8 +68,8 @@ EOF
 
 # Git global config
 if [ "$PROJECT_SOURCE" != "composer" ]; then
-  git config --system user.name "$PROJECT_USER_NAME"
-  git config --system user.email "$PROJECT_USER_EMAIL"
+  git config --system user.name "$PROJECT_GIT_USER"
+  git config --system user.email "$PROJECT_GIT_EMAIL"
   git config --system core.filemode false
 fi
 

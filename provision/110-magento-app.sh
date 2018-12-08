@@ -3,7 +3,7 @@
 # ------------------------------------- #
 # NFS Vagrant - Magento2                #
 #                                       #
-# Author: zpgram                        #
+# Author: zepgram                       #
 # Git: https://github.com/zepgram/      #
 # ------------------------------------- #
 
@@ -81,7 +81,7 @@ sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento setup:install \
 --db-password="vagrant" \
 --admin-firstname="admin" \
 --admin-lastname="admin" \
---admin-email="${PROJECT_USER_EMAIL}" \
+--admin-email="${PROJECT_GIT_EMAIL}" \
 --admin-user="admin" \
 --admin-password="admin123" \
 --language="${PROJECT_LANGUAGE}" \

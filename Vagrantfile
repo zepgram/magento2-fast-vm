@@ -1,7 +1,7 @@
 # ------------------------------------- #
 # NFS Vagrant - Magento2                #
 #                                       #
-# Author: zpgram                        #
+# Author: zepgram                       #
 # Git: https://github.com/zepgram/      #
 # ------------------------------------- #
 
@@ -21,7 +21,8 @@ end
 # Load yaml configuration
 configValues = YAML.load_file("#{rootPath}/config.yaml")
 vmconf       = configValues['vmconf']
-credentials  = configValues['credentials']
+composer     = configValues['composer']
+git          = configValues['git']
 magento      = configValues['magento']
 projectName  = 'magento'
 
@@ -105,9 +106,8 @@ Vagrant.configure(2) do |config|
   
   # Environment provisioning
   config.vm.provision "shell", path: "provision/001-system-env.sh", run: "always", keep_color: true, args: [
-    credentials['git_host'], credentials['git_repository'], credentials['composer_username'], 
-    credentials['composer_password'], credentials['name'], credentials['email'], 
-    projectName, magento['url'], magento['source'], magento['edition'], magento['version'], 
+    projectName, composer['username'], composer['password'], git['name'], git['email'], git['host'], git['repository'],
+    magento['url'], magento['source'], magento['edition'], magento['version'], 
     magento['sample'], magento['mode'], magento['currency'], magento['language'],
     magento['time_zone'], vmconf['nfs'], vmconf['mount']
   ]
@@ -137,7 +137,7 @@ Vagrant.configure(2) do |config|
   config.vm.post_up_message = 
 "
 ---------------------------------------------------------
-Vagrant machine ready to use for #{credentials['name']}
+Vagrant machine ready to use for #{git['name']}
 
    magento         #{magento['url']}
    phpinfo         #{vmconf['network_ip']}/phpinfo
