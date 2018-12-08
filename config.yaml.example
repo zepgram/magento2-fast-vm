@@ -16,7 +16,6 @@ git:
   host: 'github.com'
   repository: 'ssh://git@github.com:project-name.git'
 magento:
-  php: '7.2'
   url: 'dev.magento.com'
   source: 'composer'
   edition: 'community'
