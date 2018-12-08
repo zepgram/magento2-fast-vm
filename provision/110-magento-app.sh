@@ -39,7 +39,7 @@ if [ "$PROJECT_SOURCE" == "composer" ]; then
 		magento/module-downloadable-sample-data magento/module-msrp-sample-data \
 		magento/module-configurable-sample-data magento/module-product-links-sample-data \
 		magento/module-wishlist-sample-data magento/module-swatches-sample-data \
-		magento/sample-data-media magento/module-offline-shipping-sample-data --no-update
+		magento/sample-data-media magento/module-offline-shipping-sample-data
 	fi
 else
 	# Install from git

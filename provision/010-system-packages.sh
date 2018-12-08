@@ -40,6 +40,7 @@ fi
 if $(dpkg --compare-versions "${PROJECT_VERSION}" "lt" "2.1"); then
   MAGENTO_PHP_VERSION="7.0";
 fi
+
 # PHP packages
 apt-get update -y && apt-get install -y \
   php${MAGENTO_PHP_VERSION} php${MAGENTO_PHP_VERSION}-common php${MAGENTO_PHP_VERSION}-cli \
@@ -49,18 +50,17 @@ apt-get update -y && apt-get install -y \
   php${MAGENTO_PHP_VERSION}-mysql php${MAGENTO_PHP_VERSION}-sqlite3 libapache2-mod-php${MAGENTO_PHP_VERSION} \
   php${MAGENTO_PHP_VERSION}-memcache php${MAGENTO_PHP_VERSION}-redis php${MAGENTO_PHP_VERSION}-opcache \
   python ruby ruby-dev
-if [[ "${MAGENTO_PHP_VERSION}" == "7.1" ]]; then
+if [ "${MAGENTO_PHP_VERSION}" != "7.2" ]; then
   apt-get install -y php${MAGENTO_PHP_VERSION}-mcrypt
 fi
 
-# Set php version
-PHP_VERSION="$(php --version | head -n 1 | cut -d " " -f 2 | cut -c 1,2,3)";
+# Set php version env
 if [[ -z $(grep "PHP_VERSION" "/etc/profile.d/env.sh") ]]; then
 cat <<EOF >> /etc/profile.d/env.sh
-export PHP_VERSION="${PHP_VERSION}"
+export PHP_VERSION="${MAGENTO_PHP_VERSION}"
 EOF
 else
-  sed -i '/export PHP_VERSION*/c\'"export PHP_VERSION=$PHP_VERSION" /etc/profile.d/env.sh
+  sed -i '/export PHP_VERSION*/c\'"export PHP_VERSION=${MAGENTO_PHP_VERSION}" /etc/profile.d/env.sh
 fi
 source /etc/profile.d/env.sh
 
