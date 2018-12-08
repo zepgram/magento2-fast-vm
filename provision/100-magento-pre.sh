@@ -52,6 +52,7 @@ chmod +x /usr/local/bin/permission
 # Credentials
 chmod 600 /home/vagrant/.ssh/id_rsa
 chmod 600 /home/vagrant/.ssh/id_rsa.pub
+ssh-keyscan ${PROJECT_HOST_REPOSITORY} >> ~/.ssh/known_hosts
 echo -e "Host ${PROJECT_HOST_REPOSITORY}\n\tStrictHostKeyChecking no\n" >> /home/vagrant/.ssh/config
 sudo -u vagrant mkdir -p /home/vagrant/.composer
 sudo -u vagrant cat <<EOF > /home/vagrant/.composer/auth.json
