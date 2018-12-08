@@ -194,5 +194,5 @@ When running vagrant up machine hangs, this problem is encountered with newest v
 - Second solution is to downgrade to 1.9.5 for vagrant and 5.1.10 for VirtualBox<br>
 You can found more about this issue on [github](https://github.com/hashicorp/vagrant/issues/8783).<br>
 
-### OTHERS
+### Others
 - If you have trouble during installation please open a new issue on this git repository.
