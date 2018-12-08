@@ -15,6 +15,9 @@ echo '--- Magento post-installation sequence ---'
 chmod +x "$PROJECT_PATH"/bin/magento
 ln -sf "$PROJECT_PATH"/bin/magento /usr/local/bin/magento
 
+# Admin secure url
+sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento config:set web/secure/use_in_adminhtml 1
+
 # Redis configuration
 sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento setup:config:set \
       --cache-backend=redis \
