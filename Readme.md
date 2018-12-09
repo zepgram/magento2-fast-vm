@@ -82,12 +82,12 @@ You can add your custom shell provisioners which will be executed on pre-defined
    * url: magento site host name (dev.magento.com)
    <br>FI [do not use .dev or .localhost as extension](https://ma.ttias.be/chrome-force-dev-domains-https-via-preloaded-hsts/)
     * source: define installation source (composer)
-      * 'composer' install version magento source from official composer repository
+      * 'composer' install magento source code from official composer repository
       * 'git-branch-name' install magento project from your git repository based on defined branch (ex: master)
    * edition: magento project edition, used only on composer source installation (community)
       * 'community' install magento community edition
       * 'enterprise' install magento enterprise edition
-   * version: define magento version, used only on composer source installation (2.3.0)
+   * version: set magento version and also define PHP version (2.3.0)
    * sample: install sample data, used only on composer source installation (true)
    * mode: magento mode (developer)
    * currency: set currency (USD)
