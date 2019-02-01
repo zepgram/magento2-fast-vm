@@ -18,6 +18,14 @@ if OS.is_windows
   check_plugins ["vagrant-vbguest","vagrant-bindfs","vagrant-winnfsd"]
 end
 
+# Force LF
+def crlf_to_lf(file)
+  read = IO.read(file)
+  replace = read.gsub /\r\n?/, "\n"
+  newFile = File.open(file, "w")
+  newFile.write(replace)
+end
+
 # Load yaml configuration
 configValues = YAML.load_file("#{rootPath}/config.yaml")
 vmconf       = configValues['vmconf']
@@ -95,12 +103,15 @@ Vagrant.configure(2) do |config|
 
   # Extra provisionner
   if File.file?("./extra/001-env.sh")
+    crlf_to_lf("./extra/001-env.sh")
     config.vm.provision "file", source: "./extra/001-env.sh", destination: "/home/vagrant/provision/001-env.sh", run: "always"
   end
   if File.file?("./extra/100-pre-build.sh")
+    crlf_to_lf("./extra/100-pre-build.sh")
     config.vm.provision "file", source: "./extra/100-pre-build.sh", destination: "/home/vagrant/provision/100-pre-build.sh", run: "always"
   end
   if File.file?("./extra/120-post-build.sh")
+    crlf_to_lf("./extra/120-post-build.sh")
     config.vm.provision "file", source: "./extra/120-post-build.sh", destination: "/home/vagrant/provision/120-post-build.sh", run: "always"
   end
   
