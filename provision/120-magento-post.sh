@@ -62,12 +62,13 @@ if [ -f /home/vagrant/provision/120-post-build.sh ]; then
 fi
 
 # Post setup config
-sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento deploy:mode:set "$PROJECT_MODE"
-sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento config:set "admin/security/session_lifetime" "31536000"
-sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento config:set "admin/security/lockout_threshold" "180"
-sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento config:set "admin/security/password_lifetime" ""
-sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento config:set "admin/security/password_is_forced" "0"
-sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento config:set "web/secure/use_in_adminhtml" "1"
+permission
+magento deploy:mode:set "$PROJECT_MODE"
+magento config:set "admin/security/session_lifetime" "31536000"
+magento config:set "admin/security/lockout_threshold" "180"
+magento config:set "admin/security/password_lifetime" ""
+magento config:set "admin/security/password_is_forced" "0"
+magento config:set "web/secure/use_in_adminhtml" "1"
 
 # Change materialization strategy on NFS ROOT option
 if [ "$PROJECT_NFS" == "true" ] && [ "$PROJECT_MOUNT" != "app" ]; then
@@ -75,12 +76,11 @@ if [ "$PROJECT_NFS" == "true" ] && [ "$PROJECT_MOUNT" != "app" ]; then
       git --git-dir "$PROJECT_PATH"/.git update-index --assume-unchanged app/etc/di.xml
   fi
   sed -i 's/<item name="view_preprocessed" xsi:type="object">Magento\\\Framework\\\App\\\View\\\Asset\\\MaterializationStrategy\\\Symlink/<item name="view_preprocessed" xsi:type="object">Magento\\\Framework\\\App\\\View\\\Asset\\\MaterializationStrategy\\\Copy/' "$PROJECT_PATH"/app/etc/di.xml
-  magento setup:upgrade
 fi
 
-# Set permission to magento
+# Reset generated files
 rm -rf "$PROJECT_PATH"/generated/code/
-magento cache:clean
-permission
+magento setup:upgrade
+magento cache:enable
 /etc/init.d/apache2 restart
 /etc/init.d/redis-server restart
