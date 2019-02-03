@@ -61,14 +61,9 @@ if [ -f /home/vagrant/provision/120-post-build.sh ]; then
   bash /home/vagrant/provision/120-post-build.sh
 fi
 
-# Post setup config
+# Reset generated files
 permission
-magento deploy:mode:set "$PROJECT_MODE"
-magento config:set "admin/security/session_lifetime" "31536000"
-magento config:set "admin/security/lockout_threshold" "180"
-magento config:set "admin/security/password_lifetime" ""
-magento config:set "admin/security/password_is_forced" "0"
-magento config:set "web/secure/use_in_adminhtml" "1"
+rm -rf "$PROJECT_PATH"/generated/code/
 
 # Change materialization strategy on NFS ROOT option
 if [ "$PROJECT_NFS" == "true" ] && [ "$PROJECT_MOUNT" != "app" ]; then
@@ -78,9 +73,16 @@ if [ "$PROJECT_NFS" == "true" ] && [ "$PROJECT_MOUNT" != "app" ]; then
   sed -i 's/<item name="view_preprocessed" xsi:type="object">Magento\\\Framework\\\App\\\View\\\Asset\\\MaterializationStrategy\\\Symlink/<item name="view_preprocessed" xsi:type="object">Magento\\\Framework\\\App\\\View\\\Asset\\\MaterializationStrategy\\\Copy/' "$PROJECT_PATH"/app/etc/di.xml
 fi
 
-# Reset generated files
-rm -rf "$PROJECT_PATH"/generated/code/
+# Post setup config
 magento setup:upgrade
 magento cache:enable
+magento deploy:mode:set "$PROJECT_MODE"
+magento config:set "admin/security/session_lifetime" "31536000"
+magento config:set "admin/security/lockout_threshold" "180"
+magento config:set "admin/security/password_lifetime" ""
+magento config:set "admin/security/password_is_forced" "0"
+magento config:set "web/secure/use_in_adminhtml" "1"
+
+# Restart
 /etc/init.d/apache2 restart
 /etc/init.d/redis-server restart
