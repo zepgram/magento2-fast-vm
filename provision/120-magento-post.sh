@@ -71,19 +71,19 @@ fi
 
 # Reset generated files
 rm -rf "$PROJECT_PATH"/generated/code/
-permission
 
 # Post setup config
-magento cache:clean
-magento setup:upgrade
-magento cache:enable
-magento deploy:mode:set "$PROJECT_MODE"
-magento config:set "admin/security/session_lifetime" "31536000"
-magento config:set "admin/security/lockout_threshold" "180"
-magento config:set "admin/security/password_lifetime" ""
-magento config:set "admin/security/password_is_forced" "0"
-magento config:set "web/secure/use_in_adminhtml" "1"
+sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento cache:clean
+sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento setup:upgrade
+sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento cache:enable
+sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento deploy:mode:set "$PROJECT_MODE"
+sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento config:set "admin/security/session_lifetime" "31536000"
+sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento config:set "admin/security/lockout_threshold" "180"
+sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento config:set "admin/security/password_lifetime" ""
+sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento config:set "admin/security/password_is_forced" "0"
+sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento config:set "web/secure/use_in_adminhtml" "1"
 
 # Restart
 /etc/init.d/apache2 restart
 /etc/init.d/redis-server restart
+permission
