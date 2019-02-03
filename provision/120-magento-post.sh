@@ -61,7 +61,7 @@ if [ "$PROJECT_NFS" == "true" ] && [ "$PROJECT_MOUNT" != "app" ]; then
   if [ -f "${PROJECT_PATH}/.git/config" ]; then
       git --git-dir "$PROJECT_PATH"/.git update-index --assume-unchanged app/etc/di.xml
   fi
-  sed -i 's/<item name="view_preprocessed" xsi:type="object">Magento\\\Framework\\\App\\\View\\\Asset\\\MaterializationStrategy\\\Symlink/<item name="view_preprocessed" xsi:type="object">Magento\\\Framework\\\App\\\View\\\Asset\\\MaterializationStrategy\\\Copy/' "$PROJECT_PATH"/app/etc/di.xml
+  sudo -u "$PROJECT_SETUP_OWNER" sed -i 's/<item name="view_preprocessed" xsi:type="object">Magento\\\Framework\\\App\\\View\\\Asset\\\MaterializationStrategy\\\Symlink/<item name="view_preprocessed" xsi:type="object">Magento\\\Framework\\\App\\\View\\\Asset\\\MaterializationStrategy\\\Copy/' "$PROJECT_PATH"/app/etc/di.xml
 fi
 
 # Extra post-build
