@@ -70,8 +70,8 @@ if [ -f /home/vagrant/provision/120-post-build.sh ]; then
 fi
 
 # Reset generated files
-permission
 rm -rf "$PROJECT_PATH"/generated/code/
+permission
 
 # Post setup config
 magento cache:clean
