@@ -68,19 +68,20 @@ cat <<EOF > /home/vagrant/.composer/auth.json
 }
 EOF
 
+# Git global config
+if [ "$PROJECT_SOURCE" != "composer" ]; then
+  sudo -u vagrant git config --global user.name "$PROJECT_GIT_USER"
+  sudo -u vagrant git config --global user.email "$PROJECT_GIT_EMAIL"
+  sudo -u vagrant git config --global core.filemode false
+fi
+
 # Copy credentials to project user
 chown -R vagrant:vagrant /home/vagrant
 mkdir -p /home/"$PROJECT_USER"/.composer /home/"$PROJECT_USER"/.ssh
 cp -r /home/vagrant/.composer/* /home/"$PROJECT_USER"/.composer/
 cp -r /home/vagrant/.ssh/* /home/"$PROJECT_USER"/.ssh/
+cp /home/vagrant/.gitconfig /home/"$PROJECT_USER"/.gitconfig
 chown -R "$PROJECT_USER":"$PROJECT_USER" /home/"$PROJECT_USER"
-
-# Git global config
-if [ "$PROJECT_SOURCE" != "composer" ]; then
-  git config --global user.name "$PROJECT_GIT_USER"
-  git config --global user.email "$PROJECT_GIT_EMAIL"
-  git config --global core.filemode false
-fi
 
 # Extra pre-build
 if [ -f /home/vagrant/provision/100-pre-build.sh ]; then
