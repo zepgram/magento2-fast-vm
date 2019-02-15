@@ -77,9 +77,9 @@ chown -R "$PROJECT_USER":"$PROJECT_USER" /home/"$PROJECT_USER"
 
 # Git global config
 if [ "$PROJECT_SOURCE" != "composer" ]; then
-  git config --system user.name "$PROJECT_GIT_USER"
-  git config --system user.email "$PROJECT_GIT_EMAIL"
-  git config --system core.filemode false
+  git config --global user.name "$PROJECT_GIT_USER"
+  git config --global user.email "$PROJECT_GIT_EMAIL"
+  git config --global core.filemode false
 fi
 
 # Extra pre-build
