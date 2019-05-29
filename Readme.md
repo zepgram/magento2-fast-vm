@@ -94,7 +94,9 @@ You can add your custom shell provisioners which will be executed on pre-defined
    * language: set language (en_US)
    * time_zone: set time zone (Europe/London)
 
-### RSYNC - NEW (v1.2.0)
+## Mount options
+
+### Rsync - new (v1.2.0)
 The most efficient mount option, recommended if your mount path is ``root``.<br>
 * The drawback is about files who are not instantly updated between host and guest machine:<br>
 Even if ``vagrant rsync-auto`` is launched by default, if you need to force an update run ``vagrant rsync``
@@ -102,15 +104,15 @@ Even if ``vagrant rsync-auto`` is launched by default, if you need to force an u
 * Folders ignored: ``generated/code/*``, ``var/page_cache/*``, ``var/view_preprocessed/*``, ``pub/static/*``
 [See Rsync option](https://www.vagrantup.com/docs/synced-folders/rsync.html)
 
-### NFS
+### Nfs
 Recommended if your mount path is ``root`` or ``app`` directory.
 [See NFS option](https://www.vagrantup.com/docs/synced-folders/nfs.html)
 
-### DEFAULT
+### Default
 Recommended if your mount path is ``app`` directory.
 [See basic usage](https://www.vagrantup.com/docs/synced-folders/basic_usage.html)
 
-### Mount Path
+### Path
 * <b>app directory:</b> magento2 development must be provided in app directory, so mounting the entire project is not necessary according to documentation and best practice provided by magento. Furthermore, by mounting only this directory the virtual machine grants great performance: generated files and static content are not shared between guest and host machine.
 * <b>root directory:</b> if you wish to mount the entire project you can, but I highly recommend you to enable NFS or RSYNC option to improve performance between guest and host machine.
 
