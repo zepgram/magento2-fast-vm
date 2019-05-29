@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ------------------------------------- #
-# NFS Vagrant - Magento2                #
+# Fast VM - Magento2                    #
 #                                       #
 # Author: zepgram                       #
 # Git: https://github.com/zepgram/      #
@@ -56,8 +56,8 @@ if [ -f "${PROJECT_PATH}/package.json" ] && [ -f "${PROJECT_PATH}/Gruntfile.js" 
     && sudo -u "$PROJECT_SETUP_OWNER" npm update
 fi
 
-# Change materialization strategy on NFS ROOT option
-if [ "$PROJECT_NFS" == "true" ] && [ "$PROJECT_MOUNT" != "app" ]; then
+# Change materialization strategy for nfs
+if [ "$PROJECT_MOUNT" === "nfs" ] && [ "$PROJECT_MOUNT_PATH" != "app" ]; then
   if [ -f "${PROJECT_PATH}/.git/config" ]; then
       git --git-dir "$PROJECT_PATH"/.git update-index --assume-unchanged app/etc/di.xml
   fi

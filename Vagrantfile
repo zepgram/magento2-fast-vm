@@ -1,5 +1,5 @@
 # ------------------------------------- #
-# NFS Vagrant - Magento2                #
+# Fast VM - Magento2                    #
 #                                       #
 # Author: zepgram                       #
 # Git: https://github.com/zepgram/      #
@@ -37,7 +37,7 @@ projectName  = 'magento'
 # Mount directory option
 hostDirectory = "./www/#{projectName}"
 guestDirectory = "/srv/#{projectName}"
-if vmconf['mount'] == 'app'
+if vmconf['path'] == 'app'
   hostDirectory = "./www/#{projectName}/app"
   guestDirectory = "/srv/#{projectName}/app"
 end
@@ -75,8 +75,8 @@ Vagrant.configure(2) do |config|
     force_group:  'www-data',
     perms:        'u=rwx:g=rwx:o=r'
   }
-  if vmconf['nfs'] == "true"
-    # Windows NFS specification
+  # NFS mount
+  if vmconf['mount'] == 'nfs'
     if OS.is_windows
       config.winnfsd.uid = 1
       config.winnfsd.gid = 1
@@ -88,14 +88,26 @@ Vagrant.configure(2) do |config|
     else
       config.vm.synced_folder hostDirectory, guestDirectory, create: true, :nfs => true
     end
-      config.bindfs.bind_folder guestDirectory, guestDirectory, after: :provision
       config.nfs.map_uid = Process.uid
       config.nfs.map_gid = Process.gid
-  else
-    # Regular mount
-    config.vm.synced_folder hostDirectory, guestDirectory, create: true
-    config.bindfs.bind_folder guestDirectory, guestDirectory, after: :provision
   end
+  # RSYNC mount
+  if vmconf['mount'] == 'rsync'
+    config.vm.synced_folder hostDirectory, guestDirectory, create: true, type: "rsync", 
+    rsync_auto: true,
+    rsync__exclude: [
+      'generated/code/*', 'var/page_cache/*', 'var/view_preprocessed/*',
+      'pub/static/adminhtml/*', 'pub/static/base/*', 'pub/static/frontend/*'
+    ]
+  end
+  # Regular Mount
+  if vmconf['mount'] != 'rsync' && vmconf['mount'] != 'nfs'
+    vmconf['mount'] = 'default';
+    config.vm.synced_folder hostDirectory, guestDirectory, create: true
+  end
+
+  # Bind fs
+  config.bindfs.bind_folder guestDirectory, guestDirectory, after: :provision
 
   # SSH key provisioning
   config.vm.provision "file", source: "./ssh/id_rsa", destination: "~/.ssh/id_rsa"
@@ -103,24 +115,28 @@ Vagrant.configure(2) do |config|
 
   # Extra provisionner
   if File.file?("./extra/001-env.sh")
-    crlf_to_lf("./extra/001-env.sh")
-    config.vm.provision "file", source: "./extra/001-env.sh", destination: "/home/vagrant/provision/001-env.sh", run: "always"
+    crlf_to_lf("./extra/001-env.sh") 
+    config.vm.provision "file", source: "./extra/001-env.sh", 
+    destination: "/home/vagrant/provision/001-env.sh", run: "always"
   end
   if File.file?("./extra/100-pre-build.sh")
-    crlf_to_lf("./extra/100-pre-build.sh")
-    config.vm.provision "file", source: "./extra/100-pre-build.sh", destination: "/home/vagrant/provision/100-pre-build.sh", run: "always"
+    crlf_to_lf("./extra/100-pre-build.sh") 
+    config.vm.provision "file",  source: "./extra/100-pre-build.sh",
+    destination: "/home/vagrant/provision/100-pre-build.sh", run: "always"
   end
   if File.file?("./extra/120-post-build.sh")
-    crlf_to_lf("./extra/120-post-build.sh")
-    config.vm.provision "file", source: "./extra/120-post-build.sh", destination: "/home/vagrant/provision/120-post-build.sh", run: "always"
+    crlf_to_lf("./extra/120-post-build.sh") 
+    config.vm.provision "file", source: "./extra/120-post-build.sh",
+    destination: "/home/vagrant/provision/120-post-build.sh", run: "always"
   end
-  
+
   # Environment provisioning
   config.vm.provision "shell", path: "provision/001-system-env.sh", run: "always", keep_color: true, args: [
-    projectName, composer['username'], composer['password'], git['name'], git['email'], git['host'], git['repository'],
-    magento['url'], magento['source'], magento['edition'], magento['version'], 
+    projectName, composer['username'], composer['password'],
+    git['name'], git['email'], git['host'], git['repository'],
+    magento['url'], magento['source'], magento['edition'], magento['version'],
     magento['sample'], magento['mode'], magento['currency'], magento['language'],
-    magento['time_zone'], vmconf['nfs'], vmconf['mount']
+    magento['time_zone'], vmconf['mount'], vmconf['path']
   ]
 
   # Shell provisioning 
@@ -156,4 +172,11 @@ Vagrant machine ready to use for #{git['name']}
    mailcatcher     #{vmconf['network_ip']}:1080
 
 "
+  if vmconf['mount'] == 'rsync'
+    config.trigger.after :up, :reload do |trigger|
+      trigger.info = config.vm.post_up_message
+      trigger.info+= '>>> Do not close this terminal: open new one for ssh login <<<'
+      trigger.run = {inline: 'vagrant rsync-auto --rsync-chown ' + vmconf["host_name"]}
+    end
+  end
 end

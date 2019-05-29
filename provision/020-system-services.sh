@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ------------------------------------- #
-# NFS Vagrant - Magento2                #
+# Fast VM - Magento2                    #
 #                                       #
 # Author: zepgram                       #
 # Git: https://github.com/zepgram/      #

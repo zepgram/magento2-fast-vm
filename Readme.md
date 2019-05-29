@@ -1,9 +1,9 @@
-# NFS Vagrant - Magento2
+# Fast Virtual Machine for Magento2
 
 [![vagrant](https://img.shields.io/badge/vagrant-debian:stretch-blue.svg?longCache=true&style=flat&label=vagrant&logo=vagrant)](https://app.vagrantup.com/debian/boxes/stretch64)
 [![dev-box](https://img.shields.io/badge/source-git--composer-blue.svg?longCache=true&style=flat&label=magento2%20&logo=magento)](https://github.com/zepgram/magento2-fast-vm/blob/master/config.yaml.example)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg?longCache=true&style=flat&label=license)](https://github.com/zepgram/magento2-fast-vm/blob/master/LICENSE)
-[![release](https://img.shields.io/badge/release-v1.1-blue.svg?longCache=true&style=flat&label=release)](https://github.com/zepgram/magento2-fast-vm/releases)
+[![release](https://img.shields.io/badge/release-v1.2-blue.svg?longCache=true&style=flat&label=release)](https://github.com/zepgram/magento2-fast-vm/releases)
 
 ![windows](https://img.shields.io/badge/windows-ok-green.svg?longCache=true&style=flat&label=windows&logo=windows)
 ![apple](https://img.shields.io/badge/mac-ok-green.svg?longCache=true&style=flat&label=mac&logo=apple)
@@ -15,7 +15,7 @@
 
 ### Virtualbox
 [VirtualBox](https://www.virtualbox.org/) is an open source virtualizer, an application that can run an entire operating system within its own virtual machine.<br>
-Stable version >= 5.1.10
+Stable version >= 5.2.0
 
 1. Download the installer for your laptop operating system using the links below.
     * [VirtualBox download](https://www.virtualbox.org/wiki/Downloads)
@@ -28,7 +28,7 @@ Stable version >= 5.1.10
 
 ### Vagrant
 [Vagrant](https://www.vagrantup.com/) is an open source command line utility for managing reproducible developer environments.<br>
-Stable version >= 1.9.5
+Stable version >= 2.2.0
 
 1. Download the installer for your laptop operating system using the links below.
     * [Vagrant download](https://www.vagrantup.com/downloads.html)
@@ -40,7 +40,7 @@ If your ssh key has been created with a passphrase, please create an other one a
 
 ### First installation
 1. Clone this project: ``git clone git@github.com:zepgram/magento2-fast-vm.git magento2``
-1. On linux only, run: ``sudo apt install nfs-kernel-server``
+1. On linux only, run: ``sudo apt install nfs-kernel-server`` if you wish to use NFS option.
 1. Copy and past ``ssh.example``, rename it ``ssh`` and put your id_rsa and id_rsa.pub keys.
 1. Copy and past ``config.yaml.example``, rename it ``config.yaml`` and change user variables as explained in [Yaml options overview](#yaml-options-overview).
 1. Add vm_conf[network_ip] and magento[url] in your hosts file. Add 127.0.0.1 localhost if it's not already the case ``C:\Windows\System32\drivers\etc\hosts`` on Windows, ``/etc/hosts`` on Linux/macOS.<br>
@@ -62,10 +62,10 @@ You can add your custom shell provisioners which will be executed on pre-defined
    * host_name: virtual machine host name (zepgram)
    * memory: RAM of virtual machine (4096)
    * cpus: CPU usage (2)
-   * nfs: enable NFS mount (true)
-   * mount:
-      * 'app' mount app directory /var/www/magento/app (drastically improve performance, making nfs option not necessary)
-      * 'root' mount whole directory /var/www/magento (require nfs option to keep good performance)
+   * mount: nfs / rsync / default (nfs)
+   * path:
+      * 'app' mount app directory /var/www/magento/app (drastically improve performance but you cannot access to root directory from host machine)
+      * 'root' mount whole directory /var/www/magento (require nfs or rsync option to keep good performance)
    * provision: define shell provisionning sequence (all)
       * 'all' run all provisionner files
       * 'system' run only machine provisionner
@@ -94,10 +94,26 @@ You can add your custom shell provisioners which will be executed on pre-defined
    * language: set language (en_US)
    * time_zone: set time zone (Europe/London)
 
-### Mount
+### RSYNC - NEW (v1.2.0)
+The most efficient mount option, recommended if your mount path is ``root``.<br>
+* The drawback is about files who are not instantly updated between host and guest machine:<br>
+Even if ``vagrant rsync-auto`` is launched by default, if you need to force an update run ``vagrant rsync``
+* Generated files are not shared between host and guest machine resulting in drastic increase of vagrant performance
+* Folders ignored: ``generated/code/*``, ``var/page_cache/*``, ``var/view_preprocessed/*``, ``pub/static/*``
+[See Rsync option](https://www.vagrantup.com/docs/synced-folders/rsync.html)
+
+### NFS
+Recommended if your mount path is ``root`` or ``app`` directory.
+[See NFS option](https://www.vagrantup.com/docs/synced-folders/nfs.html)
+
+### DEFAULT
+Recommended if your mount path is ``app`` directory.
+[See basic usage](https://www.vagrantup.com/docs/synced-folders/basic_usage.html)
+
+### Mount Path
 * <b>app directory:</b> magento2 development must be provided in app directory, so mounting the entire project is not necessary according to documentation and best practice provided by magento. Furthermore, by mounting only this directory the virtual machine grants great performance: generated files and static content are not shared between guest and host machine.
-* <b>root directory:</b> if you wish to mount the entire project you can, but I highly recommend you to enable NFS option to improve performance between guest and host machine.
- 
+* <b>root directory:</b> if you wish to mount the entire project you can, but I highly recommend you to enable NFS or RSYNC option to improve performance between guest and host machine.
+
 ## Usage
 
 ### Permission
@@ -105,7 +121,7 @@ Magento file system owner is configured for ``magento`` user, it means all comma
 Command line ``vagrant ssh`` will log you as magento user by default.<br>
 * To logout and get back to vagrant user you can run ``exit``
 * To login as magento user you can run ``sudo su magento`` or ``bash``
-* To re-apply magento permission you can run ``permission`` in command line
+* To re-apply magento permission you can run ``permission`` in command line, only used for ``app`` mount directory
 <b>Password for magento user is ``magento``</b>
 
 ### Command line
@@ -182,17 +198,11 @@ To setup phpStorm configuration you can follow magento2 [official documentation]
 
 ## Issues
 
-### NFS
-- In case of error with NFS mount [downgrade to version 1.9.5](https://releases.hashicorp.com/vagrant/1.9.5/). Problem is known and reported by vagrant community: https://github.com/hashicorp/vagrant/issues/5424
-- If you encountered an unexpected error during vagrant provisionning : <b>set NFS option to false</b> and run ``vagrant provision``
-
 ### WFM
 There is a major issue with windows 7 host machine:<br>
 When running vagrant up machine hangs, this problem is encountered with newest version of VirtualBox and Vagrant.<br>
-- First solution is to upgrade powershell to version 4.0 by downloading [WFM 4.0](https://www.microsoft.com/fr-fr/download/details.aspx?id=40855).
-  <br>The file setup is Windows6.1-KB2819745<br>
-- Second solution is to downgrade to 1.9.5 for vagrant and 5.1.10 for VirtualBox<br>
-You can found more about this issue on [github](https://github.com/hashicorp/vagrant/issues/8783).<br>
+- Solution is to upgrade powershell to version 4.0 by downloading [WFM 4.0](https://www.microsoft.com/fr-fr/download/details.aspx?id=40855).
+<br>The file setup is Windows6.1-KB2819745<br>
 
 ### Others
 - If you have trouble during installation please open a new issue on this git repository.

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ------------------------------------- #
-# NFS Vagrant - Magento2                #
+# Fast VM - Magento2                    #
 #                                       #
 # Author: zepgram                       #
 # Git: https://github.com/zepgram/      #
@@ -31,8 +31,8 @@ export PROJECT_MODE="${13}"
 export PROJECT_CURRENCY="${14}"
 export PROJECT_LANGUAGE="${15}"
 export PROJECT_TIME_ZONE="${16}"
-export PROJECT_NFS="${17}"
-export PROJECT_MOUNT="${18}"
+export PROJECT_MOUNT="${17}"
+export PROJECT_MOUNT_PATH="${18}"
 EOF
 source /etc/profile.d/env.sh
 
@@ -66,7 +66,7 @@ fi
 
 # Set project owner for setup
 MOUNT_FULL_PATH=$PROJECT_PATH
-if [ $PROJECT_MOUNT == "app" ]; then
+if [ $PROJECT_MOUNT_PATH == "app" ]; then
 	MOUNT_FULL_PATH=$PROJECT_PATH/app
 fi
 SETUP_OWNER="$(ls -ld $MOUNT_FULL_PATH | awk 'NR==1 {print $3}')"
