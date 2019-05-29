@@ -101,15 +101,15 @@ The most efficient mount option, recommended if your mount path is ``root``.<br>
 * The drawback is about files who are not instantly updated between host and guest machine:<br>
 Even if ``vagrant rsync-auto`` is launched by default, if you need to force an update run ``vagrant rsync``
 * Generated files are not shared between host and guest machine resulting in drastic increase of vagrant performance
-* Folders ignored: ``generated/code/*``, ``var/page_cache/*``, ``var/view_preprocessed/*``, ``pub/static/*``
+* Folders ignored: ``generated/code/*``, ``var/page_cache/*``, ``var/view_preprocessed/*``, ``pub/static/*``<br>
 [See Rsync option](https://www.vagrantup.com/docs/synced-folders/rsync.html)
 
 ### Nfs
-Recommended if your mount path is ``root`` or ``app`` directory.
+Recommended if your mount path is ``root`` or ``app`` directory.<br>
 [See NFS option](https://www.vagrantup.com/docs/synced-folders/nfs.html)
 
 ### Default
-Recommended if your mount path is ``app`` directory.
+Recommended if your mount path is ``app`` directory.<br>
 [See basic usage](https://www.vagrantup.com/docs/synced-folders/basic_usage.html)
 
 ### Path
