@@ -100,7 +100,7 @@ They will be executed on pre-defined sequences:
 
 ### Path
 * <b>root directory:</b> mount the entire project.
-* <b>app directory:</b> mount only app directory. By mounting only app the virtual machine grants great performance because generated files are not shared between machines.
+* <b>app directory:</b> mount only app directory. By mounting only app generated files are not shared between machines, which ensure great performance.
 
 ### Rsync - new (v1.2.0)
 Only usefull on path set to ``root``<br>
