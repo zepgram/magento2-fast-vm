@@ -39,23 +39,17 @@ Stable version >= 2.2.0
 If your ssh key has been created with a passphrase, please create an other one and add it to your git account.
 
 ### First installation
-1. Clone this project: ``git clone git@github.com:zepgram/magento2-fast-vm.git magento2``
-1. On linux only, run: ``sudo apt install nfs-kernel-server`` if you wish to use NFS option.
-1. Copy and past ``ssh.example``, rename it ``ssh`` and put your id_rsa and id_rsa.pub keys.
-1. Copy and past ``config.yaml.example``, rename it ``config.yaml`` and change user variables as explained in [Yaml options overview](#yaml-options-overview).
-1. Add vm_conf[network_ip] and magento[url] in your hosts file. Add 127.0.0.1 localhost if it's not already the case ``C:\Windows\System32\drivers\etc\hosts`` on Windows, ``/etc/hosts`` on Linux/macOS.<br>
-For default values: ``192.168.200.50       dev.magento.com``
-1. On windows 10 start your terminal as administrator and uncomment option ``# v.gui=true`` in vagrant file, you can disable it after first installation
-1. Run: ``vagrant up`` in your terminal, installation start! (duration: ~20 minutes)
-1. Once installation is finished run: ``vagrant ssh`` to access to shell machine
+1. Clone this project: ``git clone git@github.com:zepgram/magento2-fast-vm.git``
+1. On linux only for NFS, run: ``sudo apt install nfs-kernel-server``
+1. Copy and past ``ssh.example``, rename it ``ssh`` and put your ``id_rsa`` and ``id_rsa.pub`` keys
+1. Copy and past ``config.yaml.example``, rename it ``config.yaml`` and add your configurations according to [Yaml config overview](#yaml-config-overview)
+1. As admin open your host file: ``C:\Windows\System32\drivers\etc\hosts`` for Windows or ``/etc/hosts``for Linux/macOS and add vm_conf[network_ip] and magento[url]<br>
+Default values would be: ``192.168.200.50       dev.magento.com``
+1. On windows 10 start your terminal as administrator and uncomment option ``# v.gui=true`` in VagrantFile. You can disable it after first setup
+1. Run: ``vagrant up`` in your terminal: setup start! (duration: ~20 minutes)
+1. Once installation is done run: ``vagrant ssh`` to access to your guest machine
 
-### Extra provisionners
-You can add your custom shell provisioners which will be executed on pre-defined sequences:
-1. ``extra/001-env.sh`` his purpose is to provide extra environment variables or extra package, executed on ``system-env.sh`` provision
-1. ``extra/100-pre-build.sh`` define your specific system configuration before installation, hook on magento ``pre-build.sh`` provision
-1. ``extra/120-post-build.sh`` you can execute magento command in this sequence, executed on magento ``post-build.sh`` provision
-
-### Yaml options overview
+### Yaml config overview
 * Vmconf
    * machine_name: oracle virtual machine name (Vagrant Magento 2)
    * network_ip: virtual machine ip (192.168.200.50)
@@ -64,12 +58,12 @@ You can add your custom shell provisioners which will be executed on pre-defined
    * cpus: CPU usage (2)
    * mount: nfs / rsync / default (nfs)
    * path:
-      * 'app' mount app directory /var/www/magento/app (drastically improve performance but you cannot access to root directory from host machine)
-      * 'root' mount whole directory /var/www/magento (require nfs or rsync option to keep good performance)
+      * 'app' mount only app directory /var/www/magento/app
+      * 'root' mount whole directory /var/www/magento
    * provision: define shell provisionning sequence (all)
       * 'all' run all provisionner files
       * 'system' run only machine provisionner
-      * 'magento' run magento installation
+      * 'magento' run magento provisionner
 * Composer
    * username: [magento access](https://marketplace.magento.com/customer/accessKeys/) set your magento credentials (magentoUsernameKey)
    * password: [magento access](https://marketplace.magento.com/customer/accessKeys/) set your magento credentials (magentoPasswordKey)
@@ -87,40 +81,48 @@ You can add your custom shell provisioners which will be executed on pre-defined
    * edition: magento project edition, used only on composer source installation (community)
       * 'community' install magento community edition
       * 'enterprise' install magento enterprise edition
-   * version: set magento version and also define PHP version (2.3.0)
+   * version: set magento version and also define PHP version (2.3.*)
    * sample: install sample data, used only on composer source installation (true)
    * mode: magento mode (developer)
    * currency: set currency (USD)
    * language: set language (en_US)
    * time_zone: set time zone (Europe/London)
 
+### Extra provisionners
+You can add your custom shell provisioners.<br>
+They will be executed on pre-defined sequences:
+1. ``extra/001-env.sh`` his purpose is to provide extra environment variables or extra package, executed on ``system-env.sh`` provision
+1. ``extra/100-pre-build.sh`` define your specific system configuration before installation, hook on magento ``pre-build.sh`` provision
+1. ``extra/120-post-build.sh`` you can execute magento command in this sequence, executed on magento ``post-build.sh`` provision
+
 ## Mount options
 
 ### Rsync - new (v1.2.0)
-The most efficient mount option, recommended if your mount path is ``root``.<br>
+The most efficient mount option, recommended if your directory path is ``root``<br>
 * The drawback is about files who are not instantly updated between host and guest machine:<br>
 Even if ``vagrant rsync-auto`` is launched by default, if you need to force an update run ``vagrant rsync``
 * Generated files are not shared between host and guest machine resulting in drastic increase of vagrant performance
-* Folders ignored: ``generated/code/*``, ``var/page_cache/*``, ``var/view_preprocessed/*``, ``pub/static/*``<br>
+* Folders ignored: ``generated/code/*``, ``var/page_cache/*``, ``var/view_preprocessed/*``, ``pub/static/*``
+
 [See Rsync option](https://www.vagrantup.com/docs/synced-folders/rsync.html)
 
-### Nfs
-Recommended if your mount path is ``root`` or ``app`` directory.<br>
+### NFS
+Recommended if your directory path is ``root`` or ``app``<br>
 [See NFS option](https://www.vagrantup.com/docs/synced-folders/nfs.html)
 
 ### Default
-Recommended if your mount path is ``app`` directory.<br>
+Recommended if your directory path is ``app``<br>
 [See basic usage](https://www.vagrantup.com/docs/synced-folders/basic_usage.html)
 
-### Path
-* <b>app directory:</b> magento2 development must be provided in app directory, so mounting the entire project is not necessary according to documentation and best practice provided by magento. Furthermore, by mounting only this directory the virtual machine grants great performance: generated files and static content are not shared between guest and host machine.
-* <b>root directory:</b> if you wish to mount the entire project you can, but I highly recommend you to enable NFS or RSYNC option to improve performance between guest and host machine.
+### Path directory
+* <b>root</b> if you wish to mount the entire project you can, but I highly recommend you to enable NFS or RSYNC option to improve performance between guest and host machine.
+* <b>app</b> magento2 development must be provided in app directory, so mounting the entire project is not necessary according to documentation and best practice provided by magento. Furthermore, by mounting only this directory the virtual machine grants great performance: generated files and static content are not shared between guest and host machine.
 
 ## Usage
 
 ### Permission
 Magento file system owner is configured for ``magento`` user, it means all commands in magento project must be executed by this user.<br>
-Command line ``vagrant ssh`` will log you as magento user by default.<br>
+By default command line ``vagrant ssh`` will log you as magento user.<br>
 * To logout and get back to vagrant user you can run ``exit``
 * To login as magento user you can run ``sudo su magento`` or ``bash``
 * To re-apply magento permission you can run ``permission`` in command line, only used for ``app`` mount directory
@@ -128,14 +130,13 @@ Command line ``vagrant ssh`` will log you as magento user by default.<br>
 
 ### Command line
 * magento (Magento CLI for your project)
-* magento-cloud (Cloud-specific version of the Magento CLI)
+* magento-cloud (CLI provided for Magento Cloud)
 * pestle (A collection of command line scripts for Magento 2 code generation)
 * magerun (The swiss army knife for Magento developers)
 * permission (Apply magento2 permissions on project)
 
 ### Magento mode
 After installation you can change magento statement.<br>
-Default mode is an installation statement, you can't switch to default mode if you choose a statement before.
 
 Set magento to developer mode:
 ```
