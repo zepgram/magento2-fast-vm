@@ -100,7 +100,7 @@ They will be executed on pre-defined sequences:
 
 ### Path
 * <b>root directory:</b> mount the entire project.
-* <b>app directory:</b> mount only app directory. By mounting only app generated files are not shared between machines, which ensure great performance.
+* <b>app directory:</b> mount only app directory. Generated files are not shared between machines, which ensure great performance.
 
 ### Rsync - new (v1.2.0)
 Only usefull on path set to ``root``<br>
@@ -112,12 +112,12 @@ Even with that, files update are not done in real-time, if you need to force an 
 [See Rsync option](https://www.vagrantup.com/docs/synced-folders/rsync.html)
 
 ### NFS
-Recommended for both path ``root`` and ``app``<br>
+Recommended for both path  ``root`` and ``app``<br>
 The most stable option, less performant than rsync but your files keep updated in real-time.
 [See NFS option](https://www.vagrantup.com/docs/synced-folders/nfs.html)
 
 ### Default
-Not recommended, can be used if you encountered issues with Rsync and NFS options<br>
+Not recommended, can be used if you encountered issues with rsync and NFS options<br>
 [See basic usage](https://www.vagrantup.com/docs/synced-folders/basic_usage.html)
 
 ## Usage
