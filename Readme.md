@@ -98,25 +98,26 @@ They will be executed on pre-defined sequences:
 ## Mount options
 
 ### Rsync - new (v1.2.0)
-The most efficient mount option, recommended if your directory path is ``root``<br>
-* The drawback is about files who are not instantly updated between host and guest machine:<br>
-Even if ``vagrant rsync-auto`` is launched by default, if you need to force an update run ``vagrant rsync``
-* Generated files are not shared between host and guest machine resulting in drastic increase of vagrant performance
+The most efficient mount option, only usefull if your path is set to ``root``<br>
+* Files generated on the fly are the main reason to use ``app`` path, by excluding them you can mount the whole directory ``root`` while maintaining great performance
+* The drawback is about files who are not instantly updated between host and guest machine. The ``vagrant rsync-auto`` is launched by default on vagrant up<br>
+Even with that, files update are not done in real-time, if you need to force an update you can run ``vagrant rsync``
 * Folders ignored: ``generated/code/*``, ``var/page_cache/*``, ``var/view_preprocessed/*``, ``pub/static/*``
 
 [See Rsync option](https://www.vagrantup.com/docs/synced-folders/rsync.html)
 
 ### NFS
-Recommended if your directory path is ``root`` or ``app``<br>
+Recommended if your path is ``root`` or ``app``<br>
+It's the most stable option, less performant than rsync but your files are updated in real-time.
 [See NFS option](https://www.vagrantup.com/docs/synced-folders/nfs.html)
 
 ### Default
-Recommended if your directory path is ``app``<br>
+Recommended if your path is ``app``<br>
 [See basic usage](https://www.vagrantup.com/docs/synced-folders/basic_usage.html)
 
-### Path directory
-* <b>root</b> if you wish to mount the entire project you can, but I highly recommend you to enable NFS or RSYNC option to improve performance between guest and host machine.
-* <b>app</b> magento2 development must be provided in app directory, so mounting the entire project is not necessary according to documentation and best practice provided by magento. Furthermore, by mounting only this directory the virtual machine grants great performance: generated files and static content are not shared between guest and host machine.
+### Path
+* <b>root directory:</b> mount the entire project. I highly recommend you to enable NFS or RSYNC option to keep good performance between guest and host machine.
+* <b>app directory:</b> mount only app directory. Mounting the entire project is not mandatory for development. By mounting only this directory the virtual machine grants great performance because generated files are not shared between machine.
 
 ## Usage
 
