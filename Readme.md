@@ -36,10 +36,15 @@ Stable version >= 2.2.0
 1. Reboot your laptop if prompted to do so when installation completes.
 
 ## Installation
-&#9888; DO NOT USE SSH KEY WITH PASSPHRASE, this vagrant installation is non-interactive.<br>
-If your ssh key has been created with a passphrase, please create an other one and add it to your git account.
+
+### Related guide
+- Made by Onilab for Windows 10:
+https://onilab.com/blog/install-magento-2-on-localhost-a-windows-10-guide/
 
 ### First installation
+
+&#9888; DO NOT USE SSH KEY WITH PASSPHRASE, this vagrant installation is non-interactive.<br>
+If your ssh key has been created with a passphrase, please create an other one and add it to your git account.
 1. Clone this project: ``git clone git@github.com:zepgram/magento2-fast-vm.git``
 1. On linux only for NFS, run: ``sudo apt install nfs-kernel-server``
 1. Copy and past ``ssh.example``, rename it ``ssh`` and put your ``id_rsa`` and ``id_rsa.pub`` keys
