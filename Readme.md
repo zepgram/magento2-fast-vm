@@ -97,9 +97,13 @@ They will be executed on pre-defined sequences:
 
 ## Mount options
 
+### Path
+* <b>root directory:</b> mount the entire project.
+* <b>app directory:</b> mount only app directory. By mounting only app the virtual machine grants great performance because generated files are not shared between machines.
+
 ### Rsync - new (v1.2.0)
-The most efficient mount option, only usefull if your path is set to ``root``<br>
-* Files generated on the fly are the main reason to use ``app`` path, by excluding them you can mount the whole directory ``root`` while maintaining great performance
+Only usefull on path set to ``root``<br>
+* Loss of performance is due to files generated on the fly, by excluding them you can mount the whole directory ``root`` and get performance equal to ``app`` mount.
 * Folders ignored: ``generated/code/*``, ``var/page_cache/*``, ``var/view_preprocessed/*``, ``pub/static/*``
 * The drawback is about files who are not instantly updated between host and guest machine. The ``vagrant rsync-auto`` is launched by default on vagrant up<br>
 Even with that, files update are not done in real-time, if you need to force an update you can run ``vagrant rsync``
@@ -107,17 +111,13 @@ Even with that, files update are not done in real-time, if you need to force an 
 [See Rsync option](https://www.vagrantup.com/docs/synced-folders/rsync.html)
 
 ### NFS
-Recommended if your path is ``root`` or ``app``<br>
-It's the most stable option, less performant than rsync but your files are updated in real-time.
+Recommended for both path ``root`` and ``app``<br>
+The most stable option, less performant than rsync but your files keep updated in real-time.
 [See NFS option](https://www.vagrantup.com/docs/synced-folders/nfs.html)
 
 ### Default
-Recommended if your path is ``app``<br>
+Not recommended, can be used if you encountered issues with Rsync and NFS options<br>
 [See basic usage](https://www.vagrantup.com/docs/synced-folders/basic_usage.html)
-
-### Path
-* <b>root directory:</b> mount the entire project. I highly recommend you to enable NFS or RSYNC option to keep good performance between guest and host machine.
-* <b>app directory:</b> mount only app directory. Mounting the entire project is not mandatory for development. By mounting only this directory the virtual machine grants great performance because generated files are not shared between machine.
 
 ## Usage
 
