@@ -109,10 +109,10 @@ They will be executed on pre-defined sequences:
 
 ### Rsync - new (v1.2.0)
 Only usefull on path set to ``root``<br>
-* Loss of performance is due to files generated on the fly, by excluding them you can mount the whole directory ``root`` and get performance equal to ``app`` mount.
-* Folders ignored: ``generated/code/*``, ``var/page_cache/*``, ``var/view_preprocessed/*``, ``pub/static/*``
-* The drawback is about files who are not instantly updated between host and guest machine. The ``vagrant rsync-auto`` is launched by default on vagrant up<br>
-Even with that, files update are not done in real-time, if you need to force an update you can run ``vagrant rsync``
+* Loss of performance is due to files generated on the fly, by excluding them you can mount the whole directory ``root`` and get performance equal to an ``app`` mount.
+* The ``vagrant rsync-auto`` is launched by default on vagrant up, even with that if you need to force an update you can run ``vagrant rsync``. Terminal should be kept open for rsync-auto: do not close it.
+* Rsync is unilateral, your host machine push files to guest but not the other way.<br>
+Anyway if it's necessary, after a ``composer update`` for example, you can run ``vagrant rsync-back`` to push files from guest to host.<br>
 
 [See Rsync option](https://www.vagrantup.com/docs/synced-folders/rsync.html)
 

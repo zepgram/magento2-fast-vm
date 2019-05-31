@@ -9,11 +9,11 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 rootPath = File.dirname(__FILE__)
-require "yaml"
+require 'yaml'
 require "#{rootPath}/dependency.rb"
 
 # Check plugin
-check_plugins ["vagrant-vbguest","vagrant-bindfs"]
+check_plugins ["vagrant-vbguest","vagrant-bindfs","vagrant-rsync-back"]
 if OS.is_windows
   check_plugins ["vagrant-vbguest","vagrant-bindfs","vagrant-winnfsd"]
 end
@@ -81,8 +81,8 @@ Vagrant.configure(2) do |config|
       config.winnfsd.uid = 1
       config.winnfsd.gid = 1
     end
+    # Linux NFS specification
     if OS.is_linux
-      # Linux NFS specification
       config.vm.synced_folder hostDirectory, guestDirectory, create: true, :nfs => true, 
       linux__nfs_options: ['rw','no_subtree_check','all_squash','async'], nfs_version: 4, nfs_udp: false
     else
@@ -93,11 +93,13 @@ Vagrant.configure(2) do |config|
   end
   # RSYNC mount
   if vmconf['mount'] == 'rsync'
-    config.vm.synced_folder hostDirectory, guestDirectory, create: true, type: "rsync", 
+    config.vm.synced_folder hostDirectory, guestDirectory, create: true, type: 'rsync', 
     rsync_auto: true,
+    rsync__args: ["--archive", "-z", "--copy-links"],
     rsync__exclude: [
       'generated/code/*', 'var/page_cache/*', 'var/view_preprocessed/*',
-      'pub/static/adminhtml/*', 'pub/static/base/*', 'pub/static/frontend/*'
+      'pub/static/adminhtml/*', 'pub/static/base/*', 'pub/static/frontend/*',
+      'dev', 'node_modules', 'phpserver', 'setup', 'update'
     ]
   end
   # Regular Mount
@@ -165,18 +167,38 @@ Vagrant.configure(2) do |config|
 "
 ---------------------------------------------------------
 Vagrant machine ready to use for #{git['name']}
-
    magento         #{magento['url']}
    phpinfo         #{vmconf['network_ip']}/phpinfo
    adminer         #{vmconf['network_ip']}/adminer
    mailcatcher     #{vmconf['network_ip']}:1080
-
 "
   if vmconf['mount'] == 'rsync'
     config.trigger.after :up, :reload do |trigger|
       trigger.info = config.vm.post_up_message
-      trigger.info+= '>>> Do not close this terminal: open new one for ssh login <<<'
-      trigger.run = {inline: 'vagrant rsync-auto --rsync-chown ' + vmconf["host_name"]}
+      trigger.info+= '>>> Do not close this terminal: open new one for ssh login
+---------------------------------------------------------'
+      # Deploy from guest to host
+      if !File.file?("./.rsync_deployed.flag")
+        if OS.is_windows
+          trigger.run = {inline: 'vagrant rsync-back ' + vmconf["host_name"] + ' | ni ./.rsync_deployed.flag' + 
+            ' | vagrant rsync-auto --rsync-chown ' + vmconf["host_name"]
+          }
+        else
+          trigger.run = {inline: 'vagrant rsync-back ' + vmconf["host_name"] + ' &>/dev/null | touch ./.rsync_deployed.flag' + 
+            ' | vagrant rsync-auto --rsync-chown ' + vmconf["host_name"]}
+        end
+      else
+        # Run rsync-auto
+        trigger.run = {inline: 'vagrant rsync-auto --rsync-chown ' + vmconf["host_name"]}
+      end
+    end
+    # Remove flag
+    config.trigger.after :destroy do |trigger|
+        if OS.is_windows
+          trigger.run = {inline: 'del .rsync_deployed.flag'}
+        else
+          trigger.run = {inline: 'rm -f .rsync_deployed.flag'}
+        end
     end
   end
-end
+end 
