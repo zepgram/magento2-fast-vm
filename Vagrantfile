@@ -42,26 +42,26 @@ Vagrant.configure(2) do |config|
   # Host manager configuration
   config.vm.define vmconf['host_name']
   config.vm.hostname = vmconf['host_name']
-  config.vm.network :private_network, type: "dhcp"
+  config.vm.network :private_network, type: 'dhcp'
   config.vm.network :private_network, ip: vmconf['network_ip']
   
   # VBox config
-  config.vm.provider "virtualbox" do |v|
+  config.vm.provider 'virtualbox' do |v|
     v.name = vmconf['machine_name']
     v.memory = vmconf['memory']
     v.cpus = vmconf['cpus']
     # Share VPN connections
-    v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    v.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
     # Use multiple CPUs in VM
-    v.customize ["modifyvm", :id, "--ioapic", "on"]
+    v.customize ['modifyvm', :id, '--ioapic', 'on']
     # Enable symlink
-    v.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/var/www/", "1"]
+    v.customize ['setextradata', :id, 'VBoxInternal2/SharedFoldersEnableSymlinksCreate/var/www/', '1']
     # Uncomment option below to avoid issues with VirtualBox on Windows 10
     # v.gui=true
   end
 
   # Default options
-  config.vm.synced_folder ".", "/vagrant", disabled: true
+  config.vm.synced_folder '.', '/vagrant', disabled: true
   config.bindfs.default_options = {
     force_user:   'magento',
     force_group:  'www-data',
@@ -87,7 +87,7 @@ Vagrant.configure(2) do |config|
   # Rsync mount
   if vmconf['mount'] == 'rsync'
     config.vm.synced_folder hostDirectory, guestDirectory, create: true, type: 'rsync', 
-    rsync__args: ["--archive", "-z", "--copy-links"],
+    rsync__args: ['--archive', '-z', '--copy-links'],
     rsync__exclude: rsync_exclude
   end
   # Default mount
@@ -100,13 +100,13 @@ Vagrant.configure(2) do |config|
   config.bindfs.bind_folder guestDirectory, guestDirectory, after: :provision
 
   # SSH key provisioning
-  config.vm.provision 'file', source: "./ssh/id_rsa", destination: '~/.ssh/id_rsa'
-  config.vm.provision 'file', source: "./ssh/id_rsa.pub", destination: '~/.ssh/id_rsa.pub'
+  config.vm.provision 'file', source: './ssh/id_rsa', destination: '~/.ssh/id_rsa'
+  config.vm.provision 'file', source: './ssh/id_rsa.pub', destination: '~/.ssh/id_rsa.pub'
 
   # Extra provisionner
-  process_extra_file(config, "extra/001-env.sh")
-  process_extra_file(config, "extra/100-pre-build.sh")
-  process_extra_file(config, "extra/120-post-build.sh")
+  process_extra_file(config, 'extra/001-env.sh')
+  process_extra_file(config, 'extra/100-pre-build.sh')
+  process_extra_file(config, 'extra/120-post-build.sh')
 
   # Environment provisioning
   config.vm.provision 'shell', path: 'provision/001-system-env.sh', run: 'always', keep_color: true, args: [
