@@ -65,8 +65,8 @@ if [ "$PROJECT_MOUNT" === "nfs" ] && [ "$PROJECT_MOUNT_PATH" != "app" ]; then
 fi
 
 # Extra post-build
-if [ -f /home/vagrant/provision/120-post-build.sh ]; then
-  bash /home/vagrant/provision/120-post-build.sh
+if [ -f /home/vagrant/extra/120-post-build.sh ]; then
+  bash /home/vagrant/extra/120-post-build.sh
 fi
 
 # Reset generated files

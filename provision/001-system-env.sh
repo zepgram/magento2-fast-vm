@@ -60,8 +60,8 @@ EOF
 fi
 
 # Extra env
-if [ -f /home/vagrant/provision/001-env.sh ]; then
-	bash /home/vagrant/provision/001-env.sh
+if [ -f /home/vagrant/extra/001-env.sh ]; then
+	bash /home/vagrant/extra/001-env.sh
 fi
 
 # Set project owner for setup

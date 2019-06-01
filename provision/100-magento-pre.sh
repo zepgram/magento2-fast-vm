@@ -84,8 +84,8 @@ cp -r /home/vagrant/.ssh/* /home/"$PROJECT_USER"/.ssh/
 chown -R "$PROJECT_USER":"$PROJECT_USER" /home/"$PROJECT_USER"
 
 # Extra pre-build
-if [ -f /home/vagrant/provision/100-pre-build.sh ]; then
-  bash /home/vagrant/provision/100-pre-build.sh
+if [ -f /home/vagrant/extra/100-pre-build.sh ]; then
+  bash /home/vagrant/extra/100-pre-build.sh
 fi
 
 # Restart services
