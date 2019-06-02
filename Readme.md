@@ -118,12 +118,14 @@ Anyway if it's necessary, after a ``composer update`` for example, you can run `
 
 ### NFS
 Recommended for ``root`` and ``app`` path<br>
-The most stable option, less performant than rsync but files update is multilateral, there is nothing you can just enjoy NFS native performance.
+The most stable option, conf has been done to make it works for all OS.
+Less performant than rsync but files are perfectly shared by guest and host machine.
 
 [See NFS option](https://www.vagrantup.com/docs/synced-folders/nfs.html)
 
 ### Default
-Not recommended, can be used if you encountered issues with rsync and NFS options.
+Can be used with ``app`` path but I do not recommend this option.<br>
+It can be used if you encountered issues with rsync and NFS mount.
 
 [See basic usage](https://www.vagrantup.com/docs/synced-folders/basic_usage.html)
 
