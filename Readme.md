@@ -117,12 +117,14 @@ Anyway if it's necessary, after a ``composer update`` for example, you can run `
 [See Rsync option](https://www.vagrantup.com/docs/synced-folders/rsync.html)
 
 ### NFS
-Recommended for both path ``root`` and ``app``<br>
-The most stable option, less performant than rsync but your files keep updated in real-time.
+Recommended for ``root`` and ``app`` path<br>
+The most stable option, less performant than rsync but files update is multilateral.
+
 [See NFS option](https://www.vagrantup.com/docs/synced-folders/nfs.html)
 
 ### Default
-Not recommended, can be used if you encountered issues with rsync and NFS options<br>
+Not recommended, can be used if you encountered issues with rsync and NFS options.
+
 [See basic usage](https://www.vagrantup.com/docs/synced-folders/basic_usage.html)
 
 ## Usage
