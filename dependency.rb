@@ -94,7 +94,7 @@ def rsync_exclude
 end
 
 ## Tiggers
-def triggers(config, mount, hostname)
+def triggers(config, mount, hostName, hostDirectory)
 	if mount == 'rsync'
 		config.trigger.after :up, :reload, :provision do |trigger|
 			# Add post-up message
@@ -102,17 +102,17 @@ def triggers(config, mount, hostname)
 			trigger.info+= '>>> Do not close this terminal: open new one for ssh login
 ---------------------------------------------------------'
 			# Run rsync-auto
-			if !File.file?('www/magento/app/etc/di.xml')
+			if !File.file?("#{hostDirectory}/app/etc/di.xml")
 				trigger.info+= "\r\nrsync-back and rsync auto triggered..."
-				trigger.run = {inline: "vagrant rsync-back #{hostname} | vagrant rsync-auto --rsync-chown #{hostname}"}
+				trigger.run = {inline: "vagrant rsync-back #{hostName} | vagrant rsync-auto --rsync-chown #{hostName}"}
 			else
 				trigger.info+= "\r\nrsync-auto is running..."
-				trigger.run = {inline: "vagrant rsync-auto --rsync-chown #{hostname}"}
+				trigger.run = {inline: "vagrant rsync-auto --rsync-chown #{hostName}"}
 			end
 		end
 		config.trigger.after :destroy do |trigger|
 			trigger.ruby do |env,machine|
-				File.delete('www/magento/app/etc/di.xml') if File.file?('www/magento/app/etc/di.xml')
+				File.delete("#{hostDirectory}/app/etc/di.xml") if File.file?("#{hostDirectory}/app/etc/di.xml")
 			end
 		end
 	end

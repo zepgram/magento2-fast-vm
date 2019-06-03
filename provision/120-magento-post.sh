@@ -34,6 +34,7 @@ fi
 # Npm install
 if [ -f "${PROJECT_PATH}/package.json" ] && [ -f "${PROJECT_PATH}/Gruntfile.js" ]; then
   cd "$PROJECT_PATH" \
+    && echo 'Executing npm install...'
     && sudo -u "$PROJECT_SETUP_OWNER" npm install &> /dev/null \
     && sudo -u "$PROJECT_SETUP_OWNER" npm update
 fi
