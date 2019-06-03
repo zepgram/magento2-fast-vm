@@ -133,6 +133,8 @@ Vagrant.configure(2) do |config|
     config.vm.provision 'shell', path: 'provision/020-system-services.sh', keep_color: true
   end
   if vmconf['provision'] == 'magento'
+    config.vm.provision 'shell', path: 'provision/100-magento-pre.sh', keep_color: true
+    config.vm.provision 'shell', path: 'provision/110-magento-app.sh', keep_color: true
     config.vm.provision 'shell', path: 'provision/120-magento-post.sh', keep_color: true
   end
 
