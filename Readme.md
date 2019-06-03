@@ -97,11 +97,11 @@ Default values would be: ``192.168.200.50       dev.magento.com``
    * time_zone: set time zone (Europe/London)
 
 
-### Mount options
-
-#### PATH
+### Path
 * <b>root directory:</b> mount the entire project.
 * <b>app directory:</b> mount only app directory. Ensure great performance by not sharing generated files between machines.
+
+### Mount options
 
 #### RSYNC - new (v1.2.0)
 Only usefull on path set to ``root``.<br>
