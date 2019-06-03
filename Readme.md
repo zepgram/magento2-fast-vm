@@ -139,7 +139,8 @@ By default command line ``vagrant ssh`` will log you as magento user.<br>
 * To logout and get back to vagrant user you can run ``exit``
 * To login as magento user you can run ``sudo su magento`` or ``bash``
 * To re-apply magento permission you can run ``permission`` in command line, used only for ``app`` path and ``default`` mount.
-<b>Password for magento user is ``magento``</b>
+
+<b>FI: Password for magento user is ``magento``</b>
 
 ### Command line
 * magento (Magento CLI for your project)
@@ -194,6 +195,9 @@ Disable cron:
 - mailcatcher
 
 ### Credentials
+* User bash terminal
+  * user: magento
+  * password: magento 
 * Back-office
   * url: magento[url]/admin 
   * user: admin
