@@ -36,7 +36,7 @@ usermod -a -G www-data "$PROJECT_USER"
 
 # Permission script
 cat <<EOF > /home/vagrant/permission.bak
-if [ "$PROJECT_MOUNT" == "default" ] || [ "$PROJECT_MOUNT_PATH" == "app" ]; then
+if [ "$PROJECT_MOUNT" != "nfs" ] || [ "$PROJECT_MOUNT_PATH" == "app" ]; then
 echo 'Applying permissions to $PROJECT_PATH project'
 cd "$PROJECT_PATH" \\
 && sudo find var vendor pub/static pub/media app/etc -type f -exec chmod g+w {} \; \\

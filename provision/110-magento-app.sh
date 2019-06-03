@@ -60,7 +60,7 @@ rm -rf /var/www/"$PROJECT_NAME"
 ln -sfn /srv/"$PROJECT_NAME" /var/www/"$PROJECT_NAME"
 
 # Apply basic rights on regular mount
-if [ "$PROJECT_MOUNT" == "default" ] || [ "$PROJECT_MOUNT_PATH" == "app" ]; then
+if [ "$PROJECT_MOUNT" != "nfs" ] || [ "$PROJECT_MOUNT_PATH" == "app" ]; then
 	chown -fR "$PROJECT_SETUP_OWNER":www-data "$PROJECT_PATH"
 fi
 
