@@ -103,13 +103,13 @@ They will be executed on pre-defined sequences:
 1. ``extra/100-pre-build.sh`` define your specific system configuration before installation, hook on magento ``pre-build.sh`` provision
 1. ``extra/120-post-build.sh`` you can execute magento command in this sequence, executed on magento ``post-build.sh`` provision
 
-## Mount options
+### Mount options
 
-### Path
+#### Path
 * <b>root directory:</b> mount the entire project.
 * <b>app directory:</b> mount only app directory. Ensure great performance by not sharing generated files between machines.
 
-### Rsync - new (v1.2.0)
+#### Rsync - new (v1.2.0)
 Only usefull on path set to ``root``.<br>
 * Loss of performance is due to files generated on the fly, by excluding them you can mount the whole directory ``root`` and get performance equal to an ``app`` mount.
 * The ``vagrant rsync-auto`` is launched by default on vagrant up, even with that if you need to force an update you can run ``vagrant rsync``. Terminal should be kept open for rsync-auto: do not close it.
@@ -118,14 +118,14 @@ Anyway if it's necessary, after a ``composer update`` for example, you can run `
 
 [See Rsync option](https://www.vagrantup.com/docs/synced-folders/rsync.html)
 
-### NFS
+#### NFS
 Recommended for ``root`` and ``app`` path.<br>
 The most stable option, config has been made to ensure compliance with all OS.
 Less performant than rsync but files are perfectly shared between guest and host machine.
 
 [See NFS option](https://www.vagrantup.com/docs/synced-folders/nfs.html)
 
-### Default
+#### Default
 It can be used with ``app`` path if you encountered any issue with NFS and rsync mount.
 
 [See basic usage](https://www.vagrantup.com/docs/synced-folders/basic_usage.html)
@@ -174,7 +174,7 @@ Disable cron:
 ## Configuration
 
 ### Package & Software
-- php + requiered extensions
+- php + required extensions
 - curl
 - git
 - gitflow
