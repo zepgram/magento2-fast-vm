@@ -65,6 +65,7 @@ if [ "$PROJECT_MOUNT" == "default" ] || [ "$PROJECT_MOUNT_PATH" == "app" ]; then
 fi
 
 # Run install
+chmod +x "$PROJECT_PATH"/bin/magento
 sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento setup:uninstall -n -q
 sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento setup:install \
 --base-url="http://${PROJECT_URL}/" \

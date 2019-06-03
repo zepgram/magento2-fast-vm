@@ -95,8 +95,8 @@ end
 
 ## Tiggers
 def triggers(config, mount, hostname)
-	config.trigger.after :up, :reload, :provision do |trigger|
-		if mount == 'rsync'
+	if mount == 'rsync'
+		config.trigger.after :up, :reload, :provision do |trigger|
 			# Add post-up message
 			trigger.info = config.vm.post_up_message
 			trigger.info+= '>>> Do not close this terminal: open new one for ssh login
@@ -110,10 +110,10 @@ def triggers(config, mount, hostname)
 				trigger.run = {inline: "vagrant rsync-auto --rsync-chown #{hostname}"}
 			end
 		end
-	end
-	config.trigger.after :destroy do |trigger|
-		trigger.ruby do |env,machine|
-			FileUtils.remove_dir('www', true)
+		config.trigger.after :destroy do |trigger|
+			trigger.ruby do |env,machine|
+				File.delete('www/magento/app/etc/di.xml') if File.file?('www/magento/app/etc/di.xml')
+			end
 		end
 	end
 end
