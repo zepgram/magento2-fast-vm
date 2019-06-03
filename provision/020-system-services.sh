@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ------------------------------------- #
-# NFS Vagrant - Magento2                #
+# Fast VM - Magento2                    #
 #                                       #
 # Author: zepgram                       #
 # Git: https://github.com/zepgram/      #
@@ -11,7 +11,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 echo '--- Configure system services ---'
 
-# Create user
+# Create db user
 sed -i 's/bind-address/#bind-address/' /etc/mysql/mariadb.conf.d/50-server.cnf
 sed -i 's/skip-external-locking/#skip-external-locking/' /etc/mysql/mariadb.conf.d/50-server.cnf
 
@@ -34,8 +34,8 @@ myhostname = $PROJECT_URL
 mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128" | tee -a /etc/postfix/main.cf
 
 # Php.ini configuration
-sed -i 's/smtp_port.*/smtp_port = 1025/' /etc/php/"$PHP_VERSION"/apache2/php.ini
-cat <<EOF >> /etc/php/"$PHP_VERSION"/apache2/php.ini
+sed -i 's/smtp_port.*/smtp_port = 1025/' /etc/php/"$PROJECT_PHP_VERSION"/apache2/php.ini
+cat <<EOF >> /etc/php/"$PROJECT_PHP_VERSION"/apache2/php.ini
 sendmail_path="/usr/bin/env catchmail -f vagrant@$PROJECT_URL"
 EOF
 
@@ -126,33 +126,33 @@ EOF
 
 
 # Apache php configuration
-sed -i 's/;opcache.enable=.*/opcache.enable=1/' /etc/php/"$PHP_VERSION"/apache2/php.ini
-sed -i 's/;opcache.enable_cli=.*/opcache.enable_cli=1/' /etc/php/"$PHP_VERSION"/apache2/php.ini
-sed -i 's/;opcache.memory_consumption=.*/opcache.memory_consumption=512/' /etc/php/"$PHP_VERSION"/apache2/php.ini
-sed -i 's/;opcache.interned_strings_buffer=.*/opcache.interned_strings_buffer=4/' /etc/php/"$PHP_VERSION"/apache2/php.ini
-sed -i 's/;opcache.max_accelerated_files=.*/opcache.max_accelerated_files=60000/' /etc/php/"$PHP_VERSION"/apache2/php.ini
-sed -i 's/;opcache.validate_timestamps=.*/opcache.validate_timestamps=1/' /etc/php/"$PHP_VERSION"/apache2/php.ini
-sed -i 's/memory_limit = .*/memory_limit = 2G/' /etc/php/"$PHP_VERSION"/apache2/php.ini
-sed -i "s|;date.timezone =|date.timezone = ${PROJECT_TIME_ZONE}|" /etc/php/"$PHP_VERSION"/apache2/php.ini
-sed -i 's/max_execution_time = .*/max_execution_time = 60/' /etc/php/"$PHP_VERSION"/apache2/php.ini
+sed -i 's/;opcache.enable=.*/opcache.enable=1/' /etc/php/"$PROJECT_PHP_VERSION"/apache2/php.ini
+sed -i 's/;opcache.enable_cli=.*/opcache.enable_cli=1/' /etc/php/"$PROJECT_PHP_VERSION"/apache2/php.ini
+sed -i 's/;opcache.memory_consumption=.*/opcache.memory_consumption=512/' /etc/php/"$PROJECT_PHP_VERSION"/apache2/php.ini
+sed -i 's/;opcache.interned_strings_buffer=.*/opcache.interned_strings_buffer=4/' /etc/php/"$PROJECT_PHP_VERSION"/apache2/php.ini
+sed -i 's/;opcache.max_accelerated_files=.*/opcache.max_accelerated_files=60000/' /etc/php/"$PROJECT_PHP_VERSION"/apache2/php.ini
+sed -i 's/;opcache.validate_timestamps=.*/opcache.validate_timestamps=1/' /etc/php/"$PROJECT_PHP_VERSION"/apache2/php.ini
+sed -i 's/memory_limit = .*/memory_limit = 2G/' /etc/php/"$PROJECT_PHP_VERSION"/apache2/php.ini
+sed -i "s|;date.timezone =|date.timezone = ${PROJECT_TIME_ZONE}|" /etc/php/"$PROJECT_PHP_VERSION"/apache2/php.ini
+sed -i 's/max_execution_time = .*/max_execution_time = 60/' /etc/php/"$PROJECT_PHP_VERSION"/apache2/php.ini
 
 
 # Cli php configuration
-sed -i 's/;opcache.enable=.*/opcache.enable=1/' /etc/php/"$PHP_VERSION"/cli/php.ini
-sed -i 's/;opcache.enable_cli=.*/opcache.enable_cli=1/' /etc/php/"$PHP_VERSION"/cli/php.ini
-sed -i 's/;opcache.memory_consumption=.*/opcache.memory_consumption=512/' /etc/php/"$PHP_VERSION"/cli/php.ini
-sed -i 's/;opcache.interned_strings_buffer=.*/opcache.interned_strings_buffer=4/' /etc/php/"$PHP_VERSION"/cli/php.ini
-sed -i 's/;opcache.max_accelerated_files=.*/opcache.max_accelerated_files=60000/' /etc/php/"$PHP_VERSION"/cli/php.ini
-sed -i 's/;opcache.validate_timestamps=.*/opcache.validate_timestamps=1/' /etc/php/"$PHP_VERSION"/cli/php.ini
-sed -i 's/memory_limit = .*/memory_limit = 2G/' /etc/php/"$PHP_VERSION"/cli/php.ini
-sed -i "s|;date.timezone =|date.timezone = ${PROJECT_TIME_ZONE}|" /etc/php/"$PHP_VERSION"/cli/php.ini
-sed -i 's/max_execution_time = .*/max_execution_time = 60/' /etc/php/"$PHP_VERSION"/cli/php.ini
+sed -i 's/;opcache.enable=.*/opcache.enable=1/' /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
+sed -i 's/;opcache.enable_cli=.*/opcache.enable_cli=1/' /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
+sed -i 's/;opcache.memory_consumption=.*/opcache.memory_consumption=512/' /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
+sed -i 's/;opcache.interned_strings_buffer=.*/opcache.interned_strings_buffer=4/' /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
+sed -i 's/;opcache.max_accelerated_files=.*/opcache.max_accelerated_files=60000/' /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
+sed -i 's/;opcache.validate_timestamps=.*/opcache.validate_timestamps=1/' /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
+sed -i 's/memory_limit = .*/memory_limit = 2G/' /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
+sed -i "s|;date.timezone =|date.timezone = ${PROJECT_TIME_ZONE}|" /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
+sed -i 's/max_execution_time = .*/max_execution_time = 60/' /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
 
 # File opcache for cli
-cat <<EOF >> /etc/php/"$PHP_VERSION"/apache2/php.ini
+cat <<EOF >> /etc/php/"$PROJECT_PHP_VERSION"/apache2/php.ini
 opcache.file_cache=/tmp/php-opcache
 EOF
-cat <<EOF >> /etc/php/"$PHP_VERSION"/cli/php.ini
+cat <<EOF >> /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
 opcache.file_cache=/tmp/php-opcache
 EOF
 
@@ -215,10 +215,10 @@ EOF
 a2dismod php7.0 php7.1 php7.2
 a2ensite 000-default
 a2ensite 001-ssl
-a2enmod deflate expires headers proxy proxy_http rewrite ssl php"$PHP_VERSION"
-update-alternatives --set php /usr/bin/php"$PHP_VERSION"
-update-alternatives --set phar /usr/bin/phar"$PHP_VERSION"
-update-alternatives --set phar.phar /usr/bin/phar.phar"$PHP_VERSION"
+a2enmod deflate expires headers proxy proxy_http rewrite ssl php"$PROJECT_PHP_VERSION"
+update-alternatives --set php /usr/bin/php"$PROJECT_PHP_VERSION"
+update-alternatives --set phar /usr/bin/phar"$PROJECT_PHP_VERSION"
+update-alternatives --set phar.phar /usr/bin/phar.phar"$PROJECT_PHP_VERSION"
 usermod -a -G www-data vagrant
 /etc/init.d/apache2 restart
 

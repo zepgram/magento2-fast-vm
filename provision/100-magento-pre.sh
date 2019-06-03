@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ------------------------------------- #
-# NFS Vagrant - Magento2                #
+# Fast VM - Magento2                    #
 #                                       #
 # Author: zepgram                       #
 # Git: https://github.com/zepgram/      #
@@ -36,7 +36,7 @@ usermod -a -G www-data "$PROJECT_USER"
 
 # Permission script
 cat <<EOF > /home/vagrant/permission.bak
-if [ "$PROJECT_NFS" != "true" ] || [ "$PROJECT_MOUNT" == "app" ]; then
+if [ "$PROJECT_MOUNT" != "nfs" ] || [ "$PROJECT_MOUNT_PATH" == "app" ]; then
 echo 'Applying permissions to $PROJECT_PATH project'
 cd "$PROJECT_PATH" \\
 && sudo find var vendor pub/static pub/media app/etc -type f -exec chmod g+w {} \; \\
@@ -84,8 +84,8 @@ cp -r /home/vagrant/.ssh/* /home/"$PROJECT_USER"/.ssh/
 chown -R "$PROJECT_USER":"$PROJECT_USER" /home/"$PROJECT_USER"
 
 # Extra pre-build
-if [ -f /home/vagrant/provision/100-pre-build.sh ]; then
-  bash /home/vagrant/provision/100-pre-build.sh
+if [ -f /home/vagrant/extra/100-pre-build.sh ]; then
+  bash /home/vagrant/extra/100-pre-build.sh
 fi
 
 # Restart services

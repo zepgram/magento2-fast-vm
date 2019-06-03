@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ------------------------------------- #
-# NFS Vagrant - Magento2                #
+# Fast VM - Magento2                    #
 #                                       #
 # Author: zepgram                       #
 # Git: https://github.com/zepgram/      #
@@ -13,7 +13,7 @@ echo '--- Magento installation sequence ---'
 
 # Prepare directory
 DIRECTORY_BUILD="/srv"
-if [ "$PROJECT_MOUNT" == "app" ]; then
+if [ "$PROJECT_MOUNT_PATH" == "app" ]; then
 	DIRECTORY_BUILD="/tmp"
 fi
 PROJECT_BUILD="$DIRECTORY_BUILD/$PROJECT_NAME"
@@ -60,11 +60,12 @@ rm -rf /var/www/"$PROJECT_NAME"
 ln -sfn /srv/"$PROJECT_NAME" /var/www/"$PROJECT_NAME"
 
 # Apply basic rights on regular mount
-if [ "$PROJECT_NFS" != "true" ] || [ "$PROJECT_MOUNT" == "app" ]; then
+if [ "$PROJECT_MOUNT" != "nfs" ] || [ "$PROJECT_MOUNT_PATH" == "app" ]; then
 	chown -fR "$PROJECT_SETUP_OWNER":www-data "$PROJECT_PATH"
 fi
 
 # Run install
+chmod +x "$PROJECT_PATH"/bin/magento
 sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento setup:uninstall -n -q
 sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento setup:install \
 --base-url="http://${PROJECT_URL}/" \
