@@ -46,7 +46,8 @@ https://onilab.com/blog/install-magento-2-on-localhost-a-windows-10-guide/
 &#9888; DO NOT USE SSH KEY WITH PASSPHRASE, this vagrant installation is non-interactive.<br>
 If your ssh key has been created with a passphrase, please create an other one and add it to your git account.
 1. Clone this project: ``git clone git@github.com:zepgram/magento2-fast-vm.git``
-1. On linux only for NFS, run: ``sudo apt install nfs-kernel-server``
+1. On linux only in order to install NFS, run: ``sudo apt install nfs-kernel-server``
+1. On windows only, make sur virtualization is turned 'on' in UEFI BIOS
 1. Copy and past ``ssh.example``, rename it ``ssh`` and put your ``id_rsa`` and ``id_rsa.pub`` keys
 1. Copy and past ``config.yaml.example``, rename it ``config.yaml`` and add your configurations according to [Yaml config overview](#yaml-config-overview)
 1. As admin open your host file: ``C:\Windows\System32\drivers\etc\hosts`` for Windows or ``/etc/hosts``for Linux/macOS and add vm_conf[network_ip] and magento[url]<br>
@@ -88,6 +89,7 @@ Default values would be: ``192.168.200.50       dev.magento.com``
       * 'community' install magento community edition
       * 'enterprise' install magento enterprise edition
    * version: set magento version and also define PHP version (2.3.*)
+   * php_version: override the default required version by yours, for example '7.1' (default)
    * sample: install sample data, used only on composer source installation (true)
    * mode: magento mode (developer)
    * currency: set currency (USD)
@@ -108,7 +110,7 @@ They will be executed on pre-defined sequences:
 * <b>app directory:</b> mount only app directory. Ensure great performance by not sharing generated files between machines.
 
 ### Rsync - new (v1.2.0)
-Only usefull on path set to ``root``<br>
+Only usefull on path set to ``root``.<br>
 * Loss of performance is due to files generated on the fly, by excluding them you can mount the whole directory ``root`` and get performance equal to an ``app`` mount.
 * The ``vagrant rsync-auto`` is launched by default on vagrant up, even with that if you need to force an update you can run ``vagrant rsync``. Terminal should be kept open for rsync-auto: do not close it.
 * Rsync is unilateral, your host machine push files to guest but not the other way.<br>
@@ -124,7 +126,6 @@ Less performant than rsync but files are perfectly shared between guest and host
 [See NFS option](https://www.vagrantup.com/docs/synced-folders/nfs.html)
 
 ### Default
-I do not recommend this option.<br>
 It can be used with ``app`` path if you encountered any issue with NFS and rsync mount.
 
 [See basic usage](https://www.vagrantup.com/docs/synced-folders/basic_usage.html)
@@ -136,7 +137,7 @@ Magento file system owner is configured for ``magento`` user, it means all comma
 By default command line ``vagrant ssh`` will log you as magento user.<br>
 * To logout and get back to vagrant user you can run ``exit``
 * To login as magento user you can run ``sudo su magento`` or ``bash``
-* To re-apply magento permission you can run ``permission`` in command line, only used for ``app`` mount directory
+* To re-apply magento permission you can run ``permission`` in command line, used only for ``app`` path and ``default`` mount.
 <b>Password for magento user is ``magento``</b>
 
 ### Command line
@@ -206,9 +207,6 @@ Disable cron:
   * url: [network_ip]/adminer
 * Phpinfo
   * url: [network_ip]/php
-
-### PhpStorm
-To setup phpStorm configuration you can follow magento2 [official documentation](http://devdocs.magento.com/guides/v2.1/install-gde/docker/docker-phpstorm-project.html).
 
 ## Issues
 
