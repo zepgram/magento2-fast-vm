@@ -12,12 +12,6 @@ rootPath = File.dirname(__FILE__)
 require 'yaml'
 require "#{rootPath}/dependency.rb"
 
-# Check plugin
-check_plugins ["vagrant-vbguest","vagrant-bindfs","vagrant-rsync-back"]
-if OS.is_windows
-  check_plugins ["vagrant-winnfsd"]
-end
-
 # Load yaml configuration
 configValues = YAML.load_file("#{rootPath}/config.yaml")
 vmconf       = configValues['vmconf']
@@ -25,6 +19,15 @@ composer     = configValues['composer']
 git          = configValues['git']
 magento      = configValues['magento']
 projectName  = 'magento'
+
+# Check plugin
+check_plugins ['vagrant-vbguest','vagrant-bindfs']
+if vmconf['mount'] == 'rds'
+  check_plugins['vagrant-rsync-back']
+end
+if OS.is_windows
+  check_plugins ['vagrant-winnfsd']
+end
 
 # Mount directory option
 hostDirectory = "./www/#{projectName}"
@@ -37,7 +40,7 @@ end
 # Vagrant configure
 Vagrant.configure(2) do |config|
   # Virtual machine
-  config.vm.box = "debian/stretch64"
+  config.vm.box = 'debian/stretch64'
   
   # Host manager configuration
   config.vm.define vmconf['host_name']
@@ -144,10 +147,12 @@ Vagrant.configure(2) do |config|
 ---------------------------------------------------------
 Vagrant machine ready to use for #{git['name']}
    magento         #{magento['url']}
+   mount           #{vmconf['mount']}
    phpinfo         #{vmconf['network_ip']}/phpinfo
    adminer         #{vmconf['network_ip']}/adminer
    mailcatcher     #{vmconf['network_ip']}:1080
 "
-  # Post up install
-  post_up_install(config, vmconf['mount'], vmconf['host_name'])
+
+  # Triggers
+  triggers(config, vmconf['mount'], vmconf['host_name'])
 end

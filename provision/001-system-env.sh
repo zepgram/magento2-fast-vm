@@ -60,6 +60,18 @@ cd $PROJECT_PATH && sudo su $PROJECT_USER;
 EOF
 fi
 
+# Patch extra files
+apt-get install -y dos2unix
+if [ -f /home/vagrant/extra/001-env.sh ]; then
+	dos2unix /home/vagrant/extra/001-env.sh
+fi
+if [ -f /home/vagrant/extra/100-pre-build.sh ]; then
+	dos2unix /home/vagrant/extra/100-pre-build.sh
+fi
+if [ -f /home/vagrant/extra/120-post-build.sh ]; then
+	dos2unix /home/vagrant/extra/120-post-build.sh
+fi
+
 # Extra env
 if [ -f /home/vagrant/extra/001-env.sh ]; then
 	bash /home/vagrant/extra/001-env.sh

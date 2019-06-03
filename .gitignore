@@ -5,7 +5,6 @@
 /vagrant-ssh
 /config.yaml
 /.DS_Store
-/.guest_deployed.flag
 /extra/001-env.sh
 /extra/100-pre-build.sh
 /extra/120-post-build.sh

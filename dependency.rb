@@ -6,6 +6,7 @@
 # ------------------------------------- #
 
 require 'getoptlong'
+require 'fileutils'
 
 ## Get OS
 module OS
@@ -79,10 +80,6 @@ end
 ## Force LF
 def process_extra_file(config, file)
   if File.file?(file)
-  	read = IO.read(file)
-  	replace = read.gsub /\r\n?/, "\n"
-  	newFile = File.open(file, 'w')
-  	newFile.write(replace)
   	config.vm.provision 'file', source: file, destination: '/home/vagrant/' + file, run: 'always'
   end
 end
@@ -96,39 +93,27 @@ def rsync_exclude
   ]
 end
 
-## Post setup installation
-def post_up_install(config, mount, hostname)
-	config.trigger.after :up, :reload do |trigger|
-		if !File.file?(".guest_deployed.flag")
-			if OS.is_windows
-				runner = 'ni .guest_deployed.flag'
-			else
-				runner = 'touch .guest_deployed.flag'
-			end
-		end
-		# Add post-up message
-  		if mount == 'rsync'
+## Tiggers
+def triggers(config, mount, hostname)
+	config.trigger.after :up, :reload, :provision do |trigger|
+		if mount == 'rsync'
+			# Add post-up message
 			trigger.info = config.vm.post_up_message
 			trigger.info+= '>>> Do not close this terminal: open new one for ssh login
 ---------------------------------------------------------'
-			# Deploy from guest to host
-			if runner
-		  		runner+= " | vagrant rsync-back #{hostname} | vagrant rsync-auto --rsync-chown #{hostname}"
+			# Run rsync-auto
+			if !File.file?('www/magento/app/etc/di.xml')
+				trigger.info+= "\r\nrsync-back and rsync auto triggered..."
+				trigger.run = {inline: "vagrant rsync-back #{hostname} | vagrant rsync-auto --rsync-chown #{hostname}"}
 			else
-				# Run rsync-auto
-				runner = "vagrant rsync-auto --rsync-chown #{hostname}"
+				trigger.info+= "\r\nrsync-auto is running..."
+				trigger.run = {inline: "vagrant rsync-auto --rsync-chown #{hostname}"}
 			end
 		end
-		if runner
-			trigger.run = {inline: "#{runner}"} 
-		end
 	end
-	# Remove flag
 	config.trigger.after :destroy do |trigger|
-		if OS.is_windows
-	      trigger.run = {inline: 'del .guest_deployed.flag'}
-	    else
-	      trigger.run = {inline: 'rm -f .guest_deployed.flag'}
-	    end
+		trigger.ruby do |env,machine|
+			FileUtils.remove_dir('www', true)
+		end
 	end
 end
