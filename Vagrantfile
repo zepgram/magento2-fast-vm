@@ -112,9 +112,9 @@ Vagrant.configure(2) do |config|
   config.vm.provision 'shell', path: 'provision/001-system-env.sh', run: 'always', keep_color: true, args: [
     projectName, composer['username'], composer['password'],
     git['name'], git['email'], git['host'], git['repository'],
-    magento['url'], magento['source'], magento['edition'], magento['version'],
-    magento['sample'], magento['mode'], magento['currency'], magento['language'],
-    magento['time_zone'], vmconf['mount'], vmconf['path']
+    magento['url'], magento['php_version'], magento['source'], magento['edition'],
+    magento['version'], magento['sample'], magento['mode'], magento['currency'],
+    magento['language'], magento['time_zone'], vmconf['mount'], vmconf['path']
   ]
 
   # Shell provisioning 

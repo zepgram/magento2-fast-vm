@@ -62,7 +62,7 @@ def check_plugins(dependencies)
 		end
 
 		if dependencies_already_satisfied
-			puts "\033[0m" << " - All dependencies already satisfied" << "\e[0m"
+			puts "\033[0m" << " - All dependencies are satisfied" << "\e[0m"
 		else
 			puts "\033[0m" << " - Dependencies installed" << "\e[0m"
 			exec "vagrant " << "--skip-dependency-manager " << ARGV.join(" ")
@@ -106,6 +106,7 @@ def post_up_install(config, mount, hostname)
 				runner = 'touch .guest_deployed.flag'
 			end
 		end
+		# Add post-up message
   		if mount == 'rsync'
 			trigger.info = config.vm.post_up_message
 			trigger.info+= '>>> Do not close this terminal: open new one for ssh login
@@ -124,7 +125,6 @@ def post_up_install(config, mount, hostname)
 	end
 	# Remove flag
 	config.trigger.after :destroy do |trigger|
-		# TODO: must destroy files excluded if rsync mode
 		if OS.is_windows
 	      trigger.run = {inline: 'del .guest_deployed.flag'}
 	    else

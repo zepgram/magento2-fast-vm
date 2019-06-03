@@ -32,13 +32,16 @@ apt-get install -y \
 wget -q https://packages.sury.org/php/apt.gpg -O- | sudo apt-key add -
 echo "deb https://packages.sury.org/php/ stretch main" | sudo tee /etc/apt/sources.list.d/php.list
 
-# Set required php version
+# Set php version
 MAGENTO_PHP_VERSION="7.2";
 if $(dpkg --compare-versions "${PROJECT_VERSION}" "lt" "2.3"); then
   MAGENTO_PHP_VERSION="7.1";
 fi
-if $(dpkg --compare-versions "${PROJECT_VERSION}" "lt" "2.1"); then
+if $(dpkg --compare-versions "${PROJECT_VERSION}" "lt" "2.1.16"); then
   MAGENTO_PHP_VERSION="7.0";
+fi
+if [ $PROJECT_PHP_VERSION != 'default' ]; then
+  MAGENTO_PHP_VERSION=$PROJECT_PHP_VERSION
 fi
 
 # PHP packages
