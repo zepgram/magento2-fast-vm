@@ -96,20 +96,14 @@ Default values would be: ``192.168.200.50       dev.magento.com``
    * language: set language (en_US)
    * time_zone: set time zone (Europe/London)
 
-### Extra provisionners
-You can add your custom shell provisioners.<br>
-They will be executed on pre-defined sequences:
-1. ``extra/001-env.sh`` his purpose is to provide extra environment variables or extra package, executed on ``system-env.sh`` provision
-1. ``extra/100-pre-build.sh`` define your specific system configuration before installation, hook on magento ``pre-build.sh`` provision
-1. ``extra/120-post-build.sh`` you can execute magento command in this sequence, executed on magento ``post-build.sh`` provision
 
 ### Mount options
 
-#### Path
+#### PATH
 * <b>root directory:</b> mount the entire project.
 * <b>app directory:</b> mount only app directory. Ensure great performance by not sharing generated files between machines.
 
-#### Rsync - new (v1.2.0)
+#### RSYNC - new (v1.2.0)
 Only usefull on path set to ``root``.<br>
 * Loss of performance is due to files generated on the fly, by excluding them you can mount the whole directory ``root`` and get performance equal to an ``app`` mount.
 * The ``vagrant rsync-auto`` is launched by default on vagrant up, even with that if you need to force an update you can run ``vagrant rsync``. Terminal should be kept open for rsync-auto: do not close it.
@@ -125,10 +119,17 @@ Less performant than rsync but files are perfectly shared between guest and host
 
 [See NFS option](https://www.vagrantup.com/docs/synced-folders/nfs.html)
 
-#### Default
+#### DEFAULT
 It can be used with ``app`` path if you encountered any issue with NFS and rsync mount.
 
 [See basic usage](https://www.vagrantup.com/docs/synced-folders/basic_usage.html)
+
+### Extra provisionners
+You can add your custom shell provisioners.<br>
+They will be executed on pre-defined sequences:
+1. ``extra/001-env.sh`` his purpose is to provide extra environment variables or extra package, executed on ``system-env.sh`` provision
+1. ``extra/100-pre-build.sh`` define your specific system configuration before installation, hook on magento ``pre-build.sh`` provision
+1. ``extra/120-post-build.sh`` you can execute magento command in this sequence, executed on magento ``post-build.sh`` provision
 
 ## Usage
 
