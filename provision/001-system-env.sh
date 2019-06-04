@@ -61,7 +61,9 @@ EOF
 fi
 
 # Patch extra files
-apt-get install -y dos2unix
+if [[ ! $(dpkg-query -l 'dos2unix') ]]; then 
+ 	sudo apt-get install -y dos2unix
+fi
 if [ -f /home/vagrant/extra/001-env.sh ]; then
 	dos2unix /home/vagrant/extra/001-env.sh
 fi
