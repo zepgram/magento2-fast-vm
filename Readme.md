@@ -106,7 +106,7 @@ Default values would be: ``192.168.200.50       dev.magento.com``
 #### RSYNC - new (v1.2.0)
 Only usefull on path set to ``root``.<br>
 * Loss of performance is due to files generated on the fly, by excluding them you can mount the whole directory ``root`` and get performance equal to an ``app`` mount.
-* The ``vagrant rsync-auto`` is launched by default on vagrant up, even with that if you need to force an update you can run ``vagrant rsync``. Terminal should be kept open for rsync-auto: do not close it.
+* The ``vagrant rsync-auto`` is launched by default on vagrant up, even with that if you need to force an update you can run ``vagrant rsync``. <b>Terminal should be kept open for rsync-auto: do not close it.</b>
 * Rsync is unilateral, your host machine push files to guest but not the other way.<br>
 Anyway if it's necessary, after a ``composer update`` for example, you can run ``vagrant rsync-back`` to push files from guest to host.<br>
 

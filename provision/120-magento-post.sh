@@ -47,6 +47,11 @@ if [ "$PROJECT_MOUNT" == "nfs" ] && [ "$PROJECT_MOUNT_PATH" != "app" ]; then
   sudo -u "$PROJECT_SETUP_OWNER" sed -i 's/<item name="view_preprocessed" xsi:type="object">Magento\\\Framework\\\App\\\View\\\Asset\\\MaterializationStrategy\\\Symlink/<item name="view_preprocessed" xsi:type="object">Magento\\\Framework\\\App\\\View\\\Asset\\\MaterializationStrategy\\\Copy/' "$PROJECT_PATH"/app/etc/di.xml
 fi
 
+# Clean compiled files and cache
+rm -rf "$PROJECT_PATH"/var/generation/
+rm -rf "$PROJECT_PATH"/generated/code/
+sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento cache:clean
+
 # Magento config
 if $(dpkg --compare-versions "${PROJECT_VERSION}" "gt" "2.2"); then
   sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento setup:config:set \
@@ -83,12 +88,9 @@ fi
 # Clean compiled files
 rm -rf "$PROJECT_PATH"/var/generation/
 rm -rf "$PROJECT_PATH"/generated/code/
-
-# Post setup config
-sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento cache:clean
 sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento deploy:mode:set "$PROJECT_MODE"
-sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento setup:upgrade
 sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento cache:enable
+sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento setup:upgrade
 
 # Restart
 /etc/init.d/apache2 restart
