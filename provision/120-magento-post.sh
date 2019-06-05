@@ -88,9 +88,9 @@ fi
 # Clean compiled files
 rm -rf "$PROJECT_PATH"/var/generation/
 rm -rf "$PROJECT_PATH"/generated/code/
+sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento setup:upgrade
 sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento deploy:mode:set "$PROJECT_MODE"
 sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento cache:enable
-sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento setup:upgrade
 
 # Restart
 /etc/init.d/apache2 restart

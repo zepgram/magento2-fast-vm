@@ -21,10 +21,7 @@ magento      = configValues['magento']
 projectName  = 'magento'
 
 # Check plugin
-check_plugins ['vagrant-vbguest','vagrant-bindfs']
-if vmconf['mount'] == 'rds'
-  check_plugins['vagrant-rsync-back']
-end
+check_plugins ['vagrant-vbguest','vagrant-bindfs','vagrant-rsync-back']
 if OS.is_windows
   check_plugins ['vagrant-winnfsd']
 end
