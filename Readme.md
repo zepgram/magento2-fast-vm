@@ -125,7 +125,7 @@ It can be used with ``app`` path if you encountered any issue with NFS and rsync
 [See basic usage](https://www.vagrantup.com/docs/synced-folders/basic_usage.html)
 
 ### Extra provisions
-You can add your custom shell provisions in order to [import your database from existing project](https://github.com/zepgram/magento2-fast-vm/wiki/Import-database-from-an-existing-project) for example.<br>
+You can add your custom shell provisions in order to [import your database from existing project](https://github.com/zepgram/magento2-fast-vm/wiki/Setup-with-database-from-an-existing-project) for example.<br>
 They will be executed on pre-defined sequences:
 1. ``extra/001-env.sh`` his purpose is to provide extra environment variables or extra package, executed on ``system-env.sh`` provision
 1. ``extra/100-pre-build.sh`` define your specific system configuration before installation, hook on magento ``pre-build.sh`` provision
@@ -148,19 +148,6 @@ By default command line ``vagrant ssh`` will log you as magento user.<br>
 * pestle (A collection of command line scripts for Magento 2 code generation)
 * magerun (The swiss army knife for Magento developers)
 * permission (Apply magento2 permissions on project)
-
-### Magento mode
-After installation you can change magento statement.<br>
-
-Set magento to developer mode:
-```
-./bin/magento deploy:mode:set developer
-```
-
-Set magento to production mode:
-```
-./bin/magento deploy:mode:set production
-```
 
 ### Cron   
 Enable cron:
