@@ -3,7 +3,7 @@ vmconf:
   network_ip: '192.168.200.50'
   host_name: 'zepgram'
   memory: '4096'
-  cpus: '2'
+  cpus: '1'
   mount: 'nfs'
   path: 'root'
   provision: 'all'
