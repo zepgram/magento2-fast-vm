@@ -143,8 +143,9 @@ Vagrant.configure(2) do |config|
 "
 ---------------------------------------------------------
 Vagrant machine ready to use for #{git['name']}
+   type            #{vmconf['mount']}
+   path            #{guestDirectory}
    magento         #{magento['url']}
-   mount           #{vmconf['mount']}
    phpinfo         #{vmconf['network_ip']}/phpinfo
    adminer         #{vmconf['network_ip']}/adminer
    mailcatcher     #{vmconf['network_ip']}:1080
