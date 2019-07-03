@@ -54,7 +54,7 @@ chmod 600 /home/vagrant/.ssh/id_rsa
 chmod 600 /home/vagrant/.ssh/id_rsa.pub
 rm -rf /home/vagrant/.ssh/known_hosts /home/vagrant/.ssh/config
 rm -rf /home/"$PROJECT_USER"/.ssh/known_hosts /home/"$PROJECT_USER"/.ssh/config
-echo -e "Host ${PROJECT_HOST_REPOSITORY}\n\tStrictHostKeyChecking no\n" >> /home/vagrant/.ssh/config
+echo -e "StrictHostKeyChecking no\n" >> /home/vagrant/.ssh/config
 ssh-keyscan -t rsa ${PROJECT_HOST_REPOSITORY} >> /home/vagrant/.ssh/known_hosts
 mkdir -p /home/vagrant/.composer
 cat <<EOF > /home/vagrant/.composer/auth.json
