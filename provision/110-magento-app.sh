@@ -47,6 +47,11 @@ else
 	cd "$PROJECT_BUILD"; sudo -u "$PROJECT_SETUP_OWNER" git fetch --all; git checkout "$PROJECT_SOURCE" --force;
 fi
 
+# Apply basic rights on regular mount
+if [ "$PROJECT_MOUNT" != "nfs" ] || [ "$PROJECT_MOUNT_PATH" == "app" ]; then
+	chown -fR "$PROJECT_SETUP_OWNER":www-data "$PROJECT_PATH"
+fi
+
 # Composer install
 sudo -u "$PROJECT_SETUP_OWNER" composer install -d "$PROJECT_BUILD" --no-progress --no-interaction --no-suggest
 
@@ -58,11 +63,6 @@ fi
 # Symlink
 rm -rf /var/www/"$PROJECT_NAME"
 ln -sfn /srv/"$PROJECT_NAME" /var/www/"$PROJECT_NAME"
-
-# Apply basic rights on regular mount
-if [ "$PROJECT_MOUNT" != "nfs" ] || [ "$PROJECT_MOUNT_PATH" == "app" ]; then
-	chown -fR "$PROJECT_SETUP_OWNER":www-data "$PROJECT_PATH"
-fi
 
 # Run install
 chmod +x "$PROJECT_PATH"/bin/magento
