@@ -36,7 +36,7 @@ mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128" | tee -a /etc/postfix
 # Php.ini configuration
 sed -i 's/smtp_port.*/smtp_port = 1025/' /etc/php/"$PROJECT_PHP_VERSION"/apache2/php.ini
 cat <<EOF >> /etc/php/"$PROJECT_PHP_VERSION"/apache2/php.ini
-sendmail_path="/usr/bin/env catchmail -f vagrant@$PROJECT_URL"
+sendmail_path="LANG=en_US.UTF-8 /usr/bin/env catchmail -f vagrant@$PROJECT_URL"
 EOF
 
 # Configuration on booting
