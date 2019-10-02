@@ -37,7 +37,7 @@ end
 # Vagrant configure
 Vagrant.configure(2) do |config|
   # Virtual machine
-  config.vm.box = 'debian/stretch64'
+  config.vm.box = 'geerlingguy/debian9'
   
   # Host manager configuration
   config.vm.define vmconf['host_name']
