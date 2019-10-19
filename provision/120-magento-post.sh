@@ -76,13 +76,19 @@ if $(dpkg --compare-versions "${PROJECT_VERSION}" "gt" "2.2"); then
   sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento config:set "admin/security/password_lifetime" ""
   sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento config:set "admin/security/password_is_forced" "0"
   sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento config:set "web/secure/use_in_adminhtml" "1"
-else
-  mysql -u vagrant -pvagrant -e "USE ${PROJECT_NAME}; UPDATE core_config_data set value='https://${PROJECT_URL}/' where path='web/unsecure/base_url';"
 fi
+
+# Set https for unsecure request
+mysql -u vagrant -pvagrant -e "USE ${PROJECT_NAME}; UPDATE core_config_data set value='https://${PROJECT_URL}/' where path='web/unsecure/base_url';"
 
 # Extra post-build
 if [ -f /home/vagrant/extra/120-post-build.sh ]; then
   bash /home/vagrant/extra/120-post-build.sh
+fi
+
+# Get config from source project
+if [ "$PROJECT_SOURCE" != "composer" ]; then
+  git checkout "$PROJECT_PATH"/app/etc/config.php
 fi
 
 # Clean compiled files
