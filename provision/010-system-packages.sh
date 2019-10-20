@@ -57,7 +57,7 @@ apt-get update -y && apt-get install -y \
   php${PROJECT_PHP_VERSION}-mysql php${PROJECT_PHP_VERSION}-sqlite3 libapache2-mod-php${PROJECT_PHP_VERSION} \
   php${PROJECT_PHP_VERSION}-memcache php${PROJECT_PHP_VERSION}-redis php${PROJECT_PHP_VERSION}-opcache \
   python ruby ruby-dev
-if [ "${PROJECT_PHP_VERSION}" != "7.2" ]; then
+if $(dpkg --compare-versions "${PROJECT_PHP_VERSION}" "lt" "7.2"); then
   apt-get install -y php${PROJECT_PHP_VERSION}-mcrypt
 fi
 
