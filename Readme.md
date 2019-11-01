@@ -48,7 +48,7 @@ If your ssh key has been created with a passphrase, please create an other one.
 1. On Windows only: open UEFI BIOS and make sure virtualization is turned 'on'
 1. On Windows only: open powershell as administrator and run: ``Add-MpPreference -ExclusionProcess winnfsd.exe``
 1. On Windows only: open ``C:\Windows\System32\drivers\etc\hosts`` as administrator then add ``network_ip`` and ``magento_url``<br>Default values would be: ``192.168.200.50       dev.magento.com``
-1. On Linux only: in order to install NFS, run: ``sudo apt install nfs-kernel-server``
+1. On Linux only: in order to install NFS, run ``sudo apt install nfs-kernel-server``
 1. On Linux/MacOS only: open ``/etc/hosts`` as sudo then add ``network_ip`` and ``magento_url``<br>Default values would be: ``192.168.200.50       dev.magento.com`` 
 
 ### Installation
