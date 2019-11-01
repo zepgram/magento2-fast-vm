@@ -35,7 +35,7 @@ def check_plugins(dependencies)
 	if ['up', 'reload'].include?(ARGV[0]) && !skip_dependency_manager
 		installed_dependencies = []
 
-		puts "\033[0m" << "Checking dependencies..." << "\e[0m"
+		puts "\033[0m" << "==> Checking dependencies..." << "\e[0m"
 
 		raw_output = `vagrant plugin list`
 		raw_list = raw_output.split("\n")
@@ -54,18 +54,18 @@ def check_plugins(dependencies)
 		dependencies.each_with_index do |dependency, index|
 			if not installed_dependencies.include? dependency
 				dependencies_already_satisfied = false
-				puts "\033[0m" << " - Missing '#{dependency}'!" << "\e[0m"
+				puts "\033[0m" << "==> Missing '#{dependency}'!" << "\e[0m"
 				if not system "vagrant plugin install #{dependency}"
-					puts "\n\033[0m" << " - Could not install plugin '#{dependency}'. " << "\e[0m\033[41m" <<"Stopped." << "\e[0m"
+					puts "\n\033[0m" << "==> Could not install plugin '#{dependency}'. " << "\e[0m\033[41m" <<"Stopped." << "\e[0m"
 					exit -1
 				end
 			end
 		end
 
 		if dependencies_already_satisfied
-			puts "\033[0m" << " - All dependencies are satisfied" << "\e[0m"
+			puts "\033[0m" << "==> All dependencies are satisfied" << "\e[0m"
 		else
-			puts "\033[0m" << " - Dependencies installed" << "\e[0m"
+			puts "\033[0m" << "==> Dependencies installed" << "\e[0m"
 			exec "vagrant " << "--skip-dependency-manager " << ARGV.join(" ")
 			exit
 		end

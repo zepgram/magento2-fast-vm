@@ -28,10 +28,10 @@ end
 
 # Mount directory option
 hostDirectory = "./www/#{projectName}"
-guestDirectory = "/srv/#{projectName}"
+guestDirectory = "/home/vagrant/#{projectName}"
 if vmconf['path'] == 'app'
   hostDirectory = "./www/#{projectName}/app"
-  guestDirectory = "/srv/#{projectName}/app"
+  guestDirectory = "/home/vagrant/#{projectName}/app"
 end
 
 # Vagrant configure
@@ -63,7 +63,7 @@ Vagrant.configure(2) do |config|
   # Default options
   config.vm.synced_folder '.', '/vagrant', disabled: true
   config.bindfs.default_options = {
-    force_user:   'magento',
+    force_user:   'vagrant',
     force_group:  'www-data',
     perms:        'u=rwx:g=rwx:o=r'
   }
@@ -103,10 +103,11 @@ Vagrant.configure(2) do |config|
   config.vm.provision 'file', source: './ssh/id_rsa', destination: '~/.ssh/id_rsa'
   config.vm.provision 'file', source: './ssh/id_rsa.pub', destination: '~/.ssh/id_rsa.pub'
 
-  # Extra provisionner
+  # Extra provision
   process_extra_file(config, 'extra/001-env.sh')
   process_extra_file(config, 'extra/100-pre-build.sh')
   process_extra_file(config, 'extra/120-post-build.sh')
+  process_extra_file(config, 'db-dump.sql.gz')
 
   # Environment provisioning
   config.vm.provision 'shell', path: 'provision/001-system-env.sh', run: 'always', keep_color: true, args: [
@@ -114,10 +115,10 @@ Vagrant.configure(2) do |config|
     git['name'], git['email'], git['host'], git['repository'],
     magento['url'], magento['php_version'], magento['source'], magento['edition'],
     magento['version'], magento['sample'], magento['mode'], magento['currency'],
-    magento['language'], magento['time_zone'], vmconf['mount'], vmconf['path']
+    magento['language'], magento['time_zone'], magento['crypt_key'], vmconf['mount'], vmconf['path']
   ]
 
-  # Shell provisioning 
+  # Shell provisioning
   if vmconf['provision'] == 'all'
     config.vm.provision 'shell', path: 'provision/010-system-packages.sh', keep_color: true
     config.vm.provision 'shell', path: 'provision/020-system-services.sh', keep_color: true
@@ -143,12 +144,12 @@ Vagrant.configure(2) do |config|
 "
 ---------------------------------------------------------
 Vagrant machine ready to use for #{git['name']}
-   type            #{vmconf['mount']}
+   mount           #{vmconf['mount']}
    path            #{guestDirectory}
-   magento         #{magento['url']}
-   phpinfo         #{vmconf['network_ip']}/phpinfo
-   adminer         #{vmconf['network_ip']}/adminer
-   mailcatcher     #{vmconf['network_ip']}:1080
+   magento         http://#{magento['url']}
+   phpinfo         http://#{vmconf['network_ip']}/php
+   adminer         http://#{vmconf['network_ip']}/adminer
+   mailcatcher     http://#{vmconf['network_ip']}:1080
 "
 
   # Triggers

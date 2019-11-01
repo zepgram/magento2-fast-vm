@@ -25,19 +25,16 @@ mysql -u root -ppassword -e "FLUSH PRIVILEGES;"
 # -----------------------------------------------------------------------------------------------------
 
 
+# Add binary entry
+sudo ln -sfn /usr/sbin/sendmail /usr/local/bin/
+
 # First, remove old relayhost entry
 sed -i.bak '/relayhost/,/^/d' /etc/postfix/main.cf
 
 # Enter new information
 echo "relayhost = 127.0.0.1:1025
-myhostname = $PROJECT_URL
 mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128" | tee -a /etc/postfix/main.cf
-
-# Php.ini configuration
-sed -i 's/smtp_port.*/smtp_port = 1025/' /etc/php/"$PROJECT_PHP_VERSION"/apache2/php.ini
-cat <<EOF >> /etc/php/"$PROJECT_PHP_VERSION"/apache2/php.ini
-sendmail_path="LANG=en_US.UTF-8 /usr/bin/env catchmail -f vagrant@$PROJECT_URL"
-EOF
+sed -i "s/myhostname.*/myhostname = $PROJECT_URL" /etc/postfix/main.cf
 
 # Configuration on booting
 cat <<'EOF' > /etc/init.d/mailcatcher
@@ -62,6 +59,12 @@ update-rc.d mailcatcher defaults
 
 lsof -ti :1025 | xargs --no-run-if-empty kill -9
 mailcatcher --http-ip=0.0.0.0
+/usr/sbin/sendmail -t -i -f $PROJECT_GIT_EMAIL <<MAIL_END
+Subject: Vagrant: MailCatcher
+To: $PROJECT_GIT_EMAIL
+
+This is a test to validate mailcatcher.
+MAIL_END
 
 
 # -----------------------------------------------------------------------------------------------------
@@ -125,17 +128,20 @@ EOF
 # -----------------------------------------------------------------------------------------------------
 
 
-# Apache php configuration
-sed -i 's/;opcache.enable=.*/opcache.enable=1/' /etc/php/"$PROJECT_PHP_VERSION"/apache2/php.ini
-sed -i 's/;opcache.enable_cli=.*/opcache.enable_cli=1/' /etc/php/"$PROJECT_PHP_VERSION"/apache2/php.ini
-sed -i 's/;opcache.memory_consumption=.*/opcache.memory_consumption=512/' /etc/php/"$PROJECT_PHP_VERSION"/apache2/php.ini
-sed -i 's/;opcache.interned_strings_buffer=.*/opcache.interned_strings_buffer=4/' /etc/php/"$PROJECT_PHP_VERSION"/apache2/php.ini
-sed -i 's/;opcache.max_accelerated_files=.*/opcache.max_accelerated_files=60000/' /etc/php/"$PROJECT_PHP_VERSION"/apache2/php.ini
-sed -i 's/;opcache.validate_timestamps=.*/opcache.validate_timestamps=1/' /etc/php/"$PROJECT_PHP_VERSION"/apache2/php.ini
-sed -i 's/memory_limit = .*/memory_limit = 2G/' /etc/php/"$PROJECT_PHP_VERSION"/apache2/php.ini
-sed -i "s|;date.timezone =|date.timezone = ${PROJECT_TIME_ZONE}|" /etc/php/"$PROJECT_PHP_VERSION"/apache2/php.ini
-sed -i 's/max_execution_time = .*/max_execution_time = 60/' /etc/php/"$PROJECT_PHP_VERSION"/apache2/php.ini
-
+# Fpm php configuration
+sed -i 's/;opcache.enable=.*/opcache.enable=1/' /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
+sed -i 's/;opcache.enable_cli=.*/opcache.enable_cli=1/' /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
+sed -i 's/;opcache.memory_consumption=.*/opcache.memory_consumption=512/' /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
+sed -i 's/;opcache.interned_strings_buffer=.*/opcache.interned_strings_buffer=4/' /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
+sed -i 's/;opcache.max_accelerated_files=.*/opcache.max_accelerated_files=60000/' /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
+sed -i 's/;opcache.validate_timestamps=.*/opcache.validate_timestamps=1/' /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
+sed -i 's/memory_limit = .*/memory_limit = 2G/' /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
+sed -i "s|;date.timezone =|date.timezone = ${PROJECT_TIME_ZONE}|" /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
+sed -i 's/max_execution_time = .*/max_execution_time = 1800/' /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
+sed -i 's/zlib.output_compression = .*/zlib.output_compression = On/' /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
+sed -i "s|;sendmail_path.*|sendmail_path=/usr/sbin/sendmail -t -i -f vagrant@$PROJECT_URL|" /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
+sed -i "s|;sendmail_from.*|sendmail_from=vagrant@$PROJECT_URL|" /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
+sed -i 's/smtp_port.*/smtp_port = 1025/' /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
 
 # Cli php configuration
 sed -i 's/;opcache.enable=.*/opcache.enable=1/' /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
@@ -146,10 +152,14 @@ sed -i 's/;opcache.max_accelerated_files=.*/opcache.max_accelerated_files=60000/
 sed -i 's/;opcache.validate_timestamps=.*/opcache.validate_timestamps=1/' /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
 sed -i 's/memory_limit = .*/memory_limit = 2G/' /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
 sed -i "s|;date.timezone =|date.timezone = ${PROJECT_TIME_ZONE}|" /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
-sed -i 's/max_execution_time = .*/max_execution_time = 60/' /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
+sed -i 's/max_execution_time = .*/max_execution_time = 1800/' /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
+sed -i 's/zlib.output_compression = .*/zlib.output_compression = On/' /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
+sed -i "s|;sendmail_path.*|sendmail_path=/usr/sbin/sendmail -t -i -f vagrant@$PROJECT_URL|" /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
+sed -i "s|;sendmail_from.*|sendmail_from=vagrant@$PROJECT_URL|" /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
+sed -i 's/smtp_port.*/smtp_port = 1025/' /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
 
 # File opcache for cli
-cat <<EOF >> /etc/php/"$PROJECT_PHP_VERSION"/apache2/php.ini
+cat <<EOF >> /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
 opcache.file_cache=/tmp/php-opcache
 EOF
 cat <<EOF >> /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
@@ -166,61 +176,32 @@ systemd-tmpfiles --create /etc/tmpfiles.d/php-cli-opcache.conf
 # -----------------------------------------------------------------------------------------------------
 
 
+# SSL certificates
+mkdir /home/vagrant/ssl
+cd /home/vagrant/ssl && openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 \
+    -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=www.${PROJECT_URL}" \
+    -keyout www.${PROJECT_URL}.key -out www.${PROJECT_URL}.crt
+cp /home/vagrant/ssl/www.${PROJECT_URL}.crt /etc/ssl/certs/www.${PROJECT_URL}.crt
+cp /home/vagrant/ssl/www.${PROJECT_URL}.key /etc/ssl/private/www.${PROJECT_URL}.key
+rm -rf /home/vagrant/ssl && cd /home/vagrant
+
+
+# -----------------------------------------------------------------------------------------------------
+
+
+# Nginx default conf
+sudo perl -ne 'if ( m|\#location.*php\$ \{| .. m|^\s*#\}| ) { s/#//g; } print' -i /etc/nginx/sites-available/default
+sed -i "s|fastcgi_pass unix:/var/run/php/.*|fastcgi_pass unix:/var/run/php/php${PROJECT_PHP_VERSION}-fpm.sock;|" /etc/nginx/sites-available/default
+sed -i "s/With php-.*//" /etc/nginx/sites-available/default
+sed -i "s/fastcgi_pass 127.0.0.1:9000;//" /etc/nginx/sites-available/default
+sed -i 's/index index.html index.htm index.nginx-debian.html;/index index.php index.html index.htm index.nginx-debian.html;/' /etc/nginx/sites-available/default
+
+
+# -----------------------------------------------------------------------------------------------------
+
+
+# Server permissions
 mkdir -p /var/www/html
-chown -R www-data:www-data /var/www/
-
-# Default
-cat <<'EOF' > /etc/apache2/sites-available/000-default.conf
-<VirtualHost *:80>
-  ServerName default
-  DocumentRoot /var/www/html
-  ErrorLog /var/log/apache2/default.error.log
-  CustomLog /var/log/apache2/default.access.log combined
-  SetEnvIf X-Forwarded-Proto https HTTPS=on
-</VirtualHost>
-EOF
-
-# SSL
-cat <<'EOF' > /etc/apache2/sites-available/001-ssl.conf
-<IfModule mod_ssl.c>
-  <VirtualHost _default_:443>
-    SSLEngine on
-    SSLCipherSuite EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH
-    SSLHonorCipherOrder On
-    SSLProtocol All -SSLv2 -SSLv3
-    SSLCertificateFile /etc/ssl/certs/ssl-cert-snakeoil.pem
-    SSLCertificateKeyFile /etc/ssl/private/ssl-cert-snakeoil.key
-
-    <Proxy *>
-      Order deny,allow
-      Allow from all
-    </Proxy>
-
-    ProxyPass / http://localhost:80/ retry=0
-    ProxyPassReverse / http://localhost:80/
-    ProxyPreserveHost on
-    RequestHeader set X-Forwarded-Proto "https" early
-
-    <FilesMatch "\.(shtml|phtml|php)$">
-      SSLOptions +StdEnvVars
-    </FilesMatch>
-
-    ErrorLog /var/log/apache2/default.error.log
-    CustomLog /var/log/apache2/default.access.log combined
-  </VirtualHost>
-</IfModule>
-EOF
-
-# Enable modules
-a2dismod php7.0 php7.1 php7.2
-a2ensite 000-default
-a2ensite 001-ssl
-a2enmod deflate expires headers proxy proxy_http rewrite ssl php"$PROJECT_PHP_VERSION"
-update-alternatives --set php /usr/bin/php"$PROJECT_PHP_VERSION"
-update-alternatives --set phar /usr/bin/phar"$PROJECT_PHP_VERSION"
-update-alternatives --set phar.phar /usr/bin/phar.phar"$PROJECT_PHP_VERSION"
-usermod -a -G www-data vagrant
-/etc/init.d/apache2 restart
 
 # Adminer in default
 mkdir -p /var/www/html/adminer
@@ -228,8 +209,11 @@ curl -sL -o /var/www/html/adminer/index.php https://www.adminer.org/latest-en.ph
 
 # Add php info
 mkdir -p /var/www/html/php/
-cat <<EOF > /var/www/html/php/index.php
+cat <<-EOF > /var/www/html/php/index.php
 <?php
   phpinfo();
 EOF
 php -v
+
+chown -R www-data:www-data /var/www/
+usermod -a -G www-data vagrant
