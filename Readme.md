@@ -45,17 +45,17 @@ https://onilab.com/blog/install-magento-2-on-localhost-a-windows-10-guide/
 
 &#9888; DO NOT USE SSH KEY WITH PASSPHRASE, this vagrant installation is non-interactive.<br>
 If your ssh key has been created with a passphrase, please create an other one.
-1. On Linux only: in order to install NFS, run: ``sudo apt install nfs-kernel-server``
-1. On Linux/MacOS only: open ``/etc/hosts`` as sudo then add ``network_ip`` and ``magento_url``<br>Default values would be: ``192.168.200.50       dev.magento.com`` 
 1. On Windows only: open UEFI BIOS and make sure virtualization is turned 'on'
 1. On Windows only: open powershell as administrator and run: ``Add-MpPreference -ExclusionProcess winnfsd.exe``
 1. On Windows only: open ``C:\Windows\System32\drivers\etc\hosts`` as administrator then add ``network_ip`` and ``magento_url``<br>Default values would be: ``192.168.200.50       dev.magento.com``
+1. On Linux only: in order to install NFS, run: ``sudo apt install nfs-kernel-server``
+1. On Linux/MacOS only: open ``/etc/hosts`` as sudo then add ``network_ip`` and ``magento_url``<br>Default values would be: ``192.168.200.50       dev.magento.com`` 
 
 ### Installation
 
 1. Clone this project: ``git clone git@github.com:zepgram/magento2-fast-vm.git``
 1. Copy/past: ``ssh.example`` rename it ``ssh`` then put your ``id_rsa`` and ``id_rsa.pub`` keys
-1. Copy/past: ``config.yaml.example`` rename it ``config.yaml`` then customize configurations according to [Yaml config overview](#yaml-config-overview)
+1. Copy/past: ``config.yaml.example`` rename it ``config.yaml``<br>Then customize configurations according to [Yaml config overview](#yaml-config-overview)
 1. If you want to import an existing database: create a compressed sql dump and name it ``db-dump.sql.gz``.<br>You must also fill ``crypt_key`` in config.yaml 
 1. To start install run: ``vagrant up`` (duration: ~20 minutes)
 1. Finally run: ``vagrant ssh`` to access to your guest machine
