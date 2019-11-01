@@ -19,13 +19,19 @@ debconf-set-selections <<< "mysql-server mysql-server/root_password_again passwo
 debconf-set-selections <<< "postfix postfix/mailname string $PROJECT_URL"
 debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
 
+# Configure default locale
+cp /etc/locale.gen /etc/locale.gen.old
+sed -i "s/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g" /etc/locale.gen
+/usr/sbin/locale-gen
+export LANG=en_US.UTF-8*
+
 # Required packages
 apt-get install -y \
   curl graphviz htop net-tools rsync sudo tree wget unzip zip \
   libsqlite3-dev libxml2-utils build-essential software-properties-common \
-  postfix mailutils libsasl2-2 libsasl2-modules ca-certificates \
+  postfix mailutils libsasl2-2 libsasl2-modules ca-certificates libnss3-tools \
   apt-transport-https mysql-client mysql-server redis-server \
-  openssl apache2 \
+  openssl nginx \
   g++ vim git git-flow
 
 # Sury Repository
@@ -34,6 +40,9 @@ echo "deb https://packages.sury.org/php/ stretch main" | sudo tee /etc/apt/sourc
 
 # Set php version
 MAGENTO_PHP_VERSION='7.2';
+if $(dpkg --compare-versions "${PROJECT_VERSION}" "gt" "2.3.2-p1"); then
+  MAGENTO_PHP_VERSION='7.3';
+fi
 if $(dpkg --compare-versions "${PROJECT_VERSION}" "lt" "2.3"); then
   MAGENTO_PHP_VERSION='7.1';
 fi
@@ -54,10 +63,10 @@ apt-get update -y && apt-get install -y \
   php${PROJECT_PHP_VERSION}-curl php${PROJECT_PHP_VERSION}-gd php${PROJECT_PHP_VERSION}-intl \
   php${PROJECT_PHP_VERSION}-mbstring php${PROJECT_PHP_VERSION}-soap php${PROJECT_PHP_VERSION}-zip \
   php${PROJECT_PHP_VERSION}-xml php${PROJECT_PHP_VERSION}-xml php${PROJECT_PHP_VERSION}-bcmath \
-  php${PROJECT_PHP_VERSION}-mysql php${PROJECT_PHP_VERSION}-sqlite3 libapache2-mod-php${PROJECT_PHP_VERSION} \
+  php${PROJECT_PHP_VERSION}-mysql php${PROJECT_PHP_VERSION}-sqlite3 php${PROJECT_PHP_VERSION}-fpm \
   php${PROJECT_PHP_VERSION}-memcache php${PROJECT_PHP_VERSION}-redis php${PROJECT_PHP_VERSION}-opcache \
   python ruby ruby-dev
-if [ "${PROJECT_PHP_VERSION}" != "7.2" ]; then
+if $(dpkg --compare-versions ${PROJECT_PHP_VERSION} "lt" "7.2"); then
   apt-get install -y php${PROJECT_PHP_VERSION}-mcrypt
 fi
 

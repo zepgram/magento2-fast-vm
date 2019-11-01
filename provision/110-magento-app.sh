@@ -12,24 +12,24 @@ export DEBIAN_FRONTEND=noninteractive
 echo '--- Magento installation sequence ---'
 
 # Prepare directory
-DIRECTORY_BUILD="/srv"
+DIRECTORY_BUILD="/home/vagrant"
 if [ "$PROJECT_MOUNT_PATH" == "app" ]; then
 	DIRECTORY_BUILD="/tmp"
 fi
 PROJECT_BUILD="$DIRECTORY_BUILD/$PROJECT_NAME"
 rm -rf "$PROJECT_BUILD" &> /dev/null
-chmod -R 777 /srv /tmp
+chmod -R 777 /tmp
 mkdir -p "$PROJECT_BUILD"
-chown -fR "$PROJECT_SETUP_OWNER":"$PROJECT_SETUP_OWNER" "$PROJECT_BUILD"
+chown -fR vagrant:vagrant "$PROJECT_BUILD"
 
 # Get installation files from source
 if [ "$PROJECT_SOURCE" == "composer" ]; then
 	# Install from magento
-	sudo -u "$PROJECT_SETUP_OWNER" composer create-project --no-interaction --no-install --no-progress \
+	sudo -u vagrant composer create-project --no-interaction --no-install --no-progress \
 		--repository=https://repo.magento.com/ magento/project-"$PROJECT_EDITION"-edition="$PROJECT_VERSION" "$PROJECT_NAME" -d "$DIRECTORY_BUILD"
 	# Install sample data
 	if [ "$PROJECT_SAMPLE" == "true" ]; then
-		sudo -u "$PROJECT_SETUP_OWNER" composer require -d "$PROJECT_BUILD" \
+		sudo -u vagrant composer require -d "$PROJECT_BUILD" \
 		magento/module-bundle-sample-data magento/module-widget-sample-data \
 		magento/module-theme-sample-data magento/module-catalog-sample-data \
 		magento/module-customer-sample-data magento/module-cms-sample-data \
@@ -43,12 +43,12 @@ if [ "$PROJECT_SOURCE" == "composer" ]; then
 	fi
 else
 	# Install from git
-	sudo -u "$PROJECT_SETUP_OWNER" git clone "$PROJECT_REPOSITORY" "$PROJECT_BUILD"
-	cd "$PROJECT_BUILD"; sudo -u "$PROJECT_SETUP_OWNER" git fetch --all; git checkout "$PROJECT_SOURCE" --force;
+	sudo -u vagrant git clone "$PROJECT_REPOSITORY" "$PROJECT_BUILD"
+	cd "$PROJECT_BUILD"; sudo -u vagrant git fetch --all; git checkout "$PROJECT_SOURCE" --force;
 fi
 
 # Composer install
-sudo -u "$PROJECT_SETUP_OWNER" composer install -d "$PROJECT_BUILD" --no-progress --no-interaction --no-suggest
+sudo -u vagrant composer install -d "$PROJECT_BUILD" --no-progress --no-interaction --no-suggest
 
 # Rsync directory
 if [ "$PROJECT_BUILD" != "$PROJECT_PATH" ]; then
@@ -56,28 +56,28 @@ if [ "$PROJECT_BUILD" != "$PROJECT_PATH" ]; then
 fi
 
 # Symlink
-rm -rf /var/www/"$PROJECT_NAME"
-ln -sfn /srv/"$PROJECT_NAME" /var/www/"$PROJECT_NAME"
+rm -rf /var/www/html/"$PROJECT_NAME"
+ln -sfn "$PROJECT_PATH" /var/www/html/"$PROJECT_NAME"
 
 # Apply basic rights on regular mount
 if [ "$PROJECT_MOUNT" != "nfs" ] || [ "$PROJECT_MOUNT_PATH" == "app" ]; then
-	chown -fR "$PROJECT_SETUP_OWNER":www-data "$PROJECT_PATH"
+	chown -fR :www-data "$PROJECT_PATH"
 fi
 
 # Run install
 chmod +x "$PROJECT_PATH"/bin/magento
-sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento setup:uninstall -n -q
-sudo -u "$PROJECT_SETUP_OWNER" "$PROJECT_PATH"/bin/magento setup:install \
+sudo -u vagrant "$PROJECT_PATH"/bin/magento setup:uninstall -n -q
+sudo -u vagrant "$PROJECT_PATH"/bin/magento setup:install \
 --base-url="http://${PROJECT_URL}/" \
 --base-url-secure="https://${PROJECT_URL}/" \
 --db-host="localhost"  \
 --db-name="${PROJECT_NAME}" \
 --db-user="vagrant" \
 --db-password="vagrant" \
---admin-firstname="admin" \
---admin-lastname="admin" \
+--admin-firstname="magento.admin" \
+--admin-lastname="magento.admin" \
 --admin-email="${PROJECT_GIT_EMAIL}" \
---admin-user="admin" \
+--admin-user="magento.admin" \
 --admin-password="admin123" \
 --language="${PROJECT_LANGUAGE}" \
 --currency="${PROJECT_CURRENCY}" \
