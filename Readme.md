@@ -3,7 +3,7 @@
 [![vagrant](https://img.shields.io/badge/vagrant-debian:stretch-blue.svg?longCache=true&style=flat&label=vagrant&logo=vagrant)](https://app.vagrantup.com/debian/boxes/stretch64)
 [![dev-box](https://img.shields.io/badge/git/composer-blue.svg?longCache=true&style=flat&label=setup&logo=magento)](https://github.com/zepgram/magento2-fast-vm/blob/master/config.yaml.example)
 [![mount](https://img.shields.io/badge/nfs/rsync-blue.svg?longCache=true&style=flat&label=mount)](https://github.com/zepgram/magento2-fast-vm/releases)
-[![release](https://img.shields.io/badge/release-v1.2.0-blue.svg?longCache=true&style=flat&label=release)](https://github.com/zepgram/magento2-fast-vm/releases)
+[![release](https://img.shields.io/badge/release-v1.3.0-blue.svg?longCache=true&style=flat&label=release)](https://github.com/zepgram/magento2-fast-vm/releases)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg?longCache=true&style=flat&label=license)](https://github.com/zepgram/magento2-fast-vm/blob/master/LICENSE)
 
 ![windows](https://img.shields.io/badge/windows-ok-green.svg?longCache=true&style=flat&label=windows&logo=windows)
@@ -23,7 +23,7 @@ Stable version >= 5.2.0
 1. Run the installer, choosing all of the default options.
     * Windows: Grant the installer access every time you receive a security prompt.
     * Mac: Enter your admin password.
-    * Linux: Enter your root password if prompted.
+    * Linux: Enter your user password if prompted.
 1. Reboot your laptop if prompted to do so when installation completes.
 1. Close the VirtualBox window if it pops up at the end of the install.
 
@@ -50,6 +50,7 @@ If your ssh key has been created with a passphrase, please create an other one a
 1. On windows only, make sur virtualization is turned 'on' in UEFI BIOS
 1. Copy and past ``ssh.example``, rename it ``ssh`` and put your ``id_rsa`` and ``id_rsa.pub`` keys
 1. Copy and past ``config.yaml.example``, rename it ``config.yaml`` and add your configurations according to [Yaml config overview](#yaml-config-overview)
+1. If you want to import an existing database, create a compressed sql dump and name it ``db-dump.sql.gz``. You must also fill ``crypt_key`` in config.yaml 
 1. As admin open your host file: ``C:\Windows\System32\drivers\etc\hosts`` for Windows or ``/etc/hosts``for Linux/macOS and add vm_conf[network_ip] and magento[url]<br>
 Default values would be: ``192.168.200.50       dev.magento.com``
 1. On windows 10 start your terminal as administrator and uncomment option ``# v.gui=true`` in VagrantFile. You can disable it after first setup
@@ -88,13 +89,14 @@ Default values would be: ``192.168.200.50       dev.magento.com``
    * edition: magento project edition, used only on composer source installation (community)
       * 'community' install magento community edition
       * 'enterprise' install magento enterprise edition
-   * version: set magento version and also define PHP version (2.3.*)
+   * version: set magento version and also define PHP version (2.3.3)
    * php_version: override the default required version by yours, for example '7.1' (default)
    * sample: install sample data, used only on composer source installation (true)
    * mode: magento mode (developer)
    * currency: set currency (USD)
    * language: set language (en_US)
    * time_zone: set time zone (Europe/London)
+   * crypt_key: crypt key under your app/etc/env.php (only required if db-dump.sql.gz exist)
 
 
 ### Path
@@ -103,8 +105,8 @@ Default values would be: ``192.168.200.50       dev.magento.com``
 
 ### Mount options
 
-#### RSYNC - new (v1.2.0)
-Only usefull on path set to ``root``.<br>
+#### RSYNC
+Only useful on path set to ``root``.<br>
 * Loss of performance is due to files generated on the fly, by excluding them you can mount the whole directory ``root`` and get performance equal to an ``app`` mount.
 * The ``vagrant rsync-auto`` is launched by default on vagrant up, even with that if you need to force an update you can run ``vagrant rsync``. <b>Terminal should be kept open for rsync-auto: do not close it.</b>
 * Rsync is unilateral, your host machine push files to guest but not the other way.<br>
@@ -135,13 +137,9 @@ Those provisions will be executed on pre-defined sequences:
 ## Usage
 
 ### Permission
-Magento file system owner is configured for ``magento`` user, it means all commands in magento project must be executed by this user.<br>
-By default command line ``vagrant ssh`` will log you as magento user.<br>
-* To logout and get back to vagrant user you can run ``exit``
-* To login as magento user you can run ``sudo su magento`` or ``bash``
-* To re-apply magento permission you can run ``permission`` in command line, used only for ``app`` path and ``default`` mount.
-
-<b>FI: Password for magento user is ``magento``</b>
+Magento file system owner is configured for ``vagrant`` user, it means all commands in magento project must be executed by this user.<br>
+By default command line ``vagrant ssh`` will log you as vagrant user.<br>
+* To re-apply magento permission you can run ``permission`` in command line: this is only applicable for ``app`` path or ``default`` mount configurations.
 
 ### Command line
 * magento (Magento CLI for your project)
@@ -170,7 +168,8 @@ Disable cron:
 - gitflow
 - vim
 - mariadb
-- apache2
+- nginx
+- php-fpm
 - redis-server
 - composer
 - magento-cloud CLI
@@ -179,16 +178,14 @@ Disable cron:
 - magereun
 - adminer
 - grunt
-- postfix
 - mailcatcher
 
 ### Credentials
 * User bash terminal
-  * user: magento
-  * password: magento 
+  * user: vagrant
 * Back-office
   * url: magento[url]/admin 
-  * user: admin
+  * user: magento.admin
   * pass: admin123
 * Database
   * user: vagrant

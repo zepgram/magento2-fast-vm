@@ -15,34 +15,43 @@ echo '--- Magento pre-installation sequence ---'
 mysql -u root -ppassword -e "DROP DATABASE IF EXISTS ${PROJECT_NAME};"
 mysql -u root -ppassword -e "CREATE DATABASE ${PROJECT_NAME} COLLATE 'utf8mb4_general_ci';"
 
-# Project name url
-cat <<EOF > /etc/apache2/sites-available/010-$PROJECT_NAME.conf
-<VirtualHost *:80>
-  ServerName ${PROJECT_URL}
-  DocumentRoot "/var/www/${PROJECT_NAME}"
-  SetEnv VAGRANT 1
-  ErrorLog /var/log/apache2/${PROJECT_NAME}.error.log
-  CustomLog /var/log/apache2/${PROJECT_NAME}.access.log combined
-  SetEnvIf X-Forwarded-Proto https HTTPS=on
-  <Directory "/var/www/${PROJECT_NAME}">
-    Order Deny,Allow
-    Allow from all
-    AllowOverride All
-  </Directory>
-</VirtualHost>
+# Nginx project conf
+cat <<-EOF > /etc/nginx/sites-available/010-$PROJECT_NAME
+upstream fastcgi_backend {
+    server  unix:/run/php/php${PROJECT_PHP_VERSION}-fpm.sock;
+}
+
+server {
+    listen 80;
+    listen [::]:80;
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+
+    server_name ${PROJECT_URL} www.${PROJECT_URL};
+    set MAGE_ROOT /var/www/html/${PROJECT_NAME};
+    include /home/vagrant/extra/${PROJECT_NAME}.nginx.conf;
+
+    ssl_certificate /etc/ssl/certs/www.${PROJECT_URL}.crt;
+    ssl_certificate_key /etc/ssl/private/www.${PROJECT_URL}.key;
+    ssl_protocols TLSv1.2 TLSv1.1 TLSv1;
+
+    access_log /var/log/nginx/${PROJECT_NAME}.access.log;
+    error_log /var/log/nginx/${PROJECT_NAME}.error.log error;
+}
 EOF
-a2ensite 010-"$PROJECT_NAME"
-usermod -a -G www-data "$PROJECT_USER"
+sed -i 's/MAGE_ROOT/$MAGE_ROOT/' /etc/nginx/sites-available/010-$PROJECT_NAME
+ln -sfn /etc/nginx/sites-available/010-$PROJECT_NAME /etc/nginx/sites-enabled/010-$PROJECT_NAME
 
 # Permission script
-cat <<EOF > /home/vagrant/permission.bak
+cat <<-EOF > /home/vagrant/permission.bak
 if [ "$PROJECT_MOUNT" != "nfs" ] || [ "$PROJECT_MOUNT_PATH" == "app" ]; then
-echo 'Applying permissions to $PROJECT_PATH project'
+echo 'Applying permissions to $PROJECT_PATH'
 cd "$PROJECT_PATH" \\
 && sudo find var vendor pub/static pub/media app/etc -type f -exec chmod g+w {} \; \\
 && sudo find var vendor pub/static pub/media app/etc -type d -exec chmod g+ws {} \; \\
+&& sudo find ./var ./generated -type d -exec chmod 777 {} \; \\
 && sudo chmod u+x bin/magento \\
-&& sudo chown -fR $PROJECT_USER:www-data . || :
+&& sudo chown -fR :www-data . || :
 fi
 EOF
 grep '[^[:blank:]]' < /home/vagrant/permission.bak > /usr/local/bin/permission
@@ -53,11 +62,10 @@ chmod +x /usr/local/bin/permission
 chmod 600 /home/vagrant/.ssh/id_rsa
 chmod 600 /home/vagrant/.ssh/id_rsa.pub
 rm -rf /home/vagrant/.ssh/known_hosts /home/vagrant/.ssh/config
-rm -rf /home/"$PROJECT_USER"/.ssh/known_hosts /home/"$PROJECT_USER"/.ssh/config
 echo -e "StrictHostKeyChecking no\n" >> /home/vagrant/.ssh/config
 ssh-keyscan -t rsa ${PROJECT_HOST_REPOSITORY} >> /home/vagrant/.ssh/known_hosts
 mkdir -p /home/vagrant/.composer
-cat <<EOF > /home/vagrant/.composer/auth.json
+cat <<-EOF > /home/vagrant/.composer/auth.json
 {
     "http-basic": {
         "repo.magento.com": {
@@ -73,23 +81,22 @@ if [ "$PROJECT_SOURCE" != "composer" ]; then
   sudo -u vagrant git config --global user.name "$PROJECT_GIT_USER"
   sudo -u vagrant git config --global user.email "$PROJECT_GIT_EMAIL"
   sudo -u vagrant git config --global core.filemode false
-  cp /home/vagrant/.gitconfig /home/"$PROJECT_USER"/.gitconfig
 fi
 
-# Copy credentials to project user
+# Reapply rights for vagrant user
 chown -R vagrant:vagrant /home/vagrant
-mkdir -p /home/"$PROJECT_USER"/.composer /home/"$PROJECT_USER"/.ssh
-cp -r /home/vagrant/.composer/* /home/"$PROJECT_USER"/.composer/
-cp -r /home/vagrant/.ssh/* /home/"$PROJECT_USER"/.ssh/
-chown -R "$PROJECT_USER":"$PROJECT_USER" /home/"$PROJECT_USER"
+
+# Execute import sql
+if [ -f /home/vagrant/extra/db-dump.sql.gz ]; then
+	rm -f /home/vagrant/extra/db-dump.sql.gz
+	gunzip /home/vagrant/extra/db-dump.sql.gz
+fi
+if [ -f /home/vagrant/extra/db-dump.sql ]; then
+	echo '--- Magento db dump import ---'
+	mysql -u vagrant -pvagrant -e "USE ${PROJECT_NAME};SET FOREIGN_KEY_CHECKS = 0;source /home/vagrant/extra/db-dump.sql;SET FOREIGN_KEY_CHECKS = 1;"
+fi
 
 # Extra pre-build
 if [ -f /home/vagrant/extra/100-pre-build.sh ]; then
   bash /home/vagrant/extra/100-pre-build.sh
 fi
-
-# Restart services
-/etc/init.d/apache2 restart
-/etc/init.d/mysql restart
-/etc/init.d/redis-server restart
-/etc/init.d/postfix restart
