@@ -88,7 +88,7 @@ chown -R vagrant:vagrant /home/vagrant
 
 # Execute import sql
 if [ -f /home/vagrant/extra/db-dump.sql.gz ]; then
-	rm -f /home/vagrant/extra/db-dump.sql.gz
+	rm -f /home/vagrant/extra/db-dump.sql
 	gunzip /home/vagrant/extra/db-dump.sql.gz
 fi
 if [ -f /home/vagrant/extra/db-dump.sql ]; then
