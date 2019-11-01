@@ -56,7 +56,7 @@ If your ssh key has been created with a passphrase, please create an other one.
 1. Clone this project: ``git clone git@github.com:zepgram/magento2-fast-vm.git``
 1. Copy/past: ``ssh.example`` rename it ``ssh`` then put your ``id_rsa`` and ``id_rsa.pub`` keys
 1. Copy/past: ``config.yaml.example`` rename it ``config.yaml`` then customize configurations according to [Yaml config overview](#yaml-config-overview)
-1. If you want to import an existing database: create a compressed sql dump and name it ``db-dump.sql.gz``. You must also fill ``crypt_key`` in config.yaml 
+1. If you want to import an existing database: create a compressed sql dump and name it ``db-dump.sql.gz``.<br>You must also fill ``crypt_key`` in config.yaml 
 1. To start install run: ``vagrant up`` (duration: ~20 minutes)
 1. Finally run: ``vagrant ssh`` to access to your guest machine
 
