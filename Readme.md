@@ -35,27 +35,30 @@ Stable version >= 2.2.0
     * [Vagrant download](https://www.vagrantup.com/downloads.html)
 1. Reboot your laptop if prompted to do so when installation completes.
 
-## Installation
+## Configurations
 
 ### Related guide
-- Made by Onilab for Windows 10:
+- Made by Onilab for Windows 10:<br>
 https://onilab.com/blog/install-magento-2-on-localhost-a-windows-10-guide/
 
-### First installation
+### Pre-installation
 
 &#9888; DO NOT USE SSH KEY WITH PASSPHRASE, this vagrant installation is non-interactive.<br>
-If your ssh key has been created with a passphrase, please create an other one and add it to your git account.
+If your ssh key has been created with a passphrase, please create an other one.
+1. On Linux only: in order to install NFS, run: ``sudo apt install nfs-kernel-server``
+1. On Linux/MacOS only: open ``/etc/hosts`` as sudo then add ``network_ip`` and ``magento_url``<br>Default values would be: ``192.168.200.50       dev.magento.com`` 
+1. On Windows only: open UEFI BIOS and make sure virtualization is turned 'on'
+1. On Windows only: open powershell as administrator and run: ``Add-MpPreference -ExclusionProcess winnfsd.exe``
+1. On Windows only: open ``C:\Windows\System32\drivers\etc\hosts`` as administrator then add ``network_ip`` and ``magento_url``<br>Default values would be: ``192.168.200.50       dev.magento.com``
+
+### Installation
+
 1. Clone this project: ``git clone git@github.com:zepgram/magento2-fast-vm.git``
-1. On linux only in order to install NFS, run: ``sudo apt install nfs-kernel-server``
-1. On windows only, make sur virtualization is turned 'on' in UEFI BIOS
-1. Copy and past ``ssh.example``, rename it ``ssh`` and put your ``id_rsa`` and ``id_rsa.pub`` keys
-1. Copy and past ``config.yaml.example``, rename it ``config.yaml`` and add your configurations according to [Yaml config overview](#yaml-config-overview)
-1. If you want to import an existing database, create a compressed sql dump and name it ``db-dump.sql.gz``. You must also fill ``crypt_key`` in config.yaml 
-1. As admin open your host file: ``C:\Windows\System32\drivers\etc\hosts`` for Windows or ``/etc/hosts``for Linux/macOS and add vm_conf[network_ip] and magento[url]<br>
-Default values would be: ``192.168.200.50       dev.magento.com``
-1. On windows 10 start your terminal as administrator and uncomment option ``# v.gui=true`` in VagrantFile. You can disable it after first setup
-1. Run: ``vagrant up`` in your terminal: setup start! (duration: ~20 minutes)
-1. Once installation is done run: ``vagrant ssh`` to access to your guest machine
+1. Copy/past: ``ssh.example`` rename it ``ssh`` then put your ``id_rsa`` and ``id_rsa.pub`` keys
+1. Copy/past: ``config.yaml.example`` rename it ``config.yaml`` then customize configurations according to [Yaml config overview](#yaml-config-overview)
+1. If you want to import an existing database: create a compressed sql dump and name it ``db-dump.sql.gz``. You must also fill ``crypt_key`` in config.yaml 
+1. To start install run: ``vagrant up`` (duration: ~20 minutes)
+1. Finally run: ``vagrant ssh`` to access to your guest machine
 
 ### Yaml config overview
 * Vmconf
