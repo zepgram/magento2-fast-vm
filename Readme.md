@@ -178,6 +178,7 @@ Disable cron:
 - magereun
 - adminer
 - grunt
+- postfix
 - mailcatcher
 
 ### Credentials
