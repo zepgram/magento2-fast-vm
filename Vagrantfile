@@ -107,7 +107,7 @@ Vagrant.configure(2) do |config|
   process_extra_file(config, 'extra/001-env.sh')
   process_extra_file(config, 'extra/100-pre-build.sh')
   process_extra_file(config, 'extra/120-post-build.sh')
-  process_extra_file(config, 'db-dump.sql.gz')
+  process_extra_file(config, 'extra/db-dump.sql.gz')
 
   # Environment provisioning
   config.vm.provision 'shell', path: 'provision/001-system-env.sh', run: 'always', keep_color: true, args: [
