@@ -182,16 +182,22 @@ cp /home/vagrant/ssl/www.${PROJECT_URL}.crt /etc/ssl/certs/www.${PROJECT_URL}.cr
 cp /home/vagrant/ssl/www.${PROJECT_URL}.key /etc/ssl/private/www.${PROJECT_URL}.key
 rm -rf /home/vagrant/ssl && cd /home/vagrant
 
-
-# -----------------------------------------------------------------------------------------------------
-
-
-# Nginx default conf
+# Nginx
 perl -ne 'if ( m|\#location.*php\$ \{| .. m|^\s*#\}| ) { s/#//g; } print' -i /etc/nginx/sites-available/default
 sed -i "s|fastcgi_pass unix:/var/run/php/.*|fastcgi_pass unix:/var/run/php/php${PROJECT_PHP_VERSION}-fpm.sock;|" /etc/nginx/sites-available/default
 sed -i "s/With php-.*//" /etc/nginx/sites-available/default
 sed -i "s/fastcgi_pass 127.0.0.1:9000;//" /etc/nginx/sites-available/default
 sed -i 's/index index.html index.htm index.nginx-debian.html;/index index.php index.html index.htm index.nginx-debian.html;/' /etc/nginx/sites-available/default
+
+# Fpm
+sed -i 's/pm.max_children = .*/pm.max_children = 10/' /etc/php/"$PROJECT_PHP_VERSION"/fpm/pool.d/www.conf
+sed -i 's/pm.start_servers = .*/pm.start_servers = 2/' /etc/php/"$PROJECT_PHP_VERSION"/fpm/pool.d/www.conf
+sed -i 's/pm.min_spare_servers = .*/pm.min_spare_servers = 2/' /etc/php/"$PROJECT_PHP_VERSION"/fpm/pool.d/www.conf
+sed -i 's/pm.max_spare_servers = .*/pm.max_spare_servers = 5/' /etc/php/"$PROJECT_PHP_VERSION"/fpm/pool.d/www.conf
+
+
+# -----------------------------------------------------------------------------------------------------
+
 
 # Elastic search
 sed -i "s/#network.host: .*/network.host: 127.0.0.1/" /etc/elasticsearch/elasticsearch.yml
@@ -200,10 +206,6 @@ sed -i "s|#JAVA_HOME.*|JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java|
 /bin/systemctl daemon-reload
 /bin/systemctl enable elasticsearch.service
 /bin/systemctl start elasticsearch.service
-
-
-# -----------------------------------------------------------------------------------------------------
-
 
 # Server permissions
 mkdir -p /var/www/html

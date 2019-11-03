@@ -164,6 +164,13 @@ Disable cron:
 ./bin/magento cron:remove
 ```
 
+### Elasticsearch
+Only version 6.0 of Elasticsearch is available.<br>
+If you use version 5.0 or simply doesn't want Elasticsearch, you can disable it and fall back to mysql:
+```
+./bin/magento config:set catalog/search/engine mysql
+```
+
 ## Configuration
 
 ### Package & Software
@@ -177,7 +184,7 @@ Disable cron:
 - php-fpm
 - percona
 - redis-server
-- elasticsearch
+- elasticsearch6
 - grunt
 - postfix
 - mailcatcher

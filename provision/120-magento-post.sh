@@ -115,5 +115,4 @@ sudo -u vagrant "$PROJECT_PATH"/bin/magento cache:enable
 /etc/init.d/mysql restart
 /etc/init.d/redis-server restart
 /etc/init.d/postfix restart
-/etc/init.d/elasticsearch restart
 permission
