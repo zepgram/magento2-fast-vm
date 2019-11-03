@@ -23,7 +23,7 @@ mysql -u root -ppassword -e "FLUSH PRIVILEGES;"
 
 
 # Add binary entry
-sudo ln -sfn /usr/sbin/sendmail /usr/local/bin/
+ln -sfn /usr/sbin/sendmail /usr/local/bin/
 
 # First, remove old relayhost entry
 sed -i.bak '/relayhost/,/^/d' /etc/postfix/main.cf
@@ -187,7 +187,7 @@ rm -rf /home/vagrant/ssl && cd /home/vagrant
 
 
 # Nginx default conf
-sudo perl -ne 'if ( m|\#location.*php\$ \{| .. m|^\s*#\}| ) { s/#//g; } print' -i /etc/nginx/sites-available/default
+perl -ne 'if ( m|\#location.*php\$ \{| .. m|^\s*#\}| ) { s/#//g; } print' -i /etc/nginx/sites-available/default
 sed -i "s|fastcgi_pass unix:/var/run/php/.*|fastcgi_pass unix:/var/run/php/php${PROJECT_PHP_VERSION}-fpm.sock;|" /etc/nginx/sites-available/default
 sed -i "s/With php-.*//" /etc/nginx/sites-available/default
 sed -i "s/fastcgi_pass 127.0.0.1:9000;//" /etc/nginx/sites-available/default

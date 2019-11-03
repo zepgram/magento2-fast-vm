@@ -37,16 +37,16 @@ apt-get install -y \
   vim git git-flow
 
 # Php Repository
-wget -q https://packages.sury.org/php/apt.gpg -O- | sudo apt-key add -
-echo "deb https://packages.sury.org/php/ stretch main" | sudo tee /etc/apt/sources.list.d/php.list
+wget -q https://packages.sury.org/php/apt.gpg -O- | apt-key add -
+echo "deb https://packages.sury.org/php/ stretch main" | tee /etc/apt/sources.list.d/php.list
 
 # Percona repository
 wget https://repo.percona.com/apt/percona-release_latest.$(lsb_release -sc)_all.deb
 dpkg -i percona-release_latest.$(lsb_release -sc)_all.deb
 
 # Elasticsearch repository
-wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
-echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-6.x.list
+wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
+echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | tee /etc/apt/sources.list.d/elastic-6.x.list
 
 # Set php version
 MAGENTO_PHP_VERSION='7.2';
@@ -81,7 +81,7 @@ if $(dpkg --compare-versions "${PROJECT_PHP_VERSION}" "lt" "7.2"); then
 fi
 
 # Composer
-curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
+curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Prestissimo speed up installation
 sudo -u vagrant composer global require hirak/prestissimo
@@ -96,7 +96,7 @@ gem install mime-types --version "< 3" --no-ri --no-rdoc
 gem install mailcatcher --no-ri --no-rdoc
 
 # Grunt
-curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+curl -sL https://deb.nodesource.com/setup_8.x | -E bash -
 apt-get install -y nodejs
 npm install -g grunt-cli
 
@@ -114,7 +114,7 @@ mv /root/.magento-cloud/bin/magento-cloud /usr/local/bin
 chmod +x /usr/local/bin/magento-cloud
 
 # Bash completion for magento cli
-sudo curl -o /etc/bash_completion.d/magento2-bash-completion https://raw.githubusercontent.com/yvoronoy/magento2-bash-completion/master/magento2-bash-completion
+curl -o /etc/bash_completion.d/magento2-bash-completion https://raw.githubusercontent.com/yvoronoy/magento2-bash-completion/master/magento2-bash-completion
 source /etc/bash_completion.d/magento2-bash-completion
 
 # Clean
