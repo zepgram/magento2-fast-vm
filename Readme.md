@@ -3,12 +3,14 @@
 [![vagrant](https://img.shields.io/badge/vagrant-debian:stretch-blue.svg?longCache=true&style=flat&label=vagrant&logo=vagrant)](https://app.vagrantup.com/debian/boxes/stretch64)
 [![dev-box](https://img.shields.io/badge/git/composer-blue.svg?longCache=true&style=flat&label=setup&logo=magento)](https://github.com/zepgram/magento2-fast-vm/blob/master/config.yaml.example)
 [![mount](https://img.shields.io/badge/nfs/rsync-blue.svg?longCache=true&style=flat&label=mount)](https://github.com/zepgram/magento2-fast-vm/releases)
-[![release](https://img.shields.io/badge/release-v1.3.0-blue.svg?longCache=true&style=flat&label=release)](https://github.com/zepgram/magento2-fast-vm/releases)
+[![release](https://img.shields.io/badge/release-v1.3.1-blue.svg?longCache=true&style=flat&label=release)](https://github.com/zepgram/magento2-fast-vm/releases)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg?longCache=true&style=flat&label=license)](https://github.com/zepgram/magento2-fast-vm/blob/master/LICENSE)
 
 ![windows](https://img.shields.io/badge/windows-ok-green.svg?longCache=true&style=flat&label=windows&logo=windows)
 ![apple](https://img.shields.io/badge/mac-ok-green.svg?longCache=true&style=flat&label=mac&logo=apple)
 ![linux](https://img.shields.io/badge/linux-ok-green.svg?longCache=true&style=flat&label=linux&logo=linux)
+
+![image](https://user-images.githubusercontent.com/16258478/68086496-0d43e100-fe4d-11e9-95ea-2bce3bee9884.png)&nbsp;&nbsp;&nbsp;&nbsp;![image](https://user-images.githubusercontent.com/16258478/68086436-70814380-fe4c-11e9-8ef4-6e39388cc679.png)&nbsp;&nbsp;&nbsp;&nbsp;![image](https://user-images.githubusercontent.com/16258478/68086442-7545f780-fe4c-11e9-8c5e-518ddba8735d.png)&nbsp;&nbsp;&nbsp;&nbsp;![image](https://user-images.githubusercontent.com/16258478/68086695-ba6b2900-fe4e-11e9-8f4f-68feb9bb0db2.png)&nbsp;&nbsp;&nbsp;&nbsp;![image](https://user-images.githubusercontent.com/16258478/68086427-62cbbe00-fe4c-11e9-83d5-24aec5b7c686.png)
 
 [![associate-developer](https://u.magento.com/media/catalog/product/cache/17/small_image/92x165/9df78eab33525d08d6e5fb8d27136e95/a/s/assoc_dev-l.png)](https://u.magento.com/certification/directory/dev/2504796/)
 
@@ -162,6 +164,13 @@ Disable cron:
 ./bin/magento cron:remove
 ```
 
+### Elasticsearch
+Only version 6.0 of Elasticsearch is available.<br>
+If you use version 5.0 or simply doesn't want Elasticsearch, you can disable it and fall back to mysql:
+```
+./bin/magento config:set catalog/search/engine mysql
+```
+
 ## Configuration
 
 ### Package & Software
@@ -170,19 +179,20 @@ Disable cron:
 - git
 - gitflow
 - vim
-- mariadb
+- composer
 - nginx
 - php-fpm
+- percona
 - redis-server
-- composer
-- magento-cloud CLI
-- magento bash completion
-- pestle
-- magereun
-- adminer
+- elasticsearch6
 - grunt
 - postfix
 - mailcatcher
+- pestle
+- magereun
+- adminer
+- magento-cloud cli
+- bin/magento bash completion
 
 ### Credentials
 * User bash terminal

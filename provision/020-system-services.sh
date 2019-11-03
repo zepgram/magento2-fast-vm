@@ -12,9 +12,6 @@ export DEBIAN_FRONTEND=noninteractive
 echo '--- Configure system services ---'
 
 # Create db user
-sed -i 's/bind-address/#bind-address/' /etc/mysql/mariadb.conf.d/50-server.cnf
-sed -i 's/skip-external-locking/#skip-external-locking/' /etc/mysql/mariadb.conf.d/50-server.cnf
-
 mysql -u root -ppassword -e "CREATE USER IF NOT EXISTS 'vagrant'@'localhost' IDENTIFIED BY 'vagrant';"
 mysql -u root -ppassword -e "CREATE USER IF NOT EXISTS 'vagrant'@'%' IDENTIFIED BY 'vagrant';"
 mysql -u root -ppassword -e "GRANT ALL PRIVILEGES ON * . * TO 'vagrant'@'localhost';"
@@ -26,7 +23,7 @@ mysql -u root -ppassword -e "FLUSH PRIVILEGES;"
 
 
 # Add binary entry
-sudo ln -sfn /usr/sbin/sendmail /usr/local/bin/
+ln -sfn /usr/sbin/sendmail /usr/local/bin/
 
 # First, remove old relayhost entry
 sed -i.bak '/relayhost/,/^/d' /etc/postfix/main.cf
@@ -185,20 +182,30 @@ cp /home/vagrant/ssl/www.${PROJECT_URL}.crt /etc/ssl/certs/www.${PROJECT_URL}.cr
 cp /home/vagrant/ssl/www.${PROJECT_URL}.key /etc/ssl/private/www.${PROJECT_URL}.key
 rm -rf /home/vagrant/ssl && cd /home/vagrant
 
-
-# -----------------------------------------------------------------------------------------------------
-
-
-# Nginx default conf
-sudo perl -ne 'if ( m|\#location.*php\$ \{| .. m|^\s*#\}| ) { s/#//g; } print' -i /etc/nginx/sites-available/default
+# Nginx
+perl -ne 'if ( m|\#location.*php\$ \{| .. m|^\s*#\}| ) { s/#//g; } print' -i /etc/nginx/sites-available/default
 sed -i "s|fastcgi_pass unix:/var/run/php/.*|fastcgi_pass unix:/var/run/php/php${PROJECT_PHP_VERSION}-fpm.sock;|" /etc/nginx/sites-available/default
 sed -i "s/With php-.*//" /etc/nginx/sites-available/default
 sed -i "s/fastcgi_pass 127.0.0.1:9000;//" /etc/nginx/sites-available/default
 sed -i 's/index index.html index.htm index.nginx-debian.html;/index index.php index.html index.htm index.nginx-debian.html;/' /etc/nginx/sites-available/default
 
+# Fpm
+sed -i 's/pm.max_children = .*/pm.max_children = 10/' /etc/php/"$PROJECT_PHP_VERSION"/fpm/pool.d/www.conf
+sed -i 's/pm.start_servers = .*/pm.start_servers = 2/' /etc/php/"$PROJECT_PHP_VERSION"/fpm/pool.d/www.conf
+sed -i 's/pm.min_spare_servers = .*/pm.min_spare_servers = 2/' /etc/php/"$PROJECT_PHP_VERSION"/fpm/pool.d/www.conf
+sed -i 's/pm.max_spare_servers = .*/pm.max_spare_servers = 5/' /etc/php/"$PROJECT_PHP_VERSION"/fpm/pool.d/www.conf
+
 
 # -----------------------------------------------------------------------------------------------------
 
+
+# Elastic search
+sed -i "s/#network.host: .*/network.host: 127.0.0.1/" /etc/elasticsearch/elasticsearch.yml
+sed -i "s/#http.port: .*/http.port: 9200/" /etc/elasticsearch/elasticsearch.yml
+sed -i "s|#JAVA_HOME.*|JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java|" /etc/default/elasticsearch
+/bin/systemctl daemon-reload
+/bin/systemctl enable elasticsearch.service
+/bin/systemctl start elasticsearch.service
 
 # Server permissions
 mkdir -p /var/www/html
