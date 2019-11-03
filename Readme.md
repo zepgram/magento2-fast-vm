@@ -10,6 +10,8 @@
 ![apple](https://img.shields.io/badge/mac-ok-green.svg?longCache=true&style=flat&label=mac&logo=apple)
 ![linux](https://img.shields.io/badge/linux-ok-green.svg?longCache=true&style=flat&label=linux&logo=linux)
 
+![image](https://user-images.githubusercontent.com/16258478/68086496-0d43e100-fe4d-11e9-95ea-2bce3bee9884.png) ![image](https://user-images.githubusercontent.com/16258478/68086436-70814380-fe4c-11e9-8ef4-6e39388cc679.png) ![image](https://user-images.githubusercontent.com/16258478/68086442-7545f780-fe4c-11e9-8c5e-518ddba8735d.png) ![image](https://user-images.githubusercontent.com/16258478/68086695-ba6b2900-fe4e-11e9-8f4f-68feb9bb0db2.png) ![image](https://user-images.githubusercontent.com/16258478/68086427-62cbbe00-fe4c-11e9-83d5-24aec5b7c686.png)
+
 [![associate-developer](https://u.magento.com/media/catalog/product/cache/17/small_image/92x165/9df78eab33525d08d6e5fb8d27136e95/a/s/assoc_dev-l.png)](https://u.magento.com/certification/directory/dev/2504796/)
 
 ## Requirements

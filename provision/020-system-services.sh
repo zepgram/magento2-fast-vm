@@ -193,6 +193,14 @@ sed -i "s/With php-.*//" /etc/nginx/sites-available/default
 sed -i "s/fastcgi_pass 127.0.0.1:9000;//" /etc/nginx/sites-available/default
 sed -i 's/index index.html index.htm index.nginx-debian.html;/index index.php index.html index.htm index.nginx-debian.html;/' /etc/nginx/sites-available/default
 
+# Elastic search
+sed -i "s/#network.host: .*/network.host: 127.0.0.1/" /etc/elasticsearch/elasticsearch.yml
+sed -i "s/#http.port: .*/http.port: 9200/" /etc/elasticsearch/elasticsearch.yml
+sed -i "s|#JAVA_HOME.*|JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java|" /etc/default/elasticsearch
+/bin/systemctl daemon-reload
+/bin/systemctl enable elasticsearch.service
+/bin/systemctl start elasticsearch.service
+
 
 # -----------------------------------------------------------------------------------------------------
 

@@ -67,7 +67,7 @@ fi
 sed -i '/export PROJECT_PHP_VERSION*/c\'"export PROJECT_PHP_VERSION=${MAGENTO_PHP_VERSION}" /etc/profile.d/env.sh
 source /etc/profile.d/env.sh
 
-# PHP packages
+# PHP and aditionals
 apt-get update -y && apt-get install -y \
   php${PROJECT_PHP_VERSION} php${PROJECT_PHP_VERSION}-common php${PROJECT_PHP_VERSION}-cli \
   php${PROJECT_PHP_VERSION}-curl php${PROJECT_PHP_VERSION}-gd php${PROJECT_PHP_VERSION}-intl \
