@@ -177,7 +177,6 @@ Disable cron:
 - php-fpm
 - percona
 - redis-server
-- postfix
 - elasticsearch
 - grunt
 - postfix
