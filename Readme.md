@@ -170,19 +170,21 @@ Disable cron:
 - git
 - gitflow
 - vim
-- mariadb
+- composer
 - nginx
 - php-fpm
+- percona
 - redis-server
-- composer
-- magento-cloud CLI
-- magento bash completion
-- pestle
-- magereun
-- adminer
+- postfix
+- elasticsearch
 - grunt
 - postfix
 - mailcatcher
+- pestle
+- magereun
+- adminer
+- magento-cloud cli
+- bin/magento bash completion
 
 ### Credentials
 * User bash terminal

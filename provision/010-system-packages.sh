@@ -19,24 +19,34 @@ debconf-set-selections <<< "mysql-server mysql-server/root_password_again passwo
 debconf-set-selections <<< "postfix postfix/mailname string $PROJECT_URL"
 debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
 
-# Configure default locale
+# Set default locale
 cp /etc/locale.gen /etc/locale.gen.old
 sed -i "s/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g" /etc/locale.gen
 /usr/sbin/locale-gen
-export LANG=en_US.UTF-8*
+echo 'export LANG=en_US.UTF-8' | tee -a ~/.bashrc >> /home/vagrant/.bashrc
+echo 'export LC_CTYPE=en_US.UTF-8' | tee -a ~/.bashrc >> /home/vagrant/.bashrc
+echo 'export LC_ALL=en_US.UTF-8' | tee -a ~/.bashrc >> /home/vagrant/.bashrc
 
 # Required packages
 apt-get install -y \
-  curl graphviz htop net-tools rsync sudo tree wget unzip zip \
+  curl graphviz htop net-tools rsync sudo tree wget unzip zip g++ \
   libsqlite3-dev libxml2-utils build-essential software-properties-common \
   postfix mailutils libsasl2-2 libsasl2-modules ca-certificates libnss3-tools \
-  apt-transport-https mysql-client mysql-server redis-server \
-  openssl nginx \
-  g++ vim git git-flow
+  apt-transport-https openssl redis-server nginx \
+  python ruby ruby-dev openjdk-8-jdk openjdk-8-jre \
+  vim git git-flow
 
-# Sury Repository
+# Php Repository
 wget -q https://packages.sury.org/php/apt.gpg -O- | sudo apt-key add -
 echo "deb https://packages.sury.org/php/ stretch main" | sudo tee /etc/apt/sources.list.d/php.list
+
+# Percona repository
+wget https://repo.percona.com/apt/percona-release_latest.$(lsb_release -sc)_all.deb
+dpkg -i percona-release_latest.$(lsb_release -sc)_all.deb
+
+# Elasticsearch repository
+wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-6.x.list
 
 # Set php version
 MAGENTO_PHP_VERSION='7.2';
@@ -65,7 +75,7 @@ apt-get update -y && apt-get install -y \
   php${PROJECT_PHP_VERSION}-xml php${PROJECT_PHP_VERSION}-xml php${PROJECT_PHP_VERSION}-bcmath \
   php${PROJECT_PHP_VERSION}-mysql php${PROJECT_PHP_VERSION}-sqlite3 php${PROJECT_PHP_VERSION}-fpm \
   php${PROJECT_PHP_VERSION}-memcache php${PROJECT_PHP_VERSION}-redis php${PROJECT_PHP_VERSION}-opcache \
-  python ruby ruby-dev
+  percona-server-server-5.7 elasticsearch
 if $(dpkg --compare-versions "${PROJECT_PHP_VERSION}" "lt" "7.2"); then
   apt-get install -y php${PROJECT_PHP_VERSION}-mcrypt
 fi

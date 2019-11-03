@@ -55,6 +55,7 @@ if [ "$PROJECT_MOUNT" == "nfs" ] && [ "$PROJECT_MOUNT_PATH" != "app" ]; then
 fi
 
 # Magento config
+redis-cli flushall
 if $(dpkg --compare-versions "${PROJECT_VERSION}" "gt" "2.2"); then
   sudo -u vagrant "$PROJECT_PATH"/bin/magento setup:config:set \
         --cache-backend=redis \
@@ -80,6 +81,7 @@ if $(dpkg --compare-versions "${PROJECT_VERSION}" "gt" "2.2"); then
   sudo -u vagrant "$PROJECT_PATH"/bin/magento config:set "web/secure/use_in_adminhtml" "1"
   sudo -u vagrant "$PROJECT_PATH"/bin/magento config:set "web/secure/use_in_frontend" "1"
   sudo -u vagrant "$PROJECT_PATH"/bin/magento config:set "web/secure/enable_hsts" "1"
+  sudo -u vagrant "$PROJECT_PATH"/bin/magento config:set "catalog/search/engine" "elasticsearch6"
 else
   # Force https on unsecure request for older versions
   mysql -u vagrant -pvagrant -e "USE ${PROJECT_NAME}; UPDATE core_config_data set value='https://${PROJECT_URL}/' where path='web/unsecure/base_url';"
@@ -113,4 +115,5 @@ sudo -u vagrant "$PROJECT_PATH"/bin/magento cache:enable
 /etc/init.d/mysql restart
 /etc/init.d/redis-server restart
 /etc/init.d/postfix restart
+/etc/init.d/elasticsearch restart
 permission
