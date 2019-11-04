@@ -20,12 +20,13 @@ debconf-set-selections <<< "postfix postfix/mailname string $PROJECT_URL"
 debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
 
 # Set default locale
-cp /etc/locale.gen /etc/locale.gen.old
-sed -i "s/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g" /etc/locale.gen
-/usr/sbin/locale-gen
-echo 'export LANG=en_US.UTF-8' | tee -a ~/.bashrc >> /home/vagrant/.bashrc
-echo 'export LC_CTYPE=en_US.UTF-8' | tee -a ~/.bashrc >> /home/vagrant/.bashrc
-echo 'export LC_ALL=en_US.UTF-8' | tee -a ~/.bashrc >> /home/vagrant/.bashrc
+if ! grep -qF "LANG" /home/vagrant/.bashrc; then
+  cp /etc/locale.gen /etc/locale.gen.old
+  sed -i "s/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g" /etc/locale.gen && /usr/sbin/locale-gen
+  echo 'export LANG=en_US.UTF-8' | tee -a ~/.bashrc >> /home/vagrant/.bashrc
+  echo 'export LC_CTYPE=en_US.UTF-8' | tee -a ~/.bashrc >> /home/vagrant/.bashrc
+  echo 'export LC_ALL=en_US.UTF-8' | tee -a ~/.bashrc >> /home/vagrant/.bashrc
+fi
 
 # Required packages
 apt-get install -y \

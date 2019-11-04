@@ -18,20 +18,28 @@ mysql -u root -ppassword -e "GRANT ALL PRIVILEGES ON * . * TO 'vagrant'@'localho
 mysql -u root -ppassword -e "GRANT ALL PRIVILEGES ON * . * TO 'vagrant'@'%';"
 mysql -u root -ppassword -e "FLUSH PRIVILEGES;"
 
+# Mysqld conf
+if ! grep -qF "innodb_buffer_pool_size" /etc/mysql/percona-server.conf.d/mysqld.cnf; then
+cat <<EOF >> /etc/mysql/percona-server.conf.d/mysqld.cnf
+# Innodb
+innodb_buffer_pool_size = 1G
+innodb_log_file_size = 256M
+innodb_flush_log_at_trx_commit = 1
+innodb_flush_method = O_DIRECT
+EOF
+fi
+
 
 # -----------------------------------------------------------------------------------------------------
 
 
-# Add binary entry
+# Add binary entry for sendmail
 ln -sfn /usr/sbin/sendmail /usr/local/bin/
 
-# First, remove old relayhost entry
+# Postfix config
 sed -i.bak '/relayhost/,/^/d' /etc/postfix/main.cf
-
-# Enter new information
-echo "relayhost = 127.0.0.1:1025
-mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128" | tee -a /etc/postfix/main.cf
-sed -i "s/myhostname.*/myhostname = $PROJECT_URL" /etc/postfix/main.cf
+echo 'relayhost = 127.0.0.1:1025
+mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128' | tee -a /etc/postfix/main.cf
 
 # Configuration on booting
 cat <<'EOF' > /etc/init.d/mailcatcher
@@ -60,7 +68,7 @@ mailcatcher --http-ip=0.0.0.0
 Subject: Vagrant: MailCatcher
 To: $PROJECT_GIT_EMAIL
 
-This is a test to validate mailcatcher.
+Test to validate catch email.
 MAIL_END
 
 
@@ -139,6 +147,7 @@ sed -i 's/zlib.output_compression = .*/zlib.output_compression = On/' /etc/php/"
 sed -i "s|;sendmail_path.*|sendmail_path=/usr/sbin/sendmail -t -i -f vagrant@$PROJECT_URL|" /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
 sed -i "s|;sendmail_from.*|sendmail_from=vagrant@$PROJECT_URL|" /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
 sed -i 's/smtp_port.*/smtp_port = 1025/' /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
+sed -i "s|;opcache.file_cache=|opcache.file_cache=/tmp/php-opcache/|" /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
 
 # Cli php configuration
 sed -i 's/;opcache.enable=.*/opcache.enable=1/' /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
@@ -154,19 +163,13 @@ sed -i 's/zlib.output_compression = .*/zlib.output_compression = On/' /etc/php/"
 sed -i "s|;sendmail_path.*|sendmail_path=/usr/sbin/sendmail -t -i -f vagrant@$PROJECT_URL|" /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
 sed -i "s|;sendmail_from.*|sendmail_from=vagrant@$PROJECT_URL|" /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
 sed -i 's/smtp_port.*/smtp_port = 1025/' /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
+sed -i "s|;opcache.file_cache=|opcache.file_cache=/tmp/php-opcache/|" /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
 
-# File opcache for cli
-cat <<EOF >> /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
-opcache.file_cache=/tmp/php-opcache
-EOF
-cat <<EOF >> /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
-opcache.file_cache=/tmp/php-opcache
-EOF
-
+if ! grep -qF "/tmp/php-opcache" /etc/tmpfiles.d/php-cli-opcache.conf; then
 cat <<EOF >> /etc/tmpfiles.d/php-cli-opcache.conf
 d /tmp/php-opcache 1777 root root 1d
 EOF
-
+fi
 systemd-tmpfiles --create /etc/tmpfiles.d/php-cli-opcache.conf
 
 
