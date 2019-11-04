@@ -165,6 +165,7 @@ sed -i "s|;sendmail_from.*|sendmail_from=vagrant@$PROJECT_URL|" /etc/php/"$PROJE
 sed -i 's/smtp_port.*/smtp_port = 1025/' /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
 sed -i "s|;opcache.file_cache=|opcache.file_cache=/tmp/php-opcache/|" /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
 
+touch /etc/tmpfiles.d/php-cli-opcache.conf;
 if ! grep -qF "/tmp/php-opcache" /etc/tmpfiles.d/php-cli-opcache.conf; then
 cat <<EOF >> /etc/tmpfiles.d/php-cli-opcache.conf
 d /tmp/php-opcache 1777 root root 1d
