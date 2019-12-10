@@ -97,7 +97,7 @@ gem install mime-types --version "< 3" --no-ri --no-rdoc
 gem install mailcatcher --no-ri --no-rdoc
 
 # Grunt
-curl -sL https://deb.nodesource.com/setup_8.x | -E bash -
+curl -sL https://deb.nodesource.com/setup_10.x | bash -
 apt-get install -y nodejs
 npm install -g grunt-cli
 
