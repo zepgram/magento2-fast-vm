@@ -30,7 +30,7 @@ fi
 
 # Required packages
 apt-get install -y \
-  curl graphviz htop net-tools rsync sudo tree wget unzip zip g++ \
+  curl graphviz htop net-tools rsync sudo tree wget unzip zip g++ gnupg2 \
   libsqlite3-dev libxml2-utils build-essential software-properties-common \
   postfix mailutils libsasl2-2 libsasl2-modules ca-certificates libnss3-tools \
   apt-transport-https openssl redis-server nginx \

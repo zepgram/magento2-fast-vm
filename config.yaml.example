@@ -19,7 +19,7 @@ magento:
   url: 'dev.magento.com'
   source: 'composer'
   edition: 'community'
-  version: '2.3.3'
+  version: '2.3.4'
   php_version: 'default'
   sample: 'true'
   mode: 'developer'
