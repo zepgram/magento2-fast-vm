@@ -42,8 +42,7 @@ Vagrant.configure(2) do |config|
   # Host manager configuration
   config.vm.define vmconf['host_name']
   config.vm.hostname = vmconf['host_name']
-  config.vm.network :private_network, type: 'dhcp'
-  config.vm.network :private_network, ip: vmconf['network_ip']
+  config.vm.network "private_network", ip: vmconf['network_ip']
   
   # VBox config
   config.vm.provider 'virtualbox' do |v|
@@ -52,6 +51,7 @@ Vagrant.configure(2) do |config|
     v.cpus = vmconf['cpus']
     # Share VPN connections
     v.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
+    v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
     # Use multiple CPUs in VM
     v.customize ['modifyvm', :id, '--ioapic', 'on']
     # Enable symlink
@@ -62,6 +62,7 @@ Vagrant.configure(2) do |config|
 
   # Default options
   config.vm.synced_folder '.', '/vagrant', disabled: true
+  # Bindfs options
   config.bindfs.default_options = {
     force_user:   'vagrant',
     force_group:  'www-data',
