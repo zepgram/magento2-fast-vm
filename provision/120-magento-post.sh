@@ -35,6 +35,7 @@ if [ "$PROJECT_SOURCE" == "composer" ]; then
   fi
   if [ -f "$PROJECT_PATH/nginx.conf" ]; then
     sudo -u vagrant cp "$PROJECT_PATH"/nginx.conf /home/vagrant/extra/${PROJECT_NAME}.nginx.conf;
+    sudo -u vagrant sed -i "s/fastcgi_buffers 1024 4k;/fastcgi_buffers 16 14k;\n    fastcgi_buffer_size 32k;/" /home/vagrant/extra/${PROJECT_NAME}.nginx.conf;
   fi
 fi
 
