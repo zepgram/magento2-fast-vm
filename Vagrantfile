@@ -66,7 +66,7 @@ Vagrant.configure(2) do |config|
   config.bindfs.default_options = {
     force_user:   'vagrant',
     force_group:  'www-data',
-    perms:        'u=rwx:g=rwx:o=r'
+    perms:        'u=rwx:g=rwx:o=rwx'
   }
 
   # NFS mount
