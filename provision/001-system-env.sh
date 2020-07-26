@@ -11,6 +11,22 @@ export DEBIAN_FRONTEND=noninteractive
 
 echo '--- Environment variables ---'
 
+# Set php version
+PROJECT_VERSION=${12};
+PROJECT_PHP_VERSION='7.2';
+if $(dpkg --compare-versions "${PROJECT_VERSION}" "gt" "2.3.2-p1"); then
+  PROJECT_PHP_VERSION='7.3';
+fi
+if $(dpkg --compare-versions "${PROJECT_VERSION}" "lt" "2.3"); then
+  PROJECT_PHP_VERSION='7.1';
+fi
+if $(dpkg --compare-versions "${PROJECT_VERSION}" "lt" "2.2"); then
+  PROJECT_PHP_VERSION='7.0';
+fi
+if [ "${9}" != 'default' ]; then
+  PROJECT_PHP_VERSION="${9}"
+fi
+
 # Set environment variable
 cat <<EOF > /etc/profile.d/env.sh
 export PROJECT_NAME="${1}"
@@ -23,10 +39,10 @@ export PROJECT_GIT_EMAIL="${5}"
 export PROJECT_HOST_REPOSITORY="${6}"
 export PROJECT_REPOSITORY="${7}"
 export PROJECT_URL="${8}"
-export PROJECT_PHP_VERSION="${9}"
+export PROJECT_PHP_VERSION="${PROJECT_PHP_VERSION}"
 export PROJECT_SOURCE="${10}"
 export PROJECT_EDITION="${11}"
-export PROJECT_VERSION="${12}"
+export PROJECT_VERSION="${PROJECT_VERSION}"
 export PROJECT_SAMPLE="${13}"
 export PROJECT_MODE="${14}"
 export PROJECT_CURRENCY="${15}"

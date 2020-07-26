@@ -49,36 +49,17 @@ dpkg -i percona-release_latest.$(lsb_release -sc)_all.deb
 wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
 echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | tee /etc/apt/sources.list.d/elastic-6.x.list
 
-# Set php version
-MAGENTO_PHP_VERSION='7.2';
-if $(dpkg --compare-versions "${PROJECT_VERSION}" "gt" "2.3.2-p1"); then
-  MAGENTO_PHP_VERSION='7.3';
-fi
-if $(dpkg --compare-versions "${PROJECT_VERSION}" "lt" "2.3"); then
-  MAGENTO_PHP_VERSION='7.1';
-fi
-if $(dpkg --compare-versions "${PROJECT_VERSION}" "lt" "2.2"); then
-  MAGENTO_PHP_VERSION='7.0';
-fi
-if [ $PROJECT_PHP_VERSION != 'default' ]; then
-  MAGENTO_PHP_VERSION=$PROJECT_PHP_VERSION
-fi
-
-# Set php version env
-sed -i '/export PROJECT_PHP_VERSION*/c\'"export PROJECT_PHP_VERSION=${MAGENTO_PHP_VERSION}" /etc/profile.d/env.sh
-source /etc/profile.d/env.sh
-
-# PHP and aditionals
+# PHP and additional
 apt-get update -y && apt-get install -y \
-  php${PROJECT_PHP_VERSION} php${PROJECT_PHP_VERSION}-common php${PROJECT_PHP_VERSION}-cli \
-  php${PROJECT_PHP_VERSION}-curl php${PROJECT_PHP_VERSION}-gd php${PROJECT_PHP_VERSION}-intl \
-  php${PROJECT_PHP_VERSION}-mbstring php${PROJECT_PHP_VERSION}-soap php${PROJECT_PHP_VERSION}-zip \
-  php${PROJECT_PHP_VERSION}-xml php${PROJECT_PHP_VERSION}-xml php${PROJECT_PHP_VERSION}-bcmath \
-  php${PROJECT_PHP_VERSION}-mysql php${PROJECT_PHP_VERSION}-sqlite3 php${PROJECT_PHP_VERSION}-fpm \
-  php${PROJECT_PHP_VERSION}-memcache php${PROJECT_PHP_VERSION}-redis php${PROJECT_PHP_VERSION}-opcache \
+  php"${PROJECT_PHP_VERSION}" php"${PROJECT_PHP_VERSION}"-common php"${PROJECT_PHP_VERSION}"-cli \
+  php"${PROJECT_PHP_VERSION}"-curl php"${PROJECT_PHP_VERSION}"-gd php"${PROJECT_PHP_VERSION}"-intl \
+  php"${PROJECT_PHP_VERSION}"-mbstring php"${PROJECT_PHP_VERSION}"-soap php"${PROJECT_PHP_VERSION}"-zip \
+  php"${PROJECT_PHP_VERSION}"-xml php"${PROJECT_PHP_VERSION}"-xml php"${PROJECT_PHP_VERSION}"-bcmath \
+  php"${PROJECT_PHP_VERSION}"-mysql php"${PROJECT_PHP_VERSION}"-sqlite3 php"${PROJECT_PHP_VERSION}"-fpm \
+  php"${PROJECT_PHP_VERSION}"-memcache php"${PROJECT_PHP_VERSION}"-redis php"${PROJECT_PHP_VERSION}"-opcache \
   percona-server-server-5.7 elasticsearch
 if $(dpkg --compare-versions "${PROJECT_PHP_VERSION}" "lt" "7.2"); then
-  apt-get install -y php${PROJECT_PHP_VERSION}-mcrypt
+  apt-get install -y php"${PROJECT_PHP_VERSION}"-mcrypt
 fi
 
 # Composer
