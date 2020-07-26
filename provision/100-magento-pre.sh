@@ -16,7 +16,7 @@ mysql -u root -ppassword -e "DROP DATABASE IF EXISTS ${PROJECT_NAME};"
 mysql -u root -ppassword -e "CREATE DATABASE ${PROJECT_NAME} COLLATE 'utf8mb4_general_ci';"
 
 # Nginx project conf
-cat <<-EOF > /etc/nginx/sites-available/010-$PROJECT_NAME
+cat <<-EOF > /etc/nginx/sites-available/010-"$PROJECT_NAME"
 upstream fastcgi_backend {
     server  unix:/run/php/php${PROJECT_PHP_VERSION}-fpm.sock;
 }
@@ -39,8 +39,8 @@ server {
     error_log /var/log/nginx/${PROJECT_NAME}.error.log error;
 }
 EOF
-sed -i 's/MAGE_ROOT/$MAGE_ROOT/' /etc/nginx/sites-available/010-$PROJECT_NAME
-ln -sfn /etc/nginx/sites-available/010-$PROJECT_NAME /etc/nginx/sites-enabled/010-$PROJECT_NAME
+sed -i 's/MAGE_ROOT/$MAGE_ROOT/' /etc/nginx/sites-available/010-"$PROJECT_NAME"
+ln -sfn /etc/nginx/sites-available/010-"$PROJECT_NAME" /etc/nginx/sites-enabled/010-"$PROJECT_NAME"
 
 # Permission script
 cat <<-EOF > /home/vagrant/permission.bak
@@ -63,7 +63,7 @@ chmod 600 /home/vagrant/.ssh/id_rsa
 chmod 600 /home/vagrant/.ssh/id_rsa.pub
 rm -rf /home/vagrant/.ssh/known_hosts /home/vagrant/.ssh/config
 echo -e "StrictHostKeyChecking no\n" >> /home/vagrant/.ssh/config
-ssh-keyscan -t rsa ${PROJECT_HOST_REPOSITORY} >> /home/vagrant/.ssh/known_hosts
+ssh-keyscan -t rsa "${PROJECT_HOST_REPOSITORY}" >> /home/vagrant/.ssh/known_hosts
 mkdir -p /home/vagrant/.composer
 cat <<-EOF > /home/vagrant/.composer/auth.json
 {
