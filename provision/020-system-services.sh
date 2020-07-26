@@ -181,9 +181,9 @@ systemd-tmpfiles --create /etc/tmpfiles.d/php-cli-opcache.conf
 mkdir /home/vagrant/ssl
 cd /home/vagrant/ssl && openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 \
     -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=www.${PROJECT_URL}" \
-    -keyout www.${PROJECT_URL}.key -out www.${PROJECT_URL}.crt
-cp /home/vagrant/ssl/www.${PROJECT_URL}.crt /etc/ssl/certs/www.${PROJECT_URL}.crt
-cp /home/vagrant/ssl/www.${PROJECT_URL}.key /etc/ssl/private/www.${PROJECT_URL}.key
+    -keyout www."${PROJECT_URL}".key -out www."${PROJECT_URL}".crt
+cp /home/vagrant/ssl/www."${PROJECT_URL}".crt /etc/ssl/certs/www."${PROJECT_URL}".crt
+cp /home/vagrant/ssl/www."${PROJECT_URL}".key /etc/ssl/private/www."${PROJECT_URL}".key
 rm -rf /home/vagrant/ssl && cd /home/vagrant
 
 # Nginx

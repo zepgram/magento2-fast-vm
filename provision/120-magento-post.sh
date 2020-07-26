@@ -34,8 +34,8 @@ if [ "$PROJECT_SOURCE" == "composer" ]; then
     sudo -u vagrant cp "$PROJECT_PATH"/nginx.conf.sample "$PROJECT_PATH"/nginx.conf
   fi
   if [ -f "$PROJECT_PATH/nginx.conf" ]; then
-    sudo -u vagrant cp "$PROJECT_PATH"/nginx.conf /home/vagrant/extra/${PROJECT_NAME}.nginx.conf;
-    sudo -u vagrant sed -i "s/fastcgi_buffers 1024 4k;/fastcgi_buffers 16 14k;\n    fastcgi_buffer_size 32k;/" /home/vagrant/extra/${PROJECT_NAME}.nginx.conf;
+    sudo -u vagrant cp "$PROJECT_PATH"/nginx.conf /home/vagrant/extra/"${PROJECT_NAME}".nginx.conf;
+    sudo -u vagrant sed -i "s/fastcgi_buffers 1024 4k;/fastcgi_buffers 16 14k;\n    fastcgi_buffer_size 32k;/" /home/vagrant/extra/"${PROJECT_NAME}".nginx.conf;
   fi
 fi
 
@@ -58,7 +58,7 @@ fi
 # Magento config
 redis-cli flushall
 if $(dpkg --compare-versions "${PROJECT_VERSION}" "gt" "2.2"); then
-  sudo -u vagrant "$PROJECT_PATH"/bin/magento setup:config:set \
+  sudo -u vagrant "$PROJECT_PATH"/bin/magento -n setup:config:set \
         --cache-backend=redis \
         --cache-backend-redis-server=127.0.0.1 \
         --cache-backend-redis-port=6379 \
@@ -69,7 +69,7 @@ if $(dpkg --compare-versions "${PROJECT_VERSION}" "gt" "2.2"); then
         --page-cache-redis-db=1 \
         --page-cache-redis-compress-data=1
 
-  sudo -u vagrant "$PROJECT_PATH"/bin/magento setup:config:set \
+  sudo -u vagrant "$PROJECT_PATH"/bin/magento -n setup:config:set \
         --session-save=redis \
         --session-save-redis-host=127.0.0.1 \
         --session-save-redis-port=6379 \
@@ -89,8 +89,8 @@ else
 fi
 
 # Set crypt key
-if [ ! -z "$PROJECT_CRYPT_KEY" ] && [ -f /home/vagrant/extra/db-dump.sql ]; then
-  sudo -u vagrant bin/magento setup:config:set -n --key ${PROJECT_CRYPT_KEY}
+if [ -n "$PROJECT_CRYPT_KEY" ] && [ -f /home/vagrant/extra/db-dump.sql ]; then
+  sudo -u vagrant bin/magento setup:config:set -n --key "${PROJECT_CRYPT_KEY}"
 fi
 
 # Extra post-build
@@ -111,7 +111,7 @@ sudo -u vagrant "$PROJECT_PATH"/bin/magento deploy:mode:set "$PROJECT_MODE"
 sudo -u vagrant "$PROJECT_PATH"/bin/magento cache:enable
 
 # Restart services
-/etc/init.d/php${PROJECT_PHP_VERSION}-fpm restart
+/etc/init.d/php"${PROJECT_PHP_VERSION}"-fpm restart
 /etc/init.d/nginx restart
 /etc/init.d/mysql restart
 /etc/init.d/redis-server restart
