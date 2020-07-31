@@ -82,7 +82,11 @@ if $(dpkg --compare-versions "${PROJECT_VERSION}" "gt" "2.2"); then
   sudo -u vagrant "$PROJECT_PATH"/bin/magento config:set "web/secure/use_in_adminhtml" "1"
   sudo -u vagrant "$PROJECT_PATH"/bin/magento config:set "web/secure/use_in_frontend" "1"
   sudo -u vagrant "$PROJECT_PATH"/bin/magento config:set "web/secure/enable_hsts" "1"
-  sudo -u vagrant "$PROJECT_PATH"/bin/magento config:set "catalog/search/engine" "elasticsearch6"
+  if $(dpkg --compare-versions "${PROJECT_VERSION}" "lt" "2.3.5-p2"); then
+    sudo -u vagrant "$PROJECT_PATH"/bin/magento config:set "catalog/search/engine" "elasticsearch6"
+  else
+    sudo -u vagrant "$PROJECT_PATH"/bin/magento config:set "catalog/search/engine" "elasticsearch7"
+  fi
 else
   # Force https on unsecure request for older versions
   mysql -u vagrant -pvagrant -e "USE ${PROJECT_NAME}; UPDATE core_config_data set value='https://${PROJECT_URL}/' where path='web/unsecure/base_url';"

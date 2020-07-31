@@ -46,9 +46,13 @@ wget https://repo.percona.com/apt/percona-release_latest.$(lsb_release -sc)_all.
 dpkg -i percona-release_latest.$(lsb_release -sc)_all.deb
 
 # Elasticsearch repository
-wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
-echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | tee /etc/apt/sources.list.d/elastic-6.x.list
-
+if $(dpkg --compare-versions "${PROJECT_VERSION}" "lt" "2.3.5-p2"); then
+  wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
+  echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | tee /etc/apt/sources.list.d/elastic-6.x.list
+else
+  wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
+  echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | tee /etc/apt/sources.list.d/elastic-7.x.list
+fi
 # PHP and additional
 apt-get update -y && apt-get install -y \
   php"${PROJECT_PHP_VERSION}" php"${PROJECT_PHP_VERSION}"-common php"${PROJECT_PHP_VERSION}"-cli \
