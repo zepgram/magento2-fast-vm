@@ -206,7 +206,11 @@ sed -i 's/pm.max_spare_servers = .*/pm.max_spare_servers = 5/' /etc/php/"$PROJEC
 # Elastic search
 sed -i "s/#network.host: .*/network.host: 127.0.0.1/" /etc/elasticsearch/elasticsearch.yml
 sed -i "s/#http.port: .*/http.port: 9200/" /etc/elasticsearch/elasticsearch.yml
-sed -i "s|#JAVA_HOME.*|JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java|" /etc/default/elasticsearch
+if $(dpkg --compare-versions "${PROJECT_VERSION}" "lt" "2.3.5-p2"); then
+  sed -i "s|#JAVA_HOME.*|JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java|" /etc/default/elasticsearch
+else
+  sed -i "s|#JAVA_HOME.*|JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre|" /etc/default/elasticsearch
+fi
 /bin/systemctl daemon-reload
 /bin/systemctl enable elasticsearch.service
 /bin/systemctl start elasticsearch.service

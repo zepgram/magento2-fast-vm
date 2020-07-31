@@ -3,7 +3,7 @@
 [![vagrant](https://img.shields.io/badge/vagrant-debian:stretch-blue.svg?longCache=true&style=flat&label=vagrant&logo=vagrant)](https://app.vagrantup.com/debian/boxes/stretch64)
 [![dev-box](https://img.shields.io/badge/git/composer-blue.svg?longCache=true&style=flat&label=setup&logo=magento)](https://github.com/zepgram/magento2-fast-vm/blob/master/config.yaml.example)
 [![mount](https://img.shields.io/badge/nfs/rsync-blue.svg?longCache=true&style=flat&label=mount)](https://github.com/zepgram/magento2-fast-vm/releases)
-[![release](https://img.shields.io/badge/release-v1.3.4-blue.svg?longCache=true&style=flat&label=release)](https://github.com/zepgram/magento2-fast-vm/releases)
+[![release](https://img.shields.io/badge/release-v1.3.5-blue.svg?longCache=true&style=flat&label=release)](https://github.com/zepgram/magento2-fast-vm/releases)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg?longCache=true&style=flat&label=license)](https://github.com/zepgram/magento2-fast-vm/blob/master/LICENSE)
 
 ![windows](https://img.shields.io/badge/windows-ok-green.svg?longCache=true&style=flat&label=windows&logo=windows)
@@ -165,8 +165,9 @@ Disable cron:
 ```
 
 ### Elasticsearch
-Only version 6.0 of Elasticsearch is available.<br>
-If you use version 5.0 or simply doesn't want Elasticsearch, you can disable it and fall back to mysql:
+Version 7.6.x of Elasticsearch is available for Magento.<br>
+If your Magento version is lower than 2.4 then version 6.x will be installed.<br>
+For version lower than 2.4, you can disable it and fall back to mysql:
 ```
 ./bin/magento config:set catalog/search/engine mysql
 ```
@@ -184,7 +185,7 @@ If you use version 5.0 or simply doesn't want Elasticsearch, you can disable it 
 - php-fpm
 - percona
 - redis-server
-- elasticsearch6
+- elasticsearch
 - grunt
 - postfix
 - mailcatcher
