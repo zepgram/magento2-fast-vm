@@ -211,9 +211,19 @@ if $(dpkg --compare-versions "${PROJECT_VERSION}" "lt" "2.3.5-p2"); then
 else
   sed -i "s|#JAVA_HOME.*|JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre|" /etc/default/elasticsearch
 fi
+mkdir /etc/systemd/system/elasticsearch.service.d
+cat <<'EOF' > /etc/systemd/system/elasticsearch.service.d/override.conf
+[Service]
+Restart=always
+EOF
+
 /bin/systemctl daemon-reload
 /bin/systemctl enable elasticsearch.service
 /bin/systemctl start elasticsearch.service
+
+
+# -----------------------------------------------------------------------------------------------------
+
 
 # Server permissions
 mkdir -p /var/www/html
