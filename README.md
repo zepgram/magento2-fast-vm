@@ -3,7 +3,7 @@
 [![vagrant](https://img.shields.io/badge/vagrant-debian:stretch-blue.svg?longCache=true&style=flat&label=vagrant&logo=vagrant)](https://app.vagrantup.com/debian/boxes/stretch64)
 [![dev-box](https://img.shields.io/badge/git/composer-blue.svg?longCache=true&style=flat&label=setup&logo=magento)](https://github.com/zepgram/magento2-fast-vm/blob/master/config.yaml.example)
 [![mount](https://img.shields.io/badge/nfs/rsync-blue.svg?longCache=true&style=flat&label=mount)](https://github.com/zepgram/magento2-fast-vm/releases)
-[![release](https://img.shields.io/badge/release-v1.3.5-blue.svg?longCache=true&style=flat&label=release)](https://github.com/zepgram/magento2-fast-vm/releases)
+[![release](https://img.shields.io/badge/release-v1.3.6-blue.svg?longCache=true&style=flat&label=release)](https://github.com/zepgram/magento2-fast-vm/releases)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg?longCache=true&style=flat&label=license)](https://github.com/zepgram/magento2-fast-vm/blob/master/LICENSE)
 
 ![windows](https://img.shields.io/badge/windows-ok-green.svg?longCache=true&style=flat&label=windows&logo=windows)
@@ -12,7 +12,7 @@
 
 ![image](https://user-images.githubusercontent.com/16258478/68086496-0d43e100-fe4d-11e9-95ea-2bce3bee9884.png)&nbsp;&nbsp;&nbsp;&nbsp;![image](https://user-images.githubusercontent.com/16258478/68086436-70814380-fe4c-11e9-8ef4-6e39388cc679.png)&nbsp;&nbsp;&nbsp;&nbsp;![image](https://user-images.githubusercontent.com/16258478/68086442-7545f780-fe4c-11e9-8c5e-518ddba8735d.png)&nbsp;&nbsp;&nbsp;&nbsp;![image](https://user-images.githubusercontent.com/16258478/68086695-ba6b2900-fe4e-11e9-8f4f-68feb9bb0db2.png)&nbsp;&nbsp;&nbsp;&nbsp;![image](https://user-images.githubusercontent.com/16258478/68086427-62cbbe00-fe4c-11e9-83d5-24aec5b7c686.png)
 
-[![associate-developer](https://u.magento.com/media/certification/big_associate_developer_m2.png)](https://u.magento.com/certification/directory/dev/2504796/)
+[![associate-developer](https://images.youracclaim.com/size/340x340/images/48e73336-c91d-477f-a66f-3ad950acb597/Adobe_Certified_Professional_Experience_Cloud_products_Digital_Badge.png)](https://www.youracclaim.com/earner/earned/badge/406cc91a-0fda-4a6f-846b-19d7f8b59e0a)
 
 ## Requirements
 
@@ -132,12 +132,14 @@ It can be used with ``app`` path if you encountered any issue with NFS and rsync
 [See basic usage](https://www.vagrantup.com/docs/synced-folders/basic_usage.html)
 
 ### Extra provisions
-You can add your custom shell provisions.<br>
-For example in order to [import your database from existing project](https://github.com/zepgram/magento2-fast-vm/wiki/Setup-with-database-from-an-existing-project).<br>
+You can add extra shell provisions.<br>
 Those provisions will be executed on pre-defined sequences:
-1. ``extra/001-env.sh`` his purpose is to provide extra environment variables or extra package, executed on ``system-env.sh`` provision
-1. ``extra/100-pre-build.sh`` define your specific system configuration before installation, hook on magento ``pre-build.sh`` provision
-1. ``extra/120-post-build.sh`` you can execute magento command in this sequence, executed on magento ``post-build.sh`` provision
+1. ``extra/001-env.sh`` his purpose is to provide extra environment variables or extra package, executed after script ``001-system-env.sh``
+1. ``extra/100-pre-build.sh`` define your specific system configuration before installation, executed after script ``100-magento-pre.sh``
+1. ``extra/120-post-build.sh`` you can execute magento command in this sequence, executed after script ``120-magento-post.sh``
+
+- To be executed you must remove the string `-example` from the filename script.
+- As an example of use, you can adapt data from your database import by using the script ``100-pre-build.sh``
 
 ## Usage
 
@@ -215,11 +217,13 @@ For version lower than 2.4, you can disable it and fall back to mysql:
 
 ## Issues
 
-### WFM
-There is a major issue with windows 7 host machine:<br>
-When running vagrant up machine hangs, this problem is encountered with newest version of VirtualBox and Vagrant.<br>
-- Solution is to upgrade powershell to version 4.0 by downloading [WFM 4.0](https://www.microsoft.com/fr-fr/download/details.aspx?id=40855).
-<br>The file setup is Windows6.1-KB2819745<br>
+### Windows 10
+There is a known [issue with composer installation](https://github.com/zepgram/magento2-fast-vm/issues/70) on windows 10.<br>
+This issue could not be solved yet, and has already been reported 2 times.<br> 
+- It's related to the computer and BIOS configuration.
+- It's only with "nfs" setting for mount option.
+
+To solve this, just try to set mount option to "rsync", then after full installation you should be able to fallback to NFS.
 
 ### Others
 - If you have trouble during installation please open a new issue on this git repository.
