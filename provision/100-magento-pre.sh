@@ -64,17 +64,8 @@ chmod 600 /home/vagrant/.ssh/id_rsa.pub
 rm -rf /home/vagrant/.ssh/known_hosts /home/vagrant/.ssh/config
 echo -e "StrictHostKeyChecking no\n" >> /home/vagrant/.ssh/config
 ssh-keyscan -t rsa "${PROJECT_HOST_REPOSITORY}" >> /home/vagrant/.ssh/known_hosts
-mkdir -p /home/vagrant/.composer
-cat <<-EOF > /home/vagrant/.composer/auth.json
-{
-    "http-basic": {
-        "repo.magento.com": {
-            "username": "${PROJECT_COMPOSER_USER}",
-            "password": "${PROJECT_COMPOSER_PASS}"
-        }
-    }
-}
-EOF
+composer config --global http-basic.repo.magento.com "${PROJECT_COMPOSER_USER}" "${PROJECT_COMPOSER_PASS}"
+sudo -u vagrant composer config --global http-basic.repo.magento.com "${PROJECT_COMPOSER_USER}" "${PROJECT_COMPOSER_PASS}"
 
 # Git global config
 if [ "$PROJECT_SOURCE" != "composer" ]; then
