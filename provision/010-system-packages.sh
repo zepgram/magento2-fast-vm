@@ -44,6 +44,7 @@ echo "deb https://packages.sury.org/php/ stretch main" | tee /etc/apt/sources.li
 # Percona repository
 wget https://repo.percona.com/apt/percona-release_latest.$(lsb_release -sc)_all.deb
 dpkg -i percona-release_latest.$(lsb_release -sc)_all.deb
+rm -f percona-release_latest.$(lsb_release -sc)_all.deb
 
 # Elasticsearch repository
 wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
@@ -66,8 +67,8 @@ if $(dpkg --compare-versions "${PROJECT_PHP_VERSION}" "lt" "7.2"); then
   apt-get install -y php"${PROJECT_PHP_VERSION}"-mcrypt
 fi
 
-# Composer
-curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Composer v1.x
+curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --1
 
 # Prestissimo speed up installation
 sudo -u vagrant composer global require hirak/prestissimo
