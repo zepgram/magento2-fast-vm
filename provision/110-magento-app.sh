@@ -34,7 +34,7 @@ else
 fi
 
 # Composer install
-sudo -u vagrant composer install -d "$PROJECT_BUILD" --no-progress --no-interaction --no-suggest
+sudo -u vagrant COMPOSER_MEMORY_LIMIT=-1 composer install -d "$PROJECT_BUILD" --no-progress --no-interaction --no-suggest
 
 # Rsync directory
 if [ "$PROJECT_BUILD" != "$PROJECT_PATH" ]; then
