@@ -67,6 +67,18 @@ ssh-keyscan -t rsa "${PROJECT_HOST_REPOSITORY}" >> /home/vagrant/.ssh/known_host
 composer config --global http-basic.repo.magento.com "${PROJECT_COMPOSER_USER}" "${PROJECT_COMPOSER_PASS}"
 sudo -u vagrant composer config --global http-basic.repo.magento.com "${PROJECT_COMPOSER_USER}" "${PROJECT_COMPOSER_PASS}"
 
+# Auth.json
+cat <<-EOF > /home/vagrant/auth.json
+{
+    "http-basic": {
+        "repo.magento.com": {
+            "username": "fd2034320e60ae41fc5b7d97cdd084ef",
+            "password": "81a00592322716753b42dd95b6d5cc3c"
+        }
+    }
+}
+EOF
+
 # Git global config
 if [ "$PROJECT_SOURCE" != "composer" ]; then
   sudo -u vagrant git config --global user.name "$PROJECT_GIT_USER"
