@@ -44,7 +44,6 @@ ln -sfn /etc/nginx/sites-available/010-"$PROJECT_NAME" /etc/nginx/sites-enabled/
 
 # Permission script
 cat <<-EOF > /home/vagrant/permission.bak
-if [ "$PROJECT_MOUNT" != "nfs" ] || [ "$PROJECT_MOUNT_PATH" == "app" ]; then
 echo 'Applying permissions to $PROJECT_PATH'
 cd "$PROJECT_PATH" \\
 && sudo find var vendor pub/static pub/media app/etc -type f -exec chmod g+w {} \; \\
@@ -52,7 +51,6 @@ cd "$PROJECT_PATH" \\
 && sudo find ./var ./generated -type d -exec chmod 777 {} \; \\
 && sudo chmod u+x bin/magento \\
 && sudo chown -fR :www-data . || :
-fi
 EOF
 grep '[^[:blank:]]' < /home/vagrant/permission.bak > /usr/local/bin/permission
 rm -rf /home/vagrant/permission.bak
