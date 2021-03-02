@@ -65,7 +65,7 @@ Vagrant.configure(2) do |config|
 
   # Bindfs options
   config.bindfs.default_options = {
-    force_group:    'www-data',
+    force_group: 'www-data',
   }
   # NFS mount
   if vmconf['mount'] == 'nfs'

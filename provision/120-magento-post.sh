@@ -113,6 +113,7 @@ rm -rf "$PROJECT_PATH"/generated/code/
 sudo -u vagrant "$PROJECT_PATH"/bin/magento setup:upgrade
 sudo -u vagrant "$PROJECT_PATH"/bin/magento deploy:mode:set "$PROJECT_MODE"
 sudo -u vagrant "$PROJECT_PATH"/bin/magento cache:enable
+sudo -u vagrant "$PROJECT_PATH"/bin/magento cache:flush
 
 # Restart services
 /etc/init.d/php"${PROJECT_PHP_VERSION}"-fpm restart

@@ -72,8 +72,8 @@ cat <<-EOF > /home/vagrant/auth.json
 {
     "http-basic": {
         "repo.magento.com": {
-            "username": "fd2034320e60ae41fc5b7d97cdd084ef",
-            "password": "81a00592322716753b42dd95b6d5cc3c"
+            "username": "${PROJECT_COMPOSER_USER}",
+            "password": "${PROJECT_COMPOSER_PASS}"
         }
     }
 }
