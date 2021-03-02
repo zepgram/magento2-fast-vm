@@ -107,7 +107,7 @@ def triggers(config, mount, hostName, hostDirectory)
 				trigger.info+="\r\nDuration: ~5min. Once installation is complete please run 'vagrant reload'"
 				trigger.run = {inline: "vagrant rsync-back #{hostName}"}
 			else
-				trigger.info+= "\033[0m\r\nrsync-auto is running...\e[0m"
+				trigger.info+= "\r\nrsync-auto is running..."
 				trigger.run = {inline: "vagrant rsync-auto --rsync-chown #{hostName}"}
 			end
 		end
