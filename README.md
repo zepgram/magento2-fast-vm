@@ -116,7 +116,7 @@ Only useful on path set to ``root``.<br>
 * The ``vagrant rsync-auto`` is launched by default on vagrant up, even with that if you need to force an update you can run ``vagrant rsync``. <b>Terminal should be kept open for rsync-auto: do not close it.</b>
 * Rsync is unilateral, your host machine push files to guest but not the other way.<br>
 Anyway if it's necessary, after a ``composer update`` for example, you can run ``vagrant rsync-back`` to push files from guest to host.<br>
-
+* After first installation, you must run ``vagrant reload`` to enable file watching with rsync-auto.<br>
 [See Rsync option](https://www.vagrantup.com/docs/synced-folders/rsync.html)
 
 #### NFS
@@ -165,6 +165,9 @@ Disable cron:
 ```
 ./bin/magento cron:remove
 ```
+
+### Mysql
+Percona server 8.0 is installed for version >= 2.4.0
 
 ### Elasticsearch
 Version 7.6.x of Elasticsearch is available for Magento.<br>

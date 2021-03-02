@@ -104,8 +104,8 @@ def triggers(config, mount, hostName, hostDirectory)
 			# Run rsync-auto
 			if !File.file?("#{hostDirectory}/app/etc/di.xml")
 				trigger.info+= "\r\nrsync-back and rsync auto triggered..." 
-				trigger.info+="\r\nDuration: ~10min. Install is done when rsync-auto will start watching."
-				trigger.run = {inline: "vagrant rsync-back #{hostName} | vagrant rsync-auto --rsync-chown #{hostName}"}
+				trigger.info+="\r\nDuration: ~5min. Once installation is complete please run 'vagrant reload'"
+				trigger.run = {inline: "vagrant rsync-back #{hostName}"}
 			else
 				trigger.info+= "\r\nrsync-auto is running..."
 				trigger.run = {inline: "vagrant rsync-auto --rsync-chown #{hostName}"}

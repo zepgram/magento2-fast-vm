@@ -21,7 +21,7 @@ magento      = configValues['magento']
 projectName  = 'magento'
 
 # Check plugin
-check_plugins ['vagrant-bindfs','vagrant-rsync-back']
+check_plugins ['vagrant-bindfs', 'vagrant-rsync-back']
 if OS.is_windows
   check_plugins ['vagrant-winnfsd']
 end
@@ -62,13 +62,11 @@ Vagrant.configure(2) do |config|
 
   # Default options
   config.vm.synced_folder '.', '/vagrant', disabled: true
+
   # Bindfs options
   config.bindfs.default_options = {
-    force_user:   'vagrant',
-    force_group:  'www-data',
-    perms:        'u=rwx:g=rwx:o=rwx'
+    force_group: 'www-data',
   }
-
   # NFS mount
   if vmconf['mount'] == 'nfs'
     if OS.is_windows

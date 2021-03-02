@@ -29,7 +29,8 @@ if ! grep -qF "LANG" /home/vagrant/.bashrc; then
 fi
 
 # Required packages
-apt-get install -y \
+rm -rf /etc/apt/sources.list.d/*
+apt-get update -y && apt-get install -y \
   curl graphviz htop net-tools rsync sudo tree wget unzip zip g++ gnupg2 \
   libsqlite3-dev libxml2-utils build-essential software-properties-common \
   postfix mailutils libsasl2-2 libsasl2-modules ca-certificates libnss3-tools \
@@ -48,10 +49,10 @@ rm -f percona-release_latest.$(lsb_release -sc)_all.deb
 
 # Elasticsearch repository
 wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
-if $(dpkg --compare-versions "${PROJECT_VERSION}" "lt" "2.3.5-p2"); then
-  echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | tee /etc/apt/sources.list.d/elastic-6.x.list
-else
+if $(dpkg --compare-versions "${PROJECT_VERSION}" "ge" "2.4.0"); then
   echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | tee /etc/apt/sources.list.d/elastic-7.x.list
+else
+  echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | tee /etc/apt/sources.list.d/elastic-6.x.list
 fi
 
 # PHP and additional
@@ -62,10 +63,17 @@ apt-get update -y && apt-get install -y \
   php"${PROJECT_PHP_VERSION}"-xml php"${PROJECT_PHP_VERSION}"-xml php"${PROJECT_PHP_VERSION}"-bcmath \
   php"${PROJECT_PHP_VERSION}"-mysql php"${PROJECT_PHP_VERSION}"-sqlite3 php"${PROJECT_PHP_VERSION}"-fpm \
   php"${PROJECT_PHP_VERSION}"-memcache php"${PROJECT_PHP_VERSION}"-redis php"${PROJECT_PHP_VERSION}"-opcache \
-  percona-server-server-5.7 elasticsearch
+  elasticsearch
 if $(dpkg --compare-versions "${PROJECT_PHP_VERSION}" "lt" "7.2"); then
   apt-get install -y php"${PROJECT_PHP_VERSION}"-mcrypt
 fi
+if $(dpkg --compare-versions "${PROJECT_VERSION}" "ge" "2.4.0"); then
+  percona-release setup ps80
+  apt-get install -y percona-server-server
+else
+  apt-get install -y percona-server-server-5.7
+fi
+
 
 # Composer v1.x
 curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --1
