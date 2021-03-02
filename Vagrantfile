@@ -63,6 +63,10 @@ Vagrant.configure(2) do |config|
   # Default options
   config.vm.synced_folder '.', '/vagrant', disabled: true
 
+  # Bindfs options
+  config.bindfs.default_options = {
+    force_group:    'www-data',
+  }
   # NFS mount
   if vmconf['mount'] == 'nfs'
     if OS.is_windows
@@ -90,6 +94,9 @@ Vagrant.configure(2) do |config|
     vmconf['mount'] = 'default';
     config.vm.synced_folder hostDirectory, guestDirectory, create: true
   end
+
+  # Bindfs
+  config.bindfs.bind_folder guestDirectory, guestDirectory, after: :provision
 
   # SSH key provisioning
   config.vm.provision 'file', source: './ssh/id_rsa', destination: '~/.ssh/id_rsa'
