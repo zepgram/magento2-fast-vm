@@ -146,7 +146,7 @@ Those provisions will be executed on pre-defined sequences:
 ### Permission
 Magento file system owner is configured for ``vagrant`` user, it means all commands in magento project must be executed by this user.<br>
 By default command line ``vagrant ssh`` will log you as vagrant user.<br>
-* To re-apply magento permission you can run ``permission`` in command line: this is only applicable for ``app`` path or ``default`` mount configurations.
+* To re-apply magento permissions you can run ``permission`` directly in command line.
 
 ### Command line
 * magento (Magento CLI for your project)
