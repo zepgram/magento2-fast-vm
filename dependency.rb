@@ -96,18 +96,23 @@ end
 ## Tiggers
 def triggers(config, mount, hostName, hostDirectory)
 	if mount == 'rsync'
+		rsync_back = false;
 		config.trigger.after :up, :reload, :provision do |trigger|
+			# Run rsync back
+			trigger.ruby do |env,machine|
+				if !File.exist?("#{hostDirectory}/app/etc/di.xml");
+					rsync_back = true;
+				end
+			end
 			# Add post-up message
 			trigger.info = config.vm.post_up_message
-			trigger.info+= '>>> Do not close this terminal: open new one for ssh login
----------------------------------------------------------'
-			# Run rsync-auto
-			if !File.file?("#{hostDirectory}/app/etc/di.xml")
-				trigger.info+= "\r\nrsync-back and rsync auto triggered..." 
-				trigger.info+="\r\nDuration: ~5min. Once installation is complete please run 'vagrant reload'"
+			trigger.info+= '---------------------------------------------------------'
+			if rsync_back;
+				trigger.warn = "\r\nRsync-back duration: ~10min. Once rsync-back is complete, run 'vagrant reload'"
 				trigger.run = {inline: "vagrant rsync-back #{hostName}"}
 			else
-				trigger.info+= "\r\nrsync-auto is running..."
+				# Run rsync auto
+				trigger.warn = "\r\nRsync-auto is running... Do not close this terminal."
 				trigger.run = {inline: "vagrant rsync-auto --rsync-chown #{hostName}"}
 			end
 		end
