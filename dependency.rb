@@ -89,7 +89,7 @@ def rsync_exclude
   return [
   	'generated/code/*', 'var/page_cache/*', 'var/view_preprocessed/*',
   	'pub/static/adminhtml/*', 'pub/static/base/*', 'pub/static/frontend/*',
-  	'dev', 'node_modules', 'phpserver', 'setup', 'update'
+  	'dev', 'node_modules', 'phpserver', 'update'
   ]
 end
 
