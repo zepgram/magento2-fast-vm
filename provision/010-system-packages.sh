@@ -63,7 +63,7 @@ apt-get update -y && apt-get install -y \
   php"${PROJECT_PHP_VERSION}"-xml php"${PROJECT_PHP_VERSION}"-xml php"${PROJECT_PHP_VERSION}"-bcmath \
   php"${PROJECT_PHP_VERSION}"-mysql php"${PROJECT_PHP_VERSION}"-sqlite3 php"${PROJECT_PHP_VERSION}"-fpm \
   php"${PROJECT_PHP_VERSION}"-memcache php"${PROJECT_PHP_VERSION}"-redis php"${PROJECT_PHP_VERSION}"-opcache \
-  elasticsearch
+  php"${PROJECT_PHP_VERSION}"-sockets elasticsearch
 if $(dpkg --compare-versions "${PROJECT_PHP_VERSION}" "lt" "7.2"); then
   apt-get install -y php"${PROJECT_PHP_VERSION}"-mcrypt
 fi
