@@ -54,7 +54,7 @@ fi
 # Change materialization strategy for nfs
 if [ "$PROJECT_MOUNT" == "nfs" ] && [ "$PROJECT_MOUNT_PATH" != "app" ]; then
   if [ -f "${PROJECT_PATH}/.git/config" ]; then
-      git --git-dir "$PROJECT_PATH"/.git update-index --assume-unchanged app/etc/di.xml
+      sudo -u vagrant git --git-dir "$PROJECT_PATH"/.git update-index --assume-unchanged app/etc/di.xml
   fi
   sudo -u vagrant sed -i 's/<item name="view_preprocessed" xsi:type="object">Magento\\\Framework\\\App\\\View\\\Asset\\\MaterializationStrategy\\\Symlink/<item name="view_preprocessed" xsi:type="object">Magento\\\Framework\\\App\\\View\\\Asset\\\MaterializationStrategy\\\Copy/' "$PROJECT_PATH"/app/etc/di.xml
 fi
@@ -108,7 +108,7 @@ fi
 
 # Get config from source project
 if [ "$PROJECT_SOURCE" != "composer" ]; then
-  git --git-dir "$PROJECT_PATH"/.git checkout app/etc/config.php
+  cd $PROJECT_PATH; sudo -u vagrant git checkout app/etc/config.php
 fi
 
 # Clean compiled files
