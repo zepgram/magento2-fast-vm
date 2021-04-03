@@ -108,7 +108,7 @@ fi
 
 # Get config from source project
 if [ "$PROJECT_SOURCE" != "composer" ]; then
-  sudo -u vagrant git checkout "$PROJECT_PATH"/app/etc/config.php
+  git --git-dir "$PROJECT_PATH"/.git checkout app/etc/config.php
 fi
 
 # Clean compiled files
