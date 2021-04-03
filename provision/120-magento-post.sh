@@ -15,6 +15,18 @@ echo '--- Magento post-installation sequence ---'
 chmod +x "$PROJECT_PATH"/bin/magento
 ln -sf "$PROJECT_PATH"/bin/magento /usr/local/bin/magento
 
+# Enable nginx
+if [ -f "${PROJECT_PATH}/nginx.conf.sample" ] && [ ! -f "${PROJECT_PATH}/nginx.conf" ]; then
+  sudo -u vagrant cp "$PROJECT_PATH"/nginx.conf.sample "$PROJECT_PATH"/nginx.conf.tmp
+fi
+if [ -f "${PROJECT_PATH}/nginx.conf" ]; then
+  sudo -u vagrant cp "$PROJECT_PATH"/nginx.conf /home/vagrant/extra/"${PROJECT_NAME}".nginx.conf;
+else
+  sudo -u vagrant cp "$PROJECT_PATH"/nginx.conf.tmp /home/vagrant/extra/"${PROJECT_NAME}".nginx.conf;
+  sudo -u vagrant rm -f "$PROJECT_PATH"/nginx.conf.tmp
+fi
+sudo -u vagrant sed -i "s/fastcgi_buffers 1024 4k;/fastcgi_buffers 16 14k;\n    fastcgi_buffer_size 32k;/" /home/vagrant/extra/"${PROJECT_NAME}".nginx.conf;
+
 # Composer config
 if [ "$PROJECT_SOURCE" == "composer" ]; then
   # Enable php ini
@@ -28,14 +40,6 @@ if [ "$PROJECT_SOURCE" == "composer" ]; then
   # Enable grunt
   if [ -f "${PROJECT_PATH}/Gruntfile.js.sample" ] && [ ! -f "${PROJECT_PATH}/Gruntfile.js" ]; then
     sudo -u vagrant cp "$PROJECT_PATH"/Gruntfile.js.sample "$PROJECT_PATH"/Gruntfile.js
-  fi
-  # Enable nginx
-  if [ -f "${PROJECT_PATH}/nginx.conf.sample" ] && [ ! -f "${PROJECT_PATH}/nginx.conf" ]; then
-    sudo -u vagrant cp "$PROJECT_PATH"/nginx.conf.sample "$PROJECT_PATH"/nginx.conf
-  fi
-  if [ -f "$PROJECT_PATH/nginx.conf" ]; then
-    sudo -u vagrant cp "$PROJECT_PATH"/nginx.conf /home/vagrant/extra/"${PROJECT_NAME}".nginx.conf;
-    sudo -u vagrant sed -i "s/fastcgi_buffers 1024 4k;/fastcgi_buffers 16 14k;\n    fastcgi_buffer_size 32k;/" /home/vagrant/extra/"${PROJECT_NAME}".nginx.conf;
   fi
 fi
 
@@ -104,7 +108,7 @@ fi
 
 # Get config from source project
 if [ "$PROJECT_SOURCE" != "composer" ]; then
-  git checkout "$PROJECT_PATH"/app/etc/config.php
+  sudo -u vagrant git checkout "$PROJECT_PATH"/app/etc/config.php
 fi
 
 # Clean compiled files

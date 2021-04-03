@@ -31,6 +31,7 @@ else
 	# Install from git
 	sudo -u vagrant git clone "$PROJECT_REPOSITORY" "$PROJECT_BUILD"
 	cd "$PROJECT_BUILD"; sudo -u vagrant git fetch --all; git checkout "$PROJECT_SOURCE" --force;
+	rm -f app/etc/config.php app/etc/env.php
 fi
 
 # Composer install
@@ -51,9 +52,7 @@ rm -rf /var/www/html/"$PROJECT_NAME"
 ln -sfn "$PROJECT_PATH" /var/www/html/"$PROJECT_NAME"
 
 # Apply basic rights on regular mount
-if [ "$PROJECT_MOUNT" != "nfs" ] || [ "$PROJECT_MOUNT_PATH" == "app" ]; then
-	chown -fR :www-data "$PROJECT_PATH"
-fi
+chown -fR :www-data "$PROJECT_PATH"
 
 # Run install
 chmod +x "$PROJECT_PATH"/bin/magento
