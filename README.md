@@ -3,7 +3,7 @@
 [![vagrant](https://img.shields.io/badge/vagrant-debian:stretch-blue.svg?longCache=true&style=flat&label=vagrant&logo=vagrant)](https://app.vagrantup.com/debian/boxes/stretch64)
 [![dev-box](https://img.shields.io/badge/git/composer-blue.svg?longCache=true&style=flat&label=setup&logo=magento)](https://github.com/zepgram/magento2-fast-vm/blob/master/config.yaml.example)
 [![mount](https://img.shields.io/badge/nfs/rsync-blue.svg?longCache=true&style=flat&label=mount)](https://github.com/zepgram/magento2-fast-vm/releases)
-[![release](https://img.shields.io/badge/release-v1.4.0-blue.svg?longCache=true&style=flat&label=release)](https://github.com/zepgram/magento2-fast-vm/releases)
+[![release](https://img.shields.io/badge/release-v1.4.1-blue.svg?longCache=true&style=flat&label=release)](https://github.com/zepgram/magento2-fast-vm/releases)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg?longCache=true&style=flat&label=license)](https://github.com/zepgram/magento2-fast-vm/blob/master/LICENSE)
 
 ![windows](https://img.shields.io/badge/windows-ok-green.svg?longCache=true&style=flat&label=windows&logo=windows)
@@ -12,7 +12,7 @@
 
 ![image](https://user-images.githubusercontent.com/16258478/68086496-0d43e100-fe4d-11e9-95ea-2bce3bee9884.png)&nbsp;&nbsp;&nbsp;&nbsp;![image](https://user-images.githubusercontent.com/16258478/68086436-70814380-fe4c-11e9-8ef4-6e39388cc679.png)&nbsp;&nbsp;&nbsp;&nbsp;![image](https://user-images.githubusercontent.com/16258478/68086442-7545f780-fe4c-11e9-8c5e-518ddba8735d.png)&nbsp;&nbsp;&nbsp;&nbsp;![image](https://user-images.githubusercontent.com/16258478/68086695-ba6b2900-fe4e-11e9-8f4f-68feb9bb0db2.png)&nbsp;&nbsp;&nbsp;&nbsp;![image](https://user-images.githubusercontent.com/16258478/68086427-62cbbe00-fe4c-11e9-83d5-24aec5b7c686.png)
 
-[![associate-developer](https://images.youracclaim.com/size/340x340/images/48e73336-c91d-477f-a66f-3ad950acb597/Adobe_Certified_Professional_Experience_Cloud_products_Digital_Badge.png)](https://www.youracclaim.com/badges/406cc91a-0fda-4a6f-846b-19d7f8b59e0a/public_url)
+[![associate-developer](https://user-images.githubusercontent.com/16258478/121844932-02b62280-cce5-11eb-8351-726bbe9eed80.png)](https://www.youracclaim.com/badges/406cc91a-0fda-4a6f-846b-19d7f8b59e0a/public_url)
 
 ## Requirements
 
@@ -51,6 +51,7 @@ If your ssh key has been created with a passphrase, please create an other one.
 1. On Windows only: open powershell as administrator and run: ``Add-MpPreference -ExclusionProcess winnfsd.exe``
 1. On Windows only: open ``C:\Windows\System32\drivers\etc\hosts`` as administrator then add ``network_ip`` and ``magento_url``<br>Default values would be: ``192.168.200.50       dev.magento.com``
 1. On Linux only: in order to install NFS, run ``sudo apt install nfs-kernel-server``
+1. On MacOS only: to avoid issue with guest additions, run ``sudo apt install linux-headers-$(uname -r)``
 1. On Linux/MacOS only: open ``/etc/hosts`` as sudo then add ``network_ip`` and ``magento_url``<br>Default values would be: ``192.168.200.50       dev.magento.com`` 
 
 ### Installation
@@ -63,50 +64,37 @@ If your ssh key has been created with a passphrase, please create an other one.
 1. Finally run: ``vagrant ssh`` to access to your guest machine
 
 ### Yaml config overview
-* Vmconf
-   * machine_name: oracle virtual machine name (Vagrant Magento 2)
-   * network_ip: virtual machine ip (192.168.200.50)
-   * host_name: virtual machine host name (zepgram)
-   * memory: RAM of virtual machine (4096)
-   * cpus: CPU usage (2)
-   * mount: nfs / rsync / default (nfs)
-   * path:
-      * 'app' mount only app directory /var/www/magento/app
-      * 'root' mount whole directory /var/www/magento
-   * provision: define shell provisionning sequence (all)
-      * 'all' run all provisionner files
-      * 'system' run only machine provisionner
-      * 'magento' run magento provisionner
-* Composer
-   * username: [magento access](https://marketplace.magento.com/customer/accessKeys/) set your magento credentials (magentoUsernameKey)
-   * password: [magento access](https://marketplace.magento.com/customer/accessKeys/) set your magento credentials (magentoPasswordKey)
-* Git (optional)
-   * name: git account username (John Doe)
-   * email: git account email (john@doe.com)
-   * host: set your git host server to add ssh key to "known hosts" (github.com)
-   * repository: clone your existing magento project (ssh://git@github.com:project-name.git)
-* Magento
-   * url: magento site host name (dev.magento.com)
-   <br>FI [do not use .dev or .localhost as extension](https://ma.ttias.be/chrome-force-dev-domains-https-via-preloaded-hsts/)
-    * source: define installation source (composer)
-      * 'composer' install magento source code from official composer repository
-      * 'git-branch-name' install magento project from your git repository based on defined branch (ex: master)
-   * edition: magento project edition, used only on composer source installation (community)
-      * 'community' install magento community edition
-      * 'enterprise' install magento enterprise edition
-   * version: set magento version and also define PHP version (2.3.3)
-   * php_version: override the default required version by yours, for example '7.1' (default)
-   * sample: install sample data, used only on composer source installation (true)
-   * mode: magento mode (developer)
-   * currency: set currency (USD)
-   * language: set language (en_US)
-   * time_zone: set time zone (Europe/London)
-   * crypt_key: crypt key under your app/etc/env.php (only required if db-dump.sql.gz exist)
-
+Parent Node  |  Name  |  Default Value  |  Allowed Value  |  Is optional  |  Description
+| --- | --- | --- | --- | --- |---
+| vmconf |  machine_name |  Vagrant Magento 2 | string | no | Vagrant machine name
+| |  network_ip |  192.168.200.50 | IP address |  no  | Accessible IP address /etc/hosts
+| |  host_name |  zepgram | string |  no |  Virtual host name
+| |  memory |  4096  |  number  |  no |  RAM allocated
+| |  cpus |  1 |  number  |  no |  CPU allocated
+| |  mount |  nfs | nfs / rsync / default |  no |  Mount strategy
+| |  path |  root | app / root |  no |  Mount whole directory or `app/` only
+| |  provision |  all | all / system / magento | no |  Define script provision
+| composer |  username |  magentoUsernameKey | string |  no |  <a href="https://marketplace.magento.com/customer/accessKeys/" target="_blank">Composer auth user</a>
+| |  password |  magentoPasswordKey | string |  no |  <a href="https://marketplace.magento.com/customer/accessKeys/" target="_blank">Composer auth password</a>
+| git |  name |  John Doe | string |  yes |  Git user name
+| |  email |  john@doe.com | email |  yes |  Git user email
+| |  host |  github.com | url |  yes  |  Git host server name
+| |  repository |  ssh://git@github.com:%.git | git repository |  yes  | Define repository to clone
+| magento |  url |  dev.magento.com  | url |  no |  Magento site host name
+| |  source |  composer | composer / (master/develop..) |  no |  Define source installation. On git install set the branch name to clone.
+| |  edition |  community | community / enterprise |  no |  Magento project edition
+| |  version |  2.4.2 |  >=2.2 |  no |  Magento version release
+| |  php_version |  default | default / 7.x |  no |  PHP version
+| |  sample |  true | true / false |  no |  Install sample data
+| |  mode |  developer | developer / production |  no |  Magento execution mode
+| |  currency |  USD | <a href="https://en.wikipedia.org/wiki/ISO_4217#Active_codes" target="_blank">ISO 4217</a> |  no |  Default currency
+| |  language |  en_US |  <a href="https://www.iso.org/iso-639-language-codes.html" target="_blank">ISO 639-1</a> + <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank">ISO 3166</a> |  no |  Default language
+| |  time_zone | America/New_York | <a href="https://www.php.net/manual/en/timezones.php" target="_blank">timezone</a> |  no |  Default timezone
+| |  crypt_key |  -  | string |  yes |  Crypt key form app/etc/env.php for db-dump.sql.gz (db import)
 
 ### Path
 * <b>root directory:</b> mount the entire project.
-* <b>app directory:</b> mount only app directory. Ensure great performance by not sharing generated files between machines.
+* <b>app directory:</b> mount only app directory. Not sharing generated files between machines ensure great performance but in return, source code /vendor is missing.
 
 ### Mount options
 
@@ -149,13 +137,13 @@ By default command line ``vagrant ssh`` will log you as vagrant user.<br>
 * To re-apply magento permissions you can run ``permission`` directly in command line.
 
 ### Command line
-* magento (Magento CLI for your project)
-* magento-cloud (CLI provided for Magento Cloud)
-* pestle (A collection of command line scripts for Magento 2 code generation)
+* magento (Magento CLI alias)
+* magento-cloud (Magento Cloud CLI)
+* pestle (A collection of command line scripts for code generation)
 * magerun (The swiss army knife for Magento developers)
-* permission (Apply magento2 permissions on project)
+* permission (Re-apply permissions to project)
 
-### Cron   
+### Cron
 Enable cron:
 ```
 ./bin/magento cron:install
@@ -229,4 +217,4 @@ This issue could not be solved yet, and has already been reported 2 times.<br>
 To solve this, just try to set mount option to "rsync", then after full installation you should be able to fallback to NFS.
 
 ### Others
-- If you have trouble during installation please open a new issue on this git repository.
+- If you have trouble during installation please open a new issue on this repository.
