@@ -14,7 +14,7 @@ echo '--- Environment variables ---'
 # Set php version
 PROJECT_VERSION=${12};
 PROJECT_PHP_VERSION='7.4';
-if $(dpkg --compare-versions "${PROJECT_VERSION}" "lt" "2.3.5-p2"); then
+if $(dpkg --compare-versions "${PROJECT_VERSION}" "lt" "2.3.6"); then
   PROJECT_PHP_VERSION='7.3';
 fi
 if $(dpkg --compare-versions "${PROJECT_VERSION}" "lt" "2.3"); then
