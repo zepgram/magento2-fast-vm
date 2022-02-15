@@ -31,7 +31,7 @@ else
 	# Install from git
 	sudo -u vagrant git clone "$PROJECT_REPOSITORY" "$PROJECT_BUILD"
 	cd "$PROJECT_BUILD"; sudo -u vagrant git fetch --all; git checkout "$PROJECT_SOURCE" --force;
-	rm -f app/etc/config.php app/etc/env.php
+	rm -f "$PROJECT_BUILD"/app/etc/config.php "$PROJECT_BUILD"/app/etc/env.php
 fi
 
 # Composer install
