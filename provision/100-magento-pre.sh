@@ -89,14 +89,9 @@ chown -R vagrant:vagrant /home/vagrant
 
 # Execute import sql
 if [ -f /home/vagrant/extra/db-dump.sql.gz ]; then
-	rm -f /home/vagrant/extra/db-dump.sql
-	gunzip /home/vagrant/extra/db-dump.sql.gz
-fi
-if [ -f /home/vagrant/extra/db-dump.sql ]; then
 	echo '--- Magento db dump import ---'
-	mysql -u vagrant -pvagrant -e "USE ${PROJECT_NAME};SET FOREIGN_KEY_CHECKS = 0;source /home/vagrant/extra/db-dump.sql;SET FOREIGN_KEY_CHECKS = 1;"
+    zcat /home/vagrant/extra/db-dump.sql.gz | mysql --init-command="SET SESSION FOREIGN_KEY_CHECKS=0;" --user=vagrant --password=vagrant "${PROJECT_NAME}"
 fi
-
 # Extra pre-build
 if [ -f /home/vagrant/extra/100-pre-build.sh ]; then
   bash /home/vagrant/extra/100-pre-build.sh
