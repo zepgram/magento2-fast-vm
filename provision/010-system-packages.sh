@@ -40,7 +40,7 @@ apt-get update -y && apt-get install -y \
 
 # Php Repository
 wget -q https://packages.sury.org/php/apt.gpg -O- | apt-key add -
-echo "deb https://packages.sury.org/php/ stretch main" | tee /etc/apt/sources.list.d/php.list
+echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list
 
 # Percona repository
 wget https://repo.percona.com/apt/percona-release_latest.$(lsb_release -sc)_all.deb
@@ -75,11 +75,16 @@ else
 fi
 
 
-# Composer v1.x
+# Composer
+if $(dpkg --compare-versions "${PROJECT_VERSION}" "lt" "2.4.2"); then
+  # Composer v1
 curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --1
-
-# Prestissimo speed up installation
+  # Prestissimo
 sudo -u vagrant composer global require hirak/prestissimo
+else
+  # Composer v2
+  curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+fi
 
 # Postfix
 wget -P ~/ https://www.thawte.com/roots/thawte_Premium_Server_CA.pem && \

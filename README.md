@@ -3,7 +3,7 @@
 [![vagrant](https://img.shields.io/badge/vagrant-debian:stretch-blue.svg?longCache=true&style=flat&label=vagrant&logo=vagrant)](https://app.vagrantup.com/debian/boxes/stretch64)
 [![dev-box](https://img.shields.io/badge/git/composer-blue.svg?longCache=true&style=flat&label=setup&logo=magento)](https://github.com/zepgram/magento2-fast-vm/blob/master/config.yaml.example)
 [![mount](https://img.shields.io/badge/nfs/rsync-blue.svg?longCache=true&style=flat&label=mount)](https://github.com/zepgram/magento2-fast-vm/releases)
-[![release](https://img.shields.io/badge/release-v1.4.2-blue.svg?longCache=true&style=flat&label=release)](https://github.com/zepgram/magento2-fast-vm/releases)
+[![release](https://img.shields.io/badge/release-v1.5.0-blue.svg?longCache=true&style=flat&label=release)](https://github.com/zepgram/magento2-fast-vm/releases)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg?longCache=true&style=flat&label=license)](https://github.com/zepgram/magento2-fast-vm/blob/master/LICENSE)
 
 ![windows](https://img.shields.io/badge/windows-ok-green.svg?longCache=true&style=flat&label=windows&logo=windows)
@@ -22,7 +22,7 @@ Stable version >= 5.2.0
 
 1. Download the installer for your laptop operating system using the links below.
     * [VirtualBox download](https://www.virtualbox.org/wiki/Downloads)
-1. Run the installer, choosing all of the default options.
+1. Run the installer, choosing all the default options.
     * Windows: Grant the installer access every time you receive a security prompt.
     * Mac: Enter your admin password.
     * Linux: Enter your user password if prompted.
@@ -45,14 +45,15 @@ https://onilab.com/blog/install-magento-2-on-localhost-a-windows-10-guide/
 
 ### Pre-installation
 
-&#9888; DO NOT USE SSH KEY WITH PASSPHRASE, this vagrant installation is non-interactive.<br>
-If your ssh key has been created with a passphrase, please create an other one.
-1. On Windows only: open UEFI BIOS and make sure virtualization is turned 'on'
-1. On Windows only: open powershell as administrator and run: ``Add-MpPreference -ExclusionProcess winnfsd.exe``
-1. On Windows only: open ``C:\Windows\System32\drivers\etc\hosts`` as administrator then add ``network_ip`` and ``magento_url``<br>Default values would be: ``192.168.200.50       dev.magento.com``
-1. On Linux only: in order to install NFS, run ``sudo apt install nfs-kernel-server``
-1. On MacOS only: to avoid issue with guest additions, run ``sudo apt install linux-headers-$(uname -r)``
-1. On Linux/MacOS only: open ``/etc/hosts`` as sudo then add ``network_ip`` and ``magento_url``<br>Default values would be: ``192.168.200.50       dev.magento.com`` 
+&#9888; This vagrant installation is non-interactive: DO NOT USE SSH KEY WITH PASSPHRASE.<br>
+If your ssh key has been created with a passphrase, please create another one.
+
+ System  | Steps                                                                                                                                                                                                                                                                                                                                                   |
+|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Windows | 1. Open UEFI BIOS and make sure virtualization is turned 'on'<br>2. Open powershell as administrator and run: ``Add-MpPreference -ExclusionProcess winnfsd.exe``<br>3. Open ``C:\Windows\System32\drivers\etc\hosts`` as administrator then add ``network_ip`` and ``magento_url``<br>Default values would be: ``192.168.200.50       dev.magento.com`` |
+| MacOs | 1. To avoid issue with guest additions, run:<br> ``sudo apt install linux-headers-$(uname -r)``                                                                                                                                                                                                                                                         |
+| Linux | 1. To install NFS properly, run:<br> ``sudo apt install nfs-kernel-server``                                                                                                                                                                                                                                                                             
+| Linux/MacOS | 2. Open ``/etc/hosts`` as sudo then add ``network_ip`` and ``magento_url``<br>Default values would be: ``192.168.200.50       dev.magento.com``                                                                                                                                                                                                         
 
 ### Installation
 
@@ -61,7 +62,7 @@ If your ssh key has been created with a passphrase, please create an other one.
 1. Copy/past: ``config.yaml.example`` rename it ``config.yaml``<br>Then customize configurations according to [Yaml config overview](#yaml-config-overview)
 1. If you want to import an existing database: create a compressed sql dump and name it ``db-dump.sql.gz``.<br>You must also fill ``crypt_key`` in config.yaml 
 1. To start install run: ``vagrant up`` (duration: ~20 minutes)
-1. Finally run: ``vagrant ssh`` to access to your guest machine
+1. Finally, run: ``vagrant ssh`` to access guest machine
 
 ### Yaml config overview
 Parent Node  |  Name  |  Default Value  |  Allowed Value  |  Is optional  |  Description
@@ -83,7 +84,7 @@ Parent Node  |  Name  |  Default Value  |  Allowed Value  |  Is optional  |  Des
 | magento |  url |  dev.magento.com  | url |  no |  Magento site host name
 | |  source |  composer | composer / (master/develop..) |  no |  Define source installation. On git install set the branch name to clone.
 | |  edition |  community | community / enterprise |  no |  Magento project edition
-| |  version |  2.4.2 |  >=2.2 |  no |  Magento version release
+| |  version |  2.4.4 |  >=2.2 |  no |  Magento version release
 | |  php_version |  default | default / 7.x |  no |  PHP version
 | |  sample |  true | true / false |  no |  Install sample data
 | |  mode |  developer | developer / production |  no |  Magento execution mode
@@ -129,7 +130,7 @@ Those provisions will be executed on pre-defined sequences:
 - To be executed you must remove the string `-example` from the filename script.
 - As an example of use, you can adapt data from your database import by using the script ``100-pre-build.sh``
 
-## Usage
+## System usage
 
 ### Permission
 Magento file system owner is configured for ``vagrant`` user, it means all commands in magento project must be executed by this user.<br>
@@ -152,17 +153,6 @@ Enable cron:
 Disable cron:
 ```
 ./bin/magento cron:remove
-```
-
-### Mysql
-Percona server 8.0 is installed for version >= 2.4.0
-
-### Elasticsearch
-Version 7.6.x of Elasticsearch is available for Magento.<br>
-If your Magento version is lower than 2.4 then version 6.x will be installed.<br>
-For version lower than 2.4, you can disable it and fall back to mysql:
-```
-./bin/magento config:set catalog/search/engine mysql
 ```
 
 ## Configuration
@@ -188,7 +178,7 @@ For version lower than 2.4, you can disable it and fall back to mysql:
 - magento-cloud cli
 - bin/magento bash completion
 
-### Credentials
+### Access
 * User bash terminal
   * user: vagrant
 * Back-office
@@ -206,15 +196,33 @@ For version lower than 2.4, you can disable it and fall back to mysql:
 * Phpinfo
   * url: [network_ip]/php
 
+### Mysql
+Percona server 8.0 is now installed for Magento >=2.4.0
+
+### PHP
+PHP 8.1 is now installed by default for Magento >=2.4.4
+
+### Composer
+Composer v2 is now installed by default for Magento >= 2.4.2
+
+### Elasticsearch
+Version 7.6.x of Elasticsearch is now available for Magento 2.4.0.<br>
+If your Magento version is lower than 2.4.0 then version 6.x will be installed.<br>
+For version lower than 2.4.0, you can disable it and fall back to mysql search engine:
+```
+./bin/magento config:set catalog/search/engine mysql
+```
+Otherwise, you can also completely disable elasticsearch by installing this module: https://github.com/zepgram/module-disable-search-engine
+
 ## Issues
 
 ### Windows 10
 There is a known [issue with composer installation](https://github.com/zepgram/magento2-fast-vm/issues/70) on windows 10.<br>
 This issue could not be solved yet, and has already been reported 2 times.<br> 
-- It's related to the computer and BIOS configuration.
-- It's only with "nfs" setting for mount option.
+- This is related to the computer and BIOS configuration.
+- This is only reported on "NFS" mount option.
 
-To solve this, just try to set mount option to "rsync", then after full installation you should be able to fallback to NFS.
+To solve this, I recommend to set mount option to "rsync", then after full installation you should be able to fall back to NFS.
 
 ### Others
-- If you have trouble during installation please open a new issue on this repository.
+If you have trouble during installation please open a new issue on this GitHub repository.
