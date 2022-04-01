@@ -134,36 +134,16 @@ EOF
 
 
 # Fpm php configuration
-sed -i 's/;opcache.enable=.*/opcache.enable=1/' /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
-sed -i 's/;opcache.enable_cli=.*/opcache.enable_cli=1/' /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
-sed -i 's/;opcache.memory_consumption=.*/opcache.memory_consumption=512/' /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
-sed -i 's/;opcache.interned_strings_buffer=.*/opcache.interned_strings_buffer=4/' /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
-sed -i 's/;opcache.max_accelerated_files=.*/opcache.max_accelerated_files=60000/' /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
-sed -i 's/;opcache.validate_timestamps=.*/opcache.validate_timestamps=1/' /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
 sed -i 's/memory_limit = .*/memory_limit = 4G/' /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
 sed -i "s|;date.timezone =|date.timezone = ${PROJECT_TIME_ZONE}|" /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
 sed -i 's/max_execution_time = .*/max_execution_time = 1800/' /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
 sed -i 's/zlib.output_compression = .*/zlib.output_compression = On/' /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
-sed -i "s|;sendmail_path.*|sendmail_path=/usr/sbin/sendmail -t -i -f vagrant@$PROJECT_URL|" /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
-sed -i "s|;sendmail_from.*|sendmail_from=vagrant@$PROJECT_URL|" /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
-sed -i 's/smtp_port.*/smtp_port = 1025/' /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
-sed -i "s|;opcache.file_cache=|opcache.file_cache=/tmp/php-opcache/|" /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
 
 # Cli php configuration
-sed -i 's/;opcache.enable=.*/opcache.enable=1/' /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
-sed -i 's/;opcache.enable_cli=.*/opcache.enable_cli=1/' /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
-sed -i 's/;opcache.memory_consumption=.*/opcache.memory_consumption=512/' /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
-sed -i 's/;opcache.interned_strings_buffer=.*/opcache.interned_strings_buffer=4/' /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
-sed -i 's/;opcache.max_accelerated_files=.*/opcache.max_accelerated_files=60000/' /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
-sed -i 's/;opcache.validate_timestamps=.*/opcache.validate_timestamps=1/' /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
 sed -i 's/memory_limit = .*/memory_limit = 4G/' /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
 sed -i "s|;date.timezone =|date.timezone = ${PROJECT_TIME_ZONE}|" /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
 sed -i 's/max_execution_time = .*/max_execution_time = 1800/' /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
 sed -i 's/zlib.output_compression = .*/zlib.output_compression = On/' /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
-sed -i "s|;sendmail_path.*|sendmail_path=/usr/sbin/sendmail -t -i -f vagrant@$PROJECT_URL|" /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
-sed -i "s|;sendmail_from.*|sendmail_from=vagrant@$PROJECT_URL|" /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
-sed -i 's/smtp_port.*/smtp_port = 1025/' /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
-sed -i "s|;opcache.file_cache=|opcache.file_cache=/tmp/php-opcache/|" /etc/php/"$PROJECT_PHP_VERSION"/cli/php.ini
 
 touch /etc/tmpfiles.d/php-cli-opcache.conf;
 if ! grep -qF "/tmp/php-opcache" /etc/tmpfiles.d/php-cli-opcache.conf; then
