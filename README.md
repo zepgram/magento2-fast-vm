@@ -1,18 +1,28 @@
 # Fast Virtual Machine for Magento2
 
-[![vagrant](https://img.shields.io/badge/vagrant-debian:stretch-blue.svg?longCache=true&style=flat&label=vagrant&logo=vagrant)](https://app.vagrantup.com/debian/boxes/stretch64)
-[![dev-box](https://img.shields.io/badge/git/composer-blue.svg?longCache=true&style=flat&label=setup&logo=magento)](https://github.com/zepgram/magento2-fast-vm/blob/master/config.yaml.example)
-[![mount](https://img.shields.io/badge/nfs/rsync-blue.svg?longCache=true&style=flat&label=mount)](https://github.com/zepgram/magento2-fast-vm/releases)
-[![release](https://img.shields.io/badge/release-v1.5.0-blue.svg?longCache=true&style=flat&label=release)](https://github.com/zepgram/magento2-fast-vm/releases)
-[![license](https://img.shields.io/badge/license-MIT-blue.svg?longCache=true&style=flat&label=license)](https://github.com/zepgram/magento2-fast-vm/blob/master/LICENSE)
+[![vagrant](https://img.shields.io/badge/vagrant-debian:stretch-blue.svg?longCache=true&style=flat-square&label=vagrant&logo=vagrant)](https://app.vagrantup.com/debian/boxes/stretch64)
+[![install-git](https://img.shields.io/badge/git-blue.svg?longCache=true&style=flat-square&label=setup&logo=git)](https://github.com/zepgram/magento2-fast-vm/blob/master/config.yaml.example)
+[![install-composer](https://img.shields.io/badge/composer-blue.svg?longCache=true&style=flat-square&label=setup&logo=composer)](https://github.com/zepgram/magento2-fast-vm/blob/master/config.yaml.example)
+[![mount](https://img.shields.io/badge/nfs/rsync-blue.svg?longCache=true&style=flat-square&label=mount)](https://github.com/zepgram/magento2-fast-vm/releases)
+[![release](https://img.shields.io/github/v/release/zepgram/magento2-fast-vm?longCache=true&style=flat-square)](https://github.com/zepgram/magento2-fast-vm/releases)
+[![license](https://img.shields.io/github/license/zepgram/magento2-fast-vm?longCache=true&style=flat-square)](https://github.com/zepgram/magento2-fast-vm/blob/master/LICENSE)
 
-![windows](https://img.shields.io/badge/windows-ok-green.svg?longCache=true&style=flat&label=windows&logo=windows)
-![apple](https://img.shields.io/badge/mac-ok-green.svg?longCache=true&style=flat&label=mac&logo=apple)
-![linux](https://img.shields.io/badge/linux-ok-green.svg?longCache=true&style=flat&label=linux&logo=linux)
+![windows](https://img.shields.io/badge/windows-ok-green.svg?longCache=true&style=flat-square&label=windows&logo=windows)
+![apple](https://img.shields.io/badge/mac-ok-green.svg?longCache=true&style=flat-square&label=mac&logo=apple)
+![linux](https://img.shields.io/badge/linux-ok-green.svg?longCache=true&style=flat-square&label=linux&logo=linux)
 
 ![image](https://user-images.githubusercontent.com/16258478/68086496-0d43e100-fe4d-11e9-95ea-2bce3bee9884.png)&nbsp;&nbsp;&nbsp;&nbsp;![image](https://user-images.githubusercontent.com/16258478/68086436-70814380-fe4c-11e9-8ef4-6e39388cc679.png)&nbsp;&nbsp;&nbsp;&nbsp;![image](https://user-images.githubusercontent.com/16258478/68086442-7545f780-fe4c-11e9-8c5e-518ddba8735d.png)&nbsp;&nbsp;&nbsp;&nbsp;![image](https://user-images.githubusercontent.com/16258478/68086695-ba6b2900-fe4e-11e9-8f4f-68feb9bb0db2.png)&nbsp;&nbsp;&nbsp;&nbsp;![image](https://user-images.githubusercontent.com/16258478/68086427-62cbbe00-fe4c-11e9-83d5-24aec5b7c686.png)
 
 [![associate-developer](https://user-images.githubusercontent.com/16258478/121844932-02b62280-cce5-11eb-8351-726bbe9eed80.png)](https://www.youracclaim.com/badges/406cc91a-0fda-4a6f-846b-19d7f8b59e0a/public_url)
+
+Major version currently supported:<br>
+[![v2.1.*](https://img.shields.io/badge/v2.1-grey.svg?longCache=true&style=flat-square&logo=magento)](https://github.com/magento/magento2/tree/2.1)
+[![v2.2.*](https://img.shields.io/badge/v2.2-grey.svg?longCache=true&style=flat-square&logo=magento)](https://github.com/magento/magento2/tree/2.2)
+[![v2.3.*](https://img.shields.io/badge/v2.3-grey.svg?longCache=true&style=flat-square&logo=magento)](https://github.com/magento/magento2/tree/2.3)
+[![v2.4.*](https://img.shields.io/badge/v2.4-grey.svg?longCache=true&style=flat-square&logo=magento)](https://github.com/magento/magento2/tree/2.4)
+
+Latest supported version:<br>
+[![v2.4.4](https://img.shields.io/badge/v2.4.4-grey.svg?longCache=true&style=flat-square&logo=magento)](https://github.com/magento/magento2/tree/2.4.4)
 
 ## Requirements
 
@@ -203,15 +213,11 @@ Percona server 8.0 is now installed for Magento >=2.4.0
 PHP 8.1 is now installed by default for Magento >=2.4.4
 
 ### Composer
-Composer v2 is now installed by default for Magento >= 2.4.2
+Composer v2 is now installed by default for Magento >=2.4.2
 
 ### Elasticsearch
 Version 7.6.x of Elasticsearch is now available for Magento 2.4.0.<br>
-If your Magento version is lower than 2.4.0 then version 6.x will be installed.<br>
-For version lower than 2.4.0, you can disable it and fall back to mysql search engine:
-```
-./bin/magento config:set catalog/search/engine mysql
-```
+For lower Magento version, ES 6.x will be installed.<br>
 Otherwise, you can also completely disable elasticsearch by installing this module: https://github.com/zepgram/module-disable-search-engine
 
 ## Issues
