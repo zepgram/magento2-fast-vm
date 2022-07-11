@@ -37,7 +37,7 @@ end
 # Vagrant configure
 Vagrant.configure(2) do |config|
   # Virtual machine
-  config.vm.box = 'geerlingguy/debian9'
+  config.vm.box = 'geerlingguy/debian10'
   
   # Host manager configuration
   config.vm.define vmconf['host_name']
@@ -56,6 +56,9 @@ Vagrant.configure(2) do |config|
     v.customize ['modifyvm', :id, '--ioapic', 'on']
     # Enable symlink
     v.customize ['setextradata', :id, 'VBoxInternal2/SharedFoldersEnableSymlinksCreate/var/www/', '1']
+    # Resolve issue due to ssh lock https://github.com/hashicorp/vagrant/issues/11777
+    v.customize ["modifyvm", :id, "--uart1", "0x3F8", "4"]
+    v.customize ["modifyvm", :id, "--uartmode1", "file", File::NULL]
     # Uncomment option below to avoid issues with VirtualBox on Windows 10
     # v.gui=true
   end
@@ -75,7 +78,7 @@ Vagrant.configure(2) do |config|
     end
     # Linux NFS specification
     if OS.is_linux
-      config.vm.synced_folder hostDirectory, guestDirectory, create: true, :nfs => true, 
+      config.vm.synced_folder hostDirectory, guestDirectory, create: true, :nfs => true,
       linux__nfs_options: ['rw','no_subtree_check','all_squash','async'], nfs_version: 4, nfs_udp: false
     else
       config.vm.synced_folder hostDirectory, guestDirectory, create: true, :nfs => true

@@ -18,9 +18,9 @@ mysql -u root -ppassword -e "GRANT ALL PRIVILEGES ON * . * TO 'vagrant'@'localho
 mysql -u root -ppassword -e "GRANT ALL PRIVILEGES ON * . * TO 'vagrant'@'%';"
 mysql -u root -ppassword -e "FLUSH PRIVILEGES;"
 
-# Mysqld conf
-if ! grep -qF "innodb_buffer_pool_size" /etc/mysql/percona-server.conf.d/mysqld.cnf; then
-cat <<EOF >> /etc/mysql/percona-server.conf.d/mysqld.cnf
+# Mysql conf
+if ! grep -qF "innodb_buffer_pool_size" /etc/mysql/mysql.conf.d/mysqld.cnf; then
+cat <<EOF >> /etc/mysql/mysql.conf.d/mysqld.cnf
 # Innodb
 innodb_buffer_pool_size = 1G
 innodb_log_file_size = 256M
@@ -75,64 +75,6 @@ MAIL_END
 # -----------------------------------------------------------------------------------------------------
 
 
-# Redis conf
-cat <<'EOF' > /etc/systemd/system/rc-local.service
-[Unit]
-Description=/etc/rc.local Compatibility
-ConditionPathExists=/etc/rc.local
-
-[Service]
-Type=forking
-ExecStart=/etc/rc.local start
-TimeoutSec=0
-StandardOutput=tty
-RemainAfterExit=yes
-SysVStartPriority=99
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-cat <<'EOF' > /etc/rc.local
-#!/bin/sh -e
-#
-# rc.local
-#
-# This script is executed at the end of each multiuser runlevel.
-# Make sure that the script will "exit 0" on success or any other
-# value on error.
-#
-# In order to enable or disable this script just change the execution
-# bits.
-#
-# By default this script does nothing.
-
-exit 0
-EOF
-
-chmod +x /etc/rc.local
-systemctl enable rc-local
-
-echo never > /sys/kernel/mm/transparent_hugepage/enabled
-sysctl -w net.core.somaxconn=65535
-sysctl vm.overcommit_memory=1
-
-head -n -1 /etc/rc.local > /etc/rc.temp.local ; mv /etc/rc.temp.local /etc/rc.local
-cat <<'EOF' >> /etc/rc.local
-echo never > /sys/kernel/mm/transparent_hugepage/enabled
-sysctl -w net.core.somaxconn=65535
-
-exit 0
-EOF
-
-cat <<'EOF' >> /etc/sysctl.conf
-vm.overcommit_memory=1
-EOF
-
-
-# -----------------------------------------------------------------------------------------------------
-
-
 # Fpm php configuration
 sed -i 's/memory_limit = .*/memory_limit = 4G/' /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
 sed -i "s|;date.timezone =|date.timezone = ${PROJECT_TIME_ZONE}|" /etc/php/"$PROJECT_PHP_VERSION"/fpm/php.ini
@@ -168,7 +110,7 @@ rm -rf /home/vagrant/ssl && cd /home/vagrant
 
 # Nginx
 perl -ne 'if ( m|\#location.*php\$ \{| .. m|^\s*#\}| ) { s/#//g; } print' -i /etc/nginx/sites-available/default
-sed -i "s|fastcgi_pass unix:/var/run/php/.*|fastcgi_pass unix:/var/run/php/php${PROJECT_PHP_VERSION}-fpm.sock;|" /etc/nginx/sites-available/default
+sed -i "s|fastcgi_pass unix:/run/php/.*|fastcgi_pass unix:/run/php/php${PROJECT_PHP_VERSION}-fpm.sock;|" /etc/nginx/sites-available/default
 sed -i "s/With php-.*//" /etc/nginx/sites-available/default
 sed -i "s/fastcgi_pass 127.0.0.1:9000;//" /etc/nginx/sites-available/default
 sed -i 's/index index.html index.htm index.nginx-debian.html;/index index.php index.html index.htm index.nginx-debian.html;/' /etc/nginx/sites-available/default

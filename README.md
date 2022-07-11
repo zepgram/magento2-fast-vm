@@ -1,6 +1,6 @@
 # Fast Virtual Machine for Magento2
 
-[![vagrant](https://img.shields.io/badge/vagrant-debian:stretch-blue.svg?longCache=true&style=flat-square&label=vagrant&logo=vagrant)](https://app.vagrantup.com/debian/boxes/stretch64)
+[![vagrant](https://img.shields.io/badge/vagrant-debian:bullseye-blue.svg?longCache=true&style=flat-square&label=vagrant&logo=vagrant)](https://app.vagrantup.com/geerlingguy/boxes/debian10)
 [![install-git](https://img.shields.io/badge/git-blue.svg?longCache=true&style=flat-square&label=setup&logo=git)](https://github.com/zepgram/magento2-fast-vm/blob/master/config.yaml.example)
 [![install-composer](https://img.shields.io/badge/composer-blue.svg?longCache=true&style=flat-square&label=setup&logo=composer)](https://github.com/zepgram/magento2-fast-vm/blob/master/config.yaml.example)
 [![mount](https://img.shields.io/badge/nfs/rsync-blue.svg?longCache=true&style=flat-square&label=mount)](https://github.com/zepgram/magento2-fast-vm/releases)
@@ -44,7 +44,7 @@ Stable version >= 5.2.0
 Stable version >= 2.2.0
 
 1. Download the installer for your laptop operating system using the links below.
-    * [Vagrant download](https://www.vagrantup.com/downloads.html)
+    * [Vagrant download](https://www.vagrantup.com/downloads)
 1. Reboot your laptop if prompted to do so when installation completes.
 
 ## Configurations
