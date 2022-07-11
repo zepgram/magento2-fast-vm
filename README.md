@@ -1,6 +1,6 @@
 # Fast Virtual Machine for Magento2
 
-[![vagrant](https://img.shields.io/badge/vagrant-debian:bullseye-blue.svg?longCache=true&style=flat-square&label=vagrant&logo=vagrant)](https://app.vagrantup.com/geerlingguy/boxes/debian11)
+[![vagrant](https://img.shields.io/badge/vagrant-debian:bullseye-blue.svg?longCache=true&style=flat-square&label=vagrant&logo=vagrant)](https://app.vagrantup.com/geerlingguy/boxes/debian10)
 [![install-git](https://img.shields.io/badge/git-blue.svg?longCache=true&style=flat-square&label=setup&logo=git)](https://github.com/zepgram/magento2-fast-vm/blob/master/config.yaml.example)
 [![install-composer](https://img.shields.io/badge/composer-blue.svg?longCache=true&style=flat-square&label=setup&logo=composer)](https://github.com/zepgram/magento2-fast-vm/blob/master/config.yaml.example)
 [![mount](https://img.shields.io/badge/nfs/rsync-blue.svg?longCache=true&style=flat-square&label=mount)](https://github.com/zepgram/magento2-fast-vm/releases)
@@ -221,13 +221,6 @@ For lower Magento version, ES 6.x will be installed.<br>
 Otherwise, you can also completely disable elasticsearch by installing this module: https://github.com/zepgram/module-disable-search-engine
 
 ## Issues
-
-### Linux
-On version 1.6.0, I updated the machine to debian 11 bullseye, since I personally got this error:
-```shell
-mount.nfs: Connection timed out
-```
-Just fall back to default mount to avoid this issue, if you have any information about this issue please let me know.
 
 ### Windows 10
 There is a known [issue with composer installation](https://github.com/zepgram/magento2-fast-vm/issues/70) on windows 10.<br>

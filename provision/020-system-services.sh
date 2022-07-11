@@ -110,7 +110,7 @@ rm -rf /home/vagrant/ssl && cd /home/vagrant
 
 # Nginx
 perl -ne 'if ( m|\#location.*php\$ \{| .. m|^\s*#\}| ) { s/#//g; } print' -i /etc/nginx/sites-available/default
-sed -i "s|fastcgi_pass unix:/var/run/php/.*|fastcgi_pass unix:/var/run/php/php${PROJECT_PHP_VERSION}-fpm.sock;|" /etc/nginx/sites-available/default
+sed -i "s|fastcgi_pass unix:/run/php/.*|fastcgi_pass unix:/run/php/php${PROJECT_PHP_VERSION}-fpm.sock;|" /etc/nginx/sites-available/default
 sed -i "s/With php-.*//" /etc/nginx/sites-available/default
 sed -i "s/fastcgi_pass 127.0.0.1:9000;//" /etc/nginx/sites-available/default
 sed -i 's/index index.html index.htm index.nginx-debian.html;/index index.php index.html index.htm index.nginx-debian.html;/' /etc/nginx/sites-available/default

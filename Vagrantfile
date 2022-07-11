@@ -37,7 +37,7 @@ end
 # Vagrant configure
 Vagrant.configure(2) do |config|
   # Virtual machine
-  config.vm.box = 'geerlingguy/debian11'
+  config.vm.box = 'geerlingguy/debian10'
   
   # Host manager configuration
   config.vm.define vmconf['host_name']
