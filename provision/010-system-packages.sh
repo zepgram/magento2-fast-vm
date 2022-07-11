@@ -35,7 +35,7 @@ apt-get update -y && apt-get install -y \
   libsqlite3-dev libxml2-utils build-essential software-properties-common \
   postfix mailutils libsasl2-2 libsasl2-modules ca-certificates libnss3-tools \
   apt-transport-https openssl redis-server nginx \
-  python ruby ruby-dev openjdk-8-jdk openjdk-8-jre \
+  python ruby ruby-dev rubygems openjdk-11-jdk openjdk-11-jre \
   vim git git-flow
 
 # Php Repository

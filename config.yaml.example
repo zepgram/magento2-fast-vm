@@ -1,6 +1,6 @@
 vmconf:
   machine_name: 'Vagrant Magento 2'
-  network_ip: '192.168.200.50'
+  network_ip: '192.168.60.0'
   host_name: 'zepgram'
   memory: '4096'
   cpus: '1'

@@ -18,9 +18,9 @@ mysql -u root -ppassword -e "GRANT ALL PRIVILEGES ON * . * TO 'vagrant'@'localho
 mysql -u root -ppassword -e "GRANT ALL PRIVILEGES ON * . * TO 'vagrant'@'%';"
 mysql -u root -ppassword -e "FLUSH PRIVILEGES;"
 
-# Mysqld conf
-if ! grep -qF "innodb_buffer_pool_size" /etc/mysql/percona-server.conf.d/mysqld.cnf; then
-cat <<EOF >> /etc/mysql/percona-server.conf.d/mysqld.cnf
+# Mysql conf
+if ! grep -qF "innodb_buffer_pool_size" /etc/mysql/mysql.conf.d/mysqld.cnf; then
+cat <<EOF >> /etc/mysql/mysql.conf.d/mysqld.cnf
 # Innodb
 innodb_buffer_pool_size = 1G
 innodb_log_file_size = 256M
@@ -70,64 +70,6 @@ To: $PROJECT_GIT_EMAIL
 
 Test to validate catch email.
 MAIL_END
-
-
-# -----------------------------------------------------------------------------------------------------
-
-
-# Redis conf
-cat <<'EOF' > /etc/systemd/system/rc-local.service
-[Unit]
-Description=/etc/rc.local Compatibility
-ConditionPathExists=/etc/rc.local
-
-[Service]
-Type=forking
-ExecStart=/etc/rc.local start
-TimeoutSec=0
-StandardOutput=tty
-RemainAfterExit=yes
-SysVStartPriority=99
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-cat <<'EOF' > /etc/rc.local
-#!/bin/sh -e
-#
-# rc.local
-#
-# This script is executed at the end of each multiuser runlevel.
-# Make sure that the script will "exit 0" on success or any other
-# value on error.
-#
-# In order to enable or disable this script just change the execution
-# bits.
-#
-# By default this script does nothing.
-
-exit 0
-EOF
-
-chmod +x /etc/rc.local
-systemctl enable rc-local
-
-echo never > /sys/kernel/mm/transparent_hugepage/enabled
-sysctl -w net.core.somaxconn=65535
-sysctl vm.overcommit_memory=1
-
-head -n -1 /etc/rc.local > /etc/rc.temp.local ; mv /etc/rc.temp.local /etc/rc.local
-cat <<'EOF' >> /etc/rc.local
-echo never > /sys/kernel/mm/transparent_hugepage/enabled
-sysctl -w net.core.somaxconn=65535
-
-exit 0
-EOF
-
-cat <<'EOF' >> /etc/sysctl.conf
-vm.overcommit_memory=1
-EOF
 
 
 # -----------------------------------------------------------------------------------------------------

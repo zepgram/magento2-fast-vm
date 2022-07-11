@@ -9,3 +9,4 @@
 /extra/100-pre-build.sh
 /extra/120-post-build.sh
 /db-dump.sql.gz
+/*.log
