@@ -1,28 +1,26 @@
-# Fast Virtual Machine for Magento2
+# Virtual Machine for Magento2
 
 [![vagrant](https://img.shields.io/badge/vagrant-debian:bullseye-blue.svg?longCache=true&style=flat-square&label=vagrant&logo=vagrant)](https://app.vagrantup.com/geerlingguy/boxes/debian10)
 [![install-git](https://img.shields.io/badge/git-blue.svg?longCache=true&style=flat-square&label=setup&logo=git)](https://github.com/zepgram/magento2-fast-vm/blob/master/config.yaml.example)
 [![install-composer](https://img.shields.io/badge/composer-blue.svg?longCache=true&style=flat-square&label=setup&logo=composer)](https://github.com/zepgram/magento2-fast-vm/blob/master/config.yaml.example)
 [![mount](https://img.shields.io/badge/nfs/rsync-blue.svg?longCache=true&style=flat-square&label=mount)](https://github.com/zepgram/magento2-fast-vm/releases)
 [![release](https://img.shields.io/github/v/release/zepgram/magento2-fast-vm?longCache=true&style=flat-square)](https://github.com/zepgram/magento2-fast-vm/releases)
-[![license](https://img.shields.io/github/license/zepgram/magento2-fast-vm?longCache=true&style=flat-square)](https://github.com/zepgram/magento2-fast-vm/blob/master/LICENSE)
+[![license](https://img.shields.io/github/license/zepgram/magento2-fast-vm?longCache=true&style=flat-square&color=blue)](https://github.com/zepgram/magento2-fast-vm/blob/master/LICENSE)
 
-![windows](https://img.shields.io/badge/windows-ok-green.svg?longCache=true&style=flat-square&label=windows&logo=windows)
-![apple](https://img.shields.io/badge/mac-ok-green.svg?longCache=true&style=flat-square&label=mac&logo=apple)
-![linux](https://img.shields.io/badge/linux-ok-green.svg?longCache=true&style=flat-square&label=linux&logo=linux)
+Supported system:<br>
+![windows](https://img.shields.io/badge/windows-✓-success.svg?longCache=true&style=flat-square&label=windows&logo=windows)
+![apple](https://img.shields.io/badge/mac-✓-success.svg?longCache=true&style=flat-square&label=mac&logo=apple)
+![linux](https://img.shields.io/badge/linux-✓-success.svg?longCache=true&style=flat-square&label=linux&logo=linux)
 
-![image](https://user-images.githubusercontent.com/16258478/68086496-0d43e100-fe4d-11e9-95ea-2bce3bee9884.png)&nbsp;&nbsp;&nbsp;&nbsp;![image](https://user-images.githubusercontent.com/16258478/68086436-70814380-fe4c-11e9-8ef4-6e39388cc679.png)&nbsp;&nbsp;&nbsp;&nbsp;![image](https://user-images.githubusercontent.com/16258478/68086442-7545f780-fe4c-11e9-8c5e-518ddba8735d.png)&nbsp;&nbsp;&nbsp;&nbsp;![image](https://user-images.githubusercontent.com/16258478/68086695-ba6b2900-fe4e-11e9-8f4f-68feb9bb0db2.png)&nbsp;&nbsp;&nbsp;&nbsp;![image](https://user-images.githubusercontent.com/16258478/68086427-62cbbe00-fe4c-11e9-83d5-24aec5b7c686.png)
+Supported release:<br>
+[![v2.1.*](https://img.shields.io/badge/v2.1-grey.svg?longCache=true&style=flat-square&logo=magento&color=9b3f3f)](https://github.com/magento/magento2/tree/2.1)
+[![v2.2.*](https://img.shields.io/badge/v2.2-grey.svg?longCache=true&style=flat-square&logo=magento&color=3f609b)](https://github.com/magento/magento2/tree/2.2)
+[![v2.3.*](https://img.shields.io/badge/v2.3-grey.svg?longCache=true&style=flat-square&logo=magento&color=858256)](https://github.com/magento/magento2/tree/2.3)
+[![v2.4.*](https://img.shields.io/badge/v2.4-grey.svg?longCache=true&style=flat-square&logo=magento&color=36853c)](https://github.com/magento/magento2/tree/2.4)
 
-[![associate-developer](https://user-images.githubusercontent.com/16258478/121844932-02b62280-cce5-11eb-8351-726bbe9eed80.png)](https://www.youracclaim.com/badges/406cc91a-0fda-4a6f-846b-19d7f8b59e0a/public_url)
+![technical-stack](https://user-images.githubusercontent.com/16258478/182571024-28eed354-5747-482d-a078-a6fb15b4a35d.jpg)<br>
 
-Major version currently supported:<br>
-[![v2.1.*](https://img.shields.io/badge/v2.1-grey.svg?longCache=true&style=flat-square&logo=magento)](https://github.com/magento/magento2/tree/2.1)
-[![v2.2.*](https://img.shields.io/badge/v2.2-grey.svg?longCache=true&style=flat-square&logo=magento)](https://github.com/magento/magento2/tree/2.2)
-[![v2.3.*](https://img.shields.io/badge/v2.3-grey.svg?longCache=true&style=flat-square&logo=magento)](https://github.com/magento/magento2/tree/2.3)
-[![v2.4.*](https://img.shields.io/badge/v2.4-grey.svg?longCache=true&style=flat-square&logo=magento)](https://github.com/magento/magento2/tree/2.4)
-
-Latest supported version:<br>
-[![v2.4.4](https://img.shields.io/badge/v2.4.4-grey.svg?longCache=true&style=flat-square&logo=magento)](https://github.com/magento/magento2/tree/2.4.4)
+[![associate-developer](https://user-images.githubusercontent.com/16258478/182574034-662e3aeb-318a-496d-9b65-9a927e8782e0.png)](https://www.youracclaim.com/badges/406cc91a-0fda-4a6f-846b-19d7f8b59e0a/public_url)
 
 ## Requirements
 
