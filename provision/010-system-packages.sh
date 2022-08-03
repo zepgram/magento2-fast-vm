@@ -14,6 +14,8 @@ echo '--- Install system packages ---'
 # Mysql settings
 debconf-set-selections <<< "mysql-server mysql-server/root_password password password"
 debconf-set-selections <<< "mysql-server mysql-server/root_password_again password password"
+echo "percona-server-server-5.7 percona-server-server-5.7/root-pass password password" | debconf-set-selections
+echo "percona-server-server-5.7 percona-server-server-5.7/re-root-pass password password" | debconf-set-selections
 
 # Postfix settings
 debconf-set-selections <<< "postfix postfix/mailname string $PROJECT_URL"
@@ -67,6 +69,8 @@ apt-get update -y && apt-get install -y \
 if $(dpkg --compare-versions "${PROJECT_PHP_VERSION}" "lt" "7.2"); then
   apt-get install -y php"${PROJECT_PHP_VERSION}"-mcrypt
 fi
+
+# MySQL
 if $(dpkg --compare-versions "${PROJECT_VERSION}" "ge" "2.4.0"); then
   percona-release setup ps80
   apt-get install -y percona-server-server
