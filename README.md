@@ -76,7 +76,7 @@ If your ssh key has been created with a passphrase, please create another one.
 Parent Node  |  Name  |  Default Value  |  Allowed Value  |  Is optional  |  Description
 | --- | --- | --- | --- | --- |---
 | vmconf |  machine_name |  Vagrant Magento 2 | string | no | Vagrant machine name
-| |  network_ip |  192.168.200.50 | IP address |  no  | Accessible IP address /etc/hosts
+| |  network_ip |  192.168.60.0 | IP address |  no  | Accessible IP address /etc/hosts
 | |  host_name |  zepgram | string |  no |  Virtual host name
 | |  memory |  4096  |  number  |  no |  RAM allocated
 | |  cpus |  1 |  number  |  no |  CPU allocated
@@ -92,7 +92,7 @@ Parent Node  |  Name  |  Default Value  |  Allowed Value  |  Is optional  |  Des
 | magento |  url |  dev.magento.com  | url |  no |  Magento site host name
 | |  source |  composer | composer / (master/develop..) |  no |  Define source installation. On git install set the branch name to clone.
 | |  edition |  community | community / enterprise |  no |  Magento project edition
-| |  version |  2.4.4 |  >=2.2 |  no |  Magento version release
+| |  version |  2.4.5 |  >=2.2 |  no |  Magento version release
 | |  php_version |  default | default / 7.x |  no |  PHP version
 | |  sample |  true | true / false |  no |  Install sample data
 | |  mode |  developer | developer / production |  no |  Magento execution mode
@@ -179,7 +179,7 @@ Disable cron:
 - elasticsearch
 - grunt
 - postfix
-- mailcatcher
+- mailhog
 - pestle
 - magereun
 - adminer
@@ -197,8 +197,8 @@ Disable cron:
   * user: vagrant
   * pass: vagrant
   * name: magento
-* Mailcatcher
-  * url: [network_ip]:1080
+* Mailhog
+  * url: [network_ip]:8025
 * Adminer
   * url: [network_ip]/adminer
 * Phpinfo
