@@ -42,30 +42,21 @@ echo 'relayhost = 127.0.0.1:1025
 mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128' | tee -a /etc/postfix/main.cf
 
 # Configuration on booting
-cat <<'EOF' > /etc/init.d/mailcatcher
-#!/bin/sh
+cat <<'EOF' > /etc/systemd/system/mailhog.service
+[Unit]
+Description=MailHog service
 
-### BEGIN INIT INFO
-# Provides:          mailcatcher
-# Required-Start:    $remote_fs $syslog
-# Required-Stop:     $remote_fs $syslog
-# Default-Start:     2 3 4 5
-# Default-Stop:      0 1 6
-# Short-Description: Start daemon at boot time
-# Description:       Enable service provided by daemon.
-### END INIT INFO
+[Service]
+ExecStart=/usr/local/bin/mailhog
 
-set -x
-lsof -ti :1025 | xargs --no-run-if-empty kill -9
-mailcatcher --http-ip=0.0.0.0
+[Install]
+WantedBy=multi-user.target
 EOF
-chmod +x /etc/init.d/mailcatcher
-update-rc.d mailcatcher defaults
+systemctl start mailhog
+systemctl enable mailhog
 
-lsof -ti :1025 | xargs --no-run-if-empty kill -9
-mailcatcher --http-ip=0.0.0.0
 /usr/sbin/sendmail -t -i -f $PROJECT_GIT_EMAIL <<MAIL_END
-Subject: Vagrant: MailCatcher
+Subject: Vagrant: MailHog
 To: $PROJECT_GIT_EMAIL
 
 Test to validate catch email.

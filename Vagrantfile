@@ -155,7 +155,7 @@ Vagrant machine ready to use for #{git['name']}
    magento         http://#{magento['url']}
    phpinfo         http://#{vmconf['network_ip']}/php
    adminer         http://#{vmconf['network_ip']}/adminer
-   mailcatcher     http://#{vmconf['network_ip']}:1080
+   mailhog         http://#{vmconf['network_ip']}:8025
 "
 
   # Triggers

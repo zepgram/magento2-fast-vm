@@ -37,7 +37,7 @@ apt-get update -y && apt-get install -y \
   libsqlite3-dev libxml2-utils build-essential software-properties-common \
   postfix mailutils libsasl2-2 libsasl2-modules ca-certificates libnss3-tools \
   apt-transport-https openssl redis-server nginx \
-  python ruby ruby-dev rubygems openjdk-11-jdk openjdk-11-jre \
+  python golang-go openjdk-11-jdk openjdk-11-jre \
   vim git git-flow
 
 # Php Repository
@@ -95,9 +95,9 @@ wget -P ~/ https://www.thawte.com/roots/thawte_Premium_Server_CA.pem && \
     mv ~/thawte_Premium_Server_CA.pem /usr/local/share/ca-certificates/thawte_Premium_Server_CA.crt && \
     update-ca-certificates;
 
-# Mailcatcher
-gem install mime-types --version "< 3" --no-ri --no-rdoc
-gem install mailcatcher --no-ri --no-rdoc
+# Mailhog
+go get github.com/mailhog/MailHog
+ln -sfn /root/go/bin/MailHog /usr/local/bin/mailhog
 
 # Grunt
 curl -sL https://deb.nodesource.com/setup_10.x | bash -
