@@ -122,4 +122,5 @@ curl -o /etc/bash_completion.d/magento2-bash-completion https://raw.githubuserco
 source /etc/bash_completion.d/magento2-bash-completion
 
 # Clean
+apt-get purge grub-pc -yq
 apt-get -y upgrade && apt-get -y clean autoclean && apt-get -y autoremove
