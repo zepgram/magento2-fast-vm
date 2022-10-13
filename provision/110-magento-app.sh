@@ -34,6 +34,9 @@ else
 	rm -f "$PROJECT_BUILD"/app/etc/config.php "$PROJECT_BUILD"/app/etc/env.php
 fi
 
+echo '--- composer allow-plugins ---'
+sudo -u vagrant composer config -d "$PROJECT_BUILD" --no-interaction --no-plugins allow-plugins.*/* true
+
 # Composer install
 sudo -u vagrant COMPOSER_MEMORY_LIMIT=-1 composer install -d "$PROJECT_BUILD" --no-progress --no-interaction
 
