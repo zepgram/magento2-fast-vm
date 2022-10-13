@@ -34,10 +34,15 @@ else
 	rm -f "$PROJECT_BUILD"/app/etc/config.php "$PROJECT_BUILD"/app/etc/env.php
 fi
 
-echo '--- composer allow-plugins ---'
-sudo -u vagrant composer config -d "$PROJECT_BUILD" --no-interaction --no-plugins allow-plugins.*/* true
-
 # Composer install
+echo '--- composer allow-plugins ---'
+COMPOSER_VERSION=$(composer -V | cut -d " " -f 3);
+if $(dpkg --compare-versions "${COMPOSER_VERSION}" "ge" "2.0"); then
+  sudo -u vagrant composer config -d "$PROJECT_BUILD" --no-interaction --no-plugins "allow-plugins.magento/*" true
+  sudo -u vagrant composer config -d "$PROJECT_BUILD" --no-interaction --no-plugins "allow-plugins.laminas/laminas-dependency-plugin" true
+  sudo -u vagrant composer config -d "$PROJECT_BUILD" --no-interaction --no-plugins "allow-plugins.dealerdirect/phpcodesniffer-composer-installer" true
+  sudo -u vagrant composer config -d "$PROJECT_BUILD" --no-interaction --no-plugins "allow-plugins.magento-composer-installer" true
+fi
 sudo -u vagrant COMPOSER_MEMORY_LIMIT=-1 composer install -d "$PROJECT_BUILD" --no-progress --no-interaction
 
 # Rsync directory
