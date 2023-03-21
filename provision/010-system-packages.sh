@@ -49,12 +49,20 @@ wget https://repo.percona.com/apt/percona-release_latest.$(lsb_release -sc)_all.
 dpkg -i percona-release_latest.$(lsb_release -sc)_all.deb
 rm -f percona-release_latest.$(lsb_release -sc)_all.deb
 
-# Elasticsearch repository
-wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
-if $(dpkg --compare-versions "${PROJECT_VERSION}" "ge" "2.4.0"); then
-  echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | tee /etc/apt/sources.list.d/elastic-7.x.list
+if [ "$PROJECT_SEARCH_ENGINE" == "opensearch" ]; then
+  # Open search repository
+  curl -o- https://artifacts.opensearch.org/publickeys/opensearch.pgp | sudo apt-key add -
+  echo "deb https://artifacts.opensearch.org/releases/bundle/opensearch/2.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/opensearch-2.x.list
 else
-  echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | tee /etc/apt/sources.list.d/elastic-6.x.list
+  # Elasticsearch repository
+  wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
+  if $(dpkg --compare-versions "${PROJECT_VERSION}" "ge" "2.4.6"); then
+    echo "deb https://artifacts.elastic.co/packages/8.x/apt stable main" | tee /etc/apt/sources.list.d/elastic-8.x.list
+  elif $(dpkg --compare-versions "${PROJECT_VERSION}" "ge" "2.4.0"); then
+    echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | tee /etc/apt/sources.list.d/elastic-7.x.list
+  else
+    echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | tee /etc/apt/sources.list.d/elastic-6.x.list
+  fi
 fi
 
 # PHP and additional
@@ -65,9 +73,18 @@ apt-get update -y && apt-get install -y \
   php"${PROJECT_PHP_VERSION}"-xml php"${PROJECT_PHP_VERSION}"-xml php"${PROJECT_PHP_VERSION}"-bcmath \
   php"${PROJECT_PHP_VERSION}"-mysql php"${PROJECT_PHP_VERSION}"-sqlite3 php"${PROJECT_PHP_VERSION}"-fpm \
   php"${PROJECT_PHP_VERSION}"-memcache php"${PROJECT_PHP_VERSION}"-redis php"${PROJECT_PHP_VERSION}"-opcache \
-  php"${PROJECT_PHP_VERSION}"-sockets elasticsearch
+  php"${PROJECT_PHP_VERSION}"-sockets
 if $(dpkg --compare-versions "${PROJECT_PHP_VERSION}" "lt" "7.2"); then
   apt-get install -y php"${PROJECT_PHP_VERSION}"-mcrypt
+fi
+
+# Search engine
+if [ "$PROJECT_SEARCH_ENGINE" == "opensearch" ]; then
+  apt-get install -y opensearch=2.5.0
+  # remove from apt list to avoid self-update
+  rm -f /etc/apt/sources.list.d/opensearch-2.x.list
+else
+  apt-get install -y elasticsearch
 fi
 
 # MySQL

@@ -86,10 +86,16 @@ if $(dpkg --compare-versions "${PROJECT_VERSION}" "gt" "2.2"); then
   sudo -u vagrant "$PROJECT_PATH"/bin/magento config:set "web/secure/use_in_adminhtml" "1"
   sudo -u vagrant "$PROJECT_PATH"/bin/magento config:set "web/secure/use_in_frontend" "1"
   sudo -u vagrant "$PROJECT_PATH"/bin/magento config:set "web/secure/enable_hsts" "1"
-  if $(dpkg --compare-versions "${PROJECT_VERSION}" "lt" "2.3.5-p2"); then
-    sudo -u vagrant "$PROJECT_PATH"/bin/magento config:set "catalog/search/engine" "elasticsearch6"
+  if [ "$PROJECT_SEARCH_ENGINE" == "opensearch" ]; then
+    sudo -u vagrant "$PROJECT_PATH"/bin/magento config:set "catalog/search/engine" "opensearch"
   else
-    sudo -u vagrant "$PROJECT_PATH"/bin/magento config:set "catalog/search/engine" "elasticsearch7"
+    if $(dpkg --compare-versions "${PROJECT_VERSION}" "ge" "2.4.6"); then
+      sudo -u vagrant "$PROJECT_PATH"/bin/magento config:set "catalog/search/engine" "elasticsearch8"
+    elif $(dpkg --compare-versions "${PROJECT_VERSION}" "ge" "2.4.0"); then
+      sudo -u vagrant "$PROJECT_PATH"/bin/magento config:set "catalog/search/engine" "elasticsearch7"
+    else
+      sudo -u vagrant "$PROJECT_PATH"/bin/magento config:set "catalog/search/engine" "elasticsearch6"
+    fi
   fi
 else
   # Force https on unsecure request for older versions

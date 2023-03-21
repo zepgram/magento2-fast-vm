@@ -45,6 +45,11 @@ if $(dpkg --compare-versions "${COMPOSER_VERSION}" "ge" "2.0"); then
 fi
 sudo -u vagrant COMPOSER_MEMORY_LIMIT=-1 composer install -d "$PROJECT_BUILD" --no-progress --no-interaction
 
+# Handle two factor auth deactivation
+if [ "$PROJECT_DISABLE_TWO_FACTOR_AUTH" == "true" ]; then
+  sudo -u vagrant COMPOSER_MEMORY_LIMIT=-1 composer require -d "$PROJECT_BUILD" --no-progress --no-interaction markshust/magento2-module-disabletwofactorauth
+fi
+
 # Rsync directory
 if [ "$PROJECT_BUILD" != "$PROJECT_PATH" ]; then
 	rsync -a --remove-source-files "$PROJECT_BUILD"/ "$PROJECT_PATH"/ || true
@@ -52,7 +57,7 @@ fi
 
 # Copy auth.json for sample installation
 if [ ! -f "$PROJECT_PATH/auth.json" ] && [ -f /home/vagrant/auth.json ]; then
-    sudo -u vagrant cp /home/vagrant/auth.json "$PROJECT_PATH"/auth.json
+  sudo -u vagrant cp /home/vagrant/auth.json "$PROJECT_PATH"/auth.json
 fi
 
 # Symlink
@@ -61,6 +66,12 @@ ln -sfn "$PROJECT_PATH" /var/www/html/"$PROJECT_NAME"
 
 # Apply basic rights on regular mount
 chown -fR :www-data "$PROJECT_PATH"
+
+# Search engine argument
+SEARCH_ENGINE=""
+if $(dpkg --compare-versions "${PROJECT_VERSION}" "ge" "2.4.6"); then
+  SEARCH_ENGINE="--search-engine=${PROJECT_SEARCH_ENGINE}"
+fi
 
 # Run install
 chmod +x "$PROJECT_PATH"/bin/magento
@@ -81,7 +92,8 @@ sudo -u vagrant "$PROJECT_PATH"/bin/magento setup:install \
 --currency="${PROJECT_CURRENCY}" \
 --timezone="${PROJECT_TIME_ZONE}" \
 --use-rewrites="1" \
---backend-frontname="admin"
+--backend-frontname="admin" \
+$SEARCH_ENGINE
 
 # Install sample data
 if [ "$PROJECT_SAMPLE" == "true" ]; then

@@ -13,7 +13,10 @@ echo '--- Environment variables ---'
 
 # Set php version
 PROJECT_VERSION=${12};
-PROJECT_PHP_VERSION='8.1';
+PROJECT_PHP_VERSION='8.2';
+if $(dpkg --compare-versions "${PROJECT_VERSION}" "lt" "2.4.6"); then
+  PROJECT_PHP_VERSION='8.1';
+fi
 if $(dpkg --compare-versions "${PROJECT_VERSION}" "lt" "2.4.4"); then
   PROJECT_PHP_VERSION='7.4';
 fi
@@ -28,6 +31,18 @@ if $(dpkg --compare-versions "${PROJECT_VERSION}" "lt" "2.2"); then
 fi
 if [ "${9}" != 'default' ]; then
   PROJECT_PHP_VERSION="${9}"
+fi
+
+# search engine
+SEARCH_ENGINE=${21}
+if [ "$SEARCH_ENGINE" != "opensearch" ] || $(dpkg --compare-versions "${PROJECT_VERSION}" "lt" "2.4.6"); then
+ SEARCH_ENGINE='elasticsearch'
+fi
+
+# two factor auth
+DISABLE_TWO_FACTOR_AUTH=${22}
+if [ "$DISABLE_TWO_FACTOR_AUTH" == "true" ] && $(dpkg --compare-versions "${PROJECT_VERSION}" "lt" "2.4.0"); then
+ DISABLE_TWO_FACTOR_AUTH='false'
 fi
 
 # Set environment variable
@@ -54,6 +69,8 @@ export PROJECT_TIME_ZONE="${17}"
 export PROJECT_CRYPT_KEY="${18}"
 export PROJECT_MOUNT="${19}"
 export PROJECT_MOUNT_PATH="${20}"
+export PROJECT_SEARCH_ENGINE="${SEARCH_ENGINE}"
+export PROJECT_DISABLE_TWO_FACTOR_AUTH="${DISABLE_TWO_FACTOR_AUTH}"
 EOF
 source /etc/profile.d/env.sh
 
@@ -66,7 +83,7 @@ fi
 
 # Patch extra files
 sudo -u vagrant mkdir -p /home/vagrant/extra
-if [[ ! $(dpkg-query -l 'dos2unix') ]]; then 
+if [[ ! $(dpkg-query -l 'dos2unix') ]]; then
  	sudo apt-get install -y dos2unix
 fi
 if [ -f /home/vagrant/extra/001-env.sh ]; then
