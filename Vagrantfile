@@ -38,12 +38,12 @@ end
 Vagrant.configure(2) do |config|
   # Virtual machine
   config.vm.box = 'geerlingguy/debian10'
-  
+
   # Host manager configuration
   config.vm.define vmconf['host_name']
   config.vm.hostname = vmconf['host_name']
   config.vm.network "private_network", ip: vmconf['network_ip']
-  
+
   # VBox config
   config.vm.provider 'virtualbox' do |v|
     v.name = vmconf['machine_name']
@@ -88,7 +88,7 @@ Vagrant.configure(2) do |config|
   end
   # Rsync mount
   if vmconf['mount'] == 'rsync'
-    config.vm.synced_folder hostDirectory, guestDirectory, create: true, type: 'rsync', 
+    config.vm.synced_folder hostDirectory, guestDirectory, create: true, type: 'rsync',
     rsync__args: ['--archive', '-z', '--copy-links'],
     rsync__exclude: rsync_exclude
   end
@@ -114,14 +114,15 @@ Vagrant.configure(2) do |config|
   if File.file?('db-dump.sql.gz')
     config.vm.provision 'file', source: 'db-dump.sql.gz', destination: '/home/vagrant/extra/db-dump.sql.gz', run: 'always'
   end
-  
+
   # Environment provisioning
   config.vm.provision 'shell', path: 'provision/001-system-env.sh', run: 'always', keep_color: true, args: [
     projectName, composer['username'], composer['password'],
     git['name'], git['email'], git['host'], git['repository'],
     magento['url'], magento['php_version'], magento['source'], magento['edition'],
     magento['version'], magento['sample'], magento['mode'], magento['currency'],
-    magento['language'], magento['time_zone'], magento['crypt_key'], vmconf['mount'], vmconf['path']
+    magento['language'], magento['time_zone'], magento['crypt_key'], vmconf['mount'], vmconf['path'],
+    magento['search_engine'], magento['disable_two_factor_auth']
   ]
 
   # Shell provisioning
@@ -146,7 +147,7 @@ Vagrant.configure(2) do |config|
   config.ssh.forward_agent = true
 
   # Post up message
-  config.vm.post_up_message = 
+  config.vm.post_up_message =
 "
 ---------------------------------------------------------
 Vagrant machine ready to use for #{git['name']}

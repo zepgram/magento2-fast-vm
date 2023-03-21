@@ -116,6 +116,24 @@ sed -i 's/pm.max_spare_servers = .*/pm.max_spare_servers = 5/' /etc/php/"$PROJEC
 # -----------------------------------------------------------------------------------------------------
 
 
+# Open search
+if [ "$PROJECT_SEARCH_ENGINE" == "opensearch" ]; then
+# Check if the configuration already exists in the opensearch.yml file
+if grep -q "plugins.security.disabled" /etc/opensearch/opensearch.yml; then
+  sed -i "s/plugins.security.disabled: .*/plugins.security.disabled: true/" /etc/opensearch/opensearch.yml
+else
+  # Add the configuration to the opensearch.yml file
+  echo "plugins.security.disabled: true" >> /etc/opensearch/opensearch.yml
+fi
+sed -i "s/#network.host: .*/network.host: 127.0.0.1/" /etc/opensearch/opensearch.yml
+sed -i "s/#http.port: .*/http.port: 9200/" /etc/opensearch/opensearch.yml
+sed -i "s|#JAVA_HOME.*|JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre|" /etc/default/opensearch
+
+/bin/systemctl daemon-reload
+/bin/systemctl enable opensearch.service
+/bin/systemctl start opensearch.service
+
+else
 # Elastic search
 sed -i "s/#network.host: .*/network.host: 127.0.0.1/" /etc/elasticsearch/elasticsearch.yml
 sed -i "s/#http.port: .*/http.port: 9200/" /etc/elasticsearch/elasticsearch.yml
@@ -124,6 +142,10 @@ if $(dpkg --compare-versions "${PROJECT_VERSION}" "ge" "2.4.0"); then
 else
   sed -i "s|#JAVA_HOME.*|JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java|" /etc/default/elasticsearch
 fi
+if $(dpkg --compare-versions "${PROJECT_VERSION}" "ge" "2.4.6"); then
+  sed -i "s/xpack.security.enabled: .*/xpack.security.enabled: false/" /etc/elasticsearch/elasticsearch.yml
+fi
+
 mkdir /etc/systemd/system/elasticsearch.service.d
 cat <<'EOF' > /etc/systemd/system/elasticsearch.service.d/override.conf
 [Service]
@@ -133,7 +155,7 @@ EOF
 /bin/systemctl daemon-reload
 /bin/systemctl enable elasticsearch.service
 /bin/systemctl start elasticsearch.service
-
+fi
 
 # -----------------------------------------------------------------------------------------------------
 

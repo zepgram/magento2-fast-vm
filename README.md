@@ -18,7 +18,7 @@ Supported release:<br>
 [![v2.3.*](https://img.shields.io/badge/v2.3-grey.svg?longCache=true&style=flat-square&logo=magento&color=858256)](https://github.com/magento/magento2/tree/2.3)
 [![v2.4.*](https://img.shields.io/badge/v2.4-grey.svg?longCache=true&style=flat-square&logo=magento&color=36853c)](https://github.com/magento/magento2/tree/2.4)
 
-![technical-stack](https://user-images.githubusercontent.com/16258478/182571024-28eed354-5747-482d-a078-a6fb15b4a35d.jpg)<br>
+![technical-stack](https://user-images.githubusercontent.com/16258478/226653131-4f8a5b30-318d-46c8-af3e-d5dac6c90c12.jpg)<br>
 
 [![associate-developer](https://user-images.githubusercontent.com/16258478/182574034-662e3aeb-318a-496d-9b65-9a927e8782e0.png)](https://www.youracclaim.com/badges/406cc91a-0fda-4a6f-846b-19d7f8b59e0a/public_url)
 
@@ -73,33 +73,35 @@ If your ssh key has been created with a passphrase, please create another one.
 1. Finally, run: ``vagrant ssh`` to access guest machine
 
 ### Yaml config overview
-Parent Node  |  Name  |  Default Value  |  Allowed Value  |  Is optional  |  Description
-| --- | --- | --- | --- | --- |---
-| vmconf |  machine_name |  Vagrant Magento 2 | string | no | Vagrant machine name
-| |  network_ip |  192.168.60.0 | IP address |  no  | Accessible IP address /etc/hosts
-| |  host_name |  zepgram | string |  no |  Virtual host name
-| |  memory |  4096  |  number  |  no |  RAM allocated
-| |  cpus |  1 |  number  |  no |  CPU allocated
-| |  mount |  nfs | nfs / rsync / default |  no |  Mount strategy
-| |  path |  root | app / root |  no |  Mount whole directory or `app/` only
-| |  provision |  all | all / system / magento | no |  Define script provision
-| composer |  username |  magentoUsernameKey | string |  no |  <a href="https://marketplace.magento.com/customer/accessKeys/" target="_blank">Composer auth user</a>
-| |  password |  magentoPasswordKey | string |  no |  <a href="https://marketplace.magento.com/customer/accessKeys/" target="_blank">Composer auth password</a>
-| git |  name |  John Doe | string |  yes |  Git user name
-| |  email |  john@doe.com | email |  yes |  Git user email
-| |  host |  github.com | url |  yes  |  Git host server name
-| |  repository |  ssh://git@github.com:%.git | git repository |  yes  | Define repository to clone
-| magento |  url |  dev.magento.com  | url |  no |  Magento site host name
-| |  source |  composer | composer / (master/develop..) |  no |  Define source installation. On git install set the branch name to clone.
-| |  edition |  community | community / enterprise |  no |  Magento project edition
-| |  version |  2.4.5 |  >=2.2 |  no |  Magento version release
-| |  php_version |  default | default / 7.x |  no |  PHP version
-| |  sample |  true | true / false |  no |  Install sample data
-| |  mode |  developer | developer / production |  no |  Magento execution mode
-| |  currency |  USD | <a href="https://en.wikipedia.org/wiki/ISO_4217#Active_codes" target="_blank">ISO 4217</a> |  no |  Default currency
-| |  language |  en_US |  <a href="https://www.iso.org/iso-639-language-codes.html" target="_blank">ISO 639-1</a> + <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank">ISO 3166</a> |  no |  Default language
-| |  time_zone | America/New_York | <a href="https://www.php.net/manual/en/timezones.php" target="_blank">timezone</a> |  no |  Default timezone
-| |  crypt_key |  -  | string |  yes |  Crypt key form app/etc/env.php for db-dump.sql.gz (db import)
+Parent Node  | Name          |  Default Value |  Allowed Value  |  Is optional  |  Description
+| --- |---------------| -- | --- | --- |---
+| vmconf | machine_name  |  Vagrant Magento 2 | string | no | Vagrant machine name
+| | network_ip    |  192.168.60.0 | IP address |  no  | Accessible IP address /etc/hosts
+| | host_name     |  zepgram | string |  no |  Virtual host name
+| | memory        |  4096 |  number  |  no |  RAM allocated
+| | cpus          |  1 |  number  |  no |  CPU allocated
+| | mount         |  nfs | nfs / rsync / default |  no |  Mount strategy
+| | path          |  root | app / root |  no |  Mount whole directory or `app/` only
+| | provision     |  all | all / system / magento | no |  Define script provision
+| composer | username      |  magentoUsernameKey | string |  no |  <a href="https://marketplace.magento.com/customer/accessKeys/" target="_blank">Composer auth user</a>
+| | password      |  magentoPasswordKey | string |  no |  <a href="https://marketplace.magento.com/customer/accessKeys/" target="_blank">Composer auth password</a>
+| git | name          |  John Doe | string |  yes |  Git user name
+| | email         |  john@doe.com | email |  yes |  Git user email
+| | host          |  github.com | url |  yes  |  Git host server name
+| | repository    |  ssh://git@github.com:%.git | git repository |  yes  | Define repository to clone
+| magento | url           |  dev.magento.com | url |  no |  Magento site host name
+| | source        |  composer | composer / (master/develop..) |  no |  Define source installation. On git install set the branch name to clone.
+| | edition       |  community | community / enterprise |  no |  Magento project edition
+| | version       |  2.4.5 |  >=2.2 |  no |  Magento version release
+| | php_version   |  default | default / 7.x / 8.x |  no |  PHP version
+| | sample        |  true | true / false |  no |  Install sample data
+| | mode          |  developer | developer / production |  no |  Magento execution mode
+| | currency      |  USD | <a href="https://en.wikipedia.org/wiki/ISO_4217#Active_codes" target="_blank">ISO 4217</a> |  no |  Default currency
+| | language      |  en_US |  <a href="https://www.iso.org/iso-639-language-codes.html" target="_blank">ISO 639-1</a> + <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank">ISO 3166</a> |  no |  Default language
+| | time_zone     | America/New_York | <a href="https://www.php.net/manual/en/timezones.php" target="_blank">timezone</a> |  no |  Default timezone
+| | crypt_key     |  - | string |  yes |  Crypt key form app/etc/env.php for db-dump.sql.gz (db import)
+| | search_engine |  opensearch  | opensearch / elasticsearch |  false |  Search engine for catalog search
+| | disable_two_factor_auth |  true  | true / false |  false |  Disable 2 factor authentication for admin access
 
 ### Path
 * <b>root directory:</b> mount the entire project.
@@ -177,6 +179,7 @@ Disable cron:
 - percona
 - redis-server
 - elasticsearch
+- opensearch
 - grunt
 - postfix
 - mailhog
@@ -205,18 +208,26 @@ Disable cron:
   * url: [network_ip]/php
 
 ### Mysql
-Percona server 8.0 is now installed for Magento >=2.4.0
+Percona server 8.0 is now installed for Magento >=2.4.0<br>
+Lower versions are handled foreach existing Magento versions.
 
 ### PHP
-PHP 8.1 is now installed by default for Magento >=2.4.4
+PHP 8.2 is now installed by default for Magento >=2.4.6<br>
+Lower versions are handled foreach existing Magento versions.
 
 ### Composer
-Composer v2 is now installed by default for Magento >=2.4.2
+Composer v2 is now installed by default for Magento >=2.4.2<br>
+Lower versions are handled foreach existing Magento versions.
 
 ### Elasticsearch
-Version 7.6.x of Elasticsearch is now available for Magento 2.4.0.<br>
-For lower Magento version, ES 6.x will be installed.<br>
+Version 8.4.x of Elasticsearch is now available for Magento 2.4.6<br> 
+Version 7.6.x of Elasticsearch is available for version between 2.4.0 and 2.4.5<br>
+Lower versions are handled foreach existing Magento versions<br>
 Otherwise, you can also completely disable elasticsearch by installing this module: https://github.com/zepgram/module-disable-search-engine
+
+### Opensearch
+Version 2.5.x is now available for Magento 2.4.6<br>
+Elasticsearch will be installed by default on lower Magento versions.
 
 ## Issues
 
