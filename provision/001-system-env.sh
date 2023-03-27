@@ -35,8 +35,14 @@ fi
 
 # search engine
 SEARCH_ENGINE=${21}
-if [ "$SEARCH_ENGINE" != "opensearch" ] || $(dpkg --compare-versions "${PROJECT_VERSION}" "lt" "2.4.6"); then
- SEARCH_ENGINE='elasticsearch'
+if [ "$SEARCH_ENGINE" != "opensearch" ]; then
+    if $(dpkg --compare-versions "${PROJECT_VERSION}" "ge" "2.4.6"); then
+       SEARCH_ENGINE='elasticsearch8'
+    elif $(dpkg --compare-versions "${PROJECT_VERSION}" "ge" "2.4.0"); then
+       SEARCH_ENGINE='elasticsearch7'
+    else
+       SEARCH_ENGINE='elasticsearch6'
+    fi
 fi
 
 # two factor auth
